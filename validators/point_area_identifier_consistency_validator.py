@@ -1,0 +1,66 @@
+from qgis.core import QgsProject, QgsVectorLayer
+from qgis import processing
+from models import ValidationResult
+from . import FeatureValidator
+
+from processing.tools import *
+from qgis.analysis import QgsNativeAlgorithms
+import logging
+
+class PointAreaIdentifierConsistencyValidator(FeatureValidator):
+    logger = logging.getLogger(__name__)
+
+
+    @classmethod
+    def validate(cls, run_id: int, validation_code: str, severity: str, point_feature_class: QgsVectorLayer, area_feature_class: QgsVectorLayer, id_field: str) -> list[ValidationResult]:
+        """Runs the PointAreaIdentifierConsistencyValidator.
+           TODO This can probably be replaced by the more generic FeatureAreaIdentifierConsistencyValidator.
+
+        Checks if every point from the point-featureclass is inside an area of the area-featureclass while also having matching values for the id field.
+
+        Args:
+            run_id (int): The id of the current run.
+            validation_code (str): The validation code to use.
+            severity (str): The severity to use (WARNING / ERROR / STATISTIC).
+            point_feature_class (QgsVectorLayer): The featureclass containing points.
+            area_feature_class (QgsVectorLayer): The featureclass containing areas.
+            id_field (str): The corresponding ID field linking the point and area featureclasses
+
+        Returns:
+            list[ValidationResult]: A list of results, containing the point features which are either not inside an area or do not having a matching id field value.
+        """        
+        results = []
+
+        join_layer = "memory:join_layer"
+        parameters = {
+            'INPUT':point_feature_class,
+            'PREDICATE':[0],
+            'JOIN': area_feature_class,
+            'JOIN_FIELDS':[],
+            'METHOD':0,
+            'DISCARD_NONMATCHING':False,
+            'PREFIX':'',
+            'OUTPUT':join_layer}
+
+        join_by_location = processing.run("native:joinattributesbylocation", parameters) # Run processing.algorithmHelp("native:joinattributesbylocation") for documentation
+        join_by_location_layer = join_by_location['OUTPUT']  
+
+        for feature in join_by_location_layer.getFeatures():
+            point_objectid = feature.attribute('objectid')
+            point_id_value = feature.attribute(id_field)
+            area_objectid = feature.attribute('objectid_2')
+            area_id_value = feature.attribute(f'{id_field}_2')
+
+            # Point is not contained by Area
+            if area_id_value is None:
+                message = f"{point_feature_class.name()} feature with objectid {point_objectid} and {id_field} = {point_id_value} is not within any {area_feature_class.name()} feature."
+                result = cls.create_result(run_id, validation_code, severity, point_feature_class, feature, message)
+                results.append(result)
+
+            # Point is in Area but the id_field's do not match
+            elif point_id_value != area_id_value:
+                message = f"{point_feature_class.name()} feature with objectid {point_objectid} and {id_field} = {point_id_value} mismatches {area_feature_class.name()} feature with objectid {area_objectid} and {id_field} = {area_id_value}"
+                result = cls.create_result(run_id, validation_code, severity, point_feature_class, feature, message)
+                results.append(result)
+
+        return results

@@ -1,0 +1,27 @@
+{
+    "__type__" : "ValidationParameters",
+    "specification" : "DV1",
+    "task_name" : "Validation on OME2 data",
+
+    "input_database": {
+        "host": "mydatabase.postgres.database.azure.com",
+        "port" : 5432,
+        "name": "mydatabase",
+        "username": "postgres",
+        "password": "<password>"
+    },
+
+    "output_database": {
+        "host": "localhost",
+        "port" : 5432,
+        "name": "ome2_test",
+        "username": "postgres",
+        "password": "<password>"
+    },
+
+    "themes" : ["HYDRO"],
+    "checks" : ["M001"],
+    "groups" : [],
+    "countries" : ["NL"],
+    "min_required_only" : true
+}

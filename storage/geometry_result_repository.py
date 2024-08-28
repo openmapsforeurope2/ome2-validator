@@ -1,0 +1,122 @@
+import pydapper
+
+from models import GeometryResult
+
+class GeometryResultRepository():
+    dsn = None
+    __srid = None
+
+    @classmethod
+    def set_dsn(cls, dsn):
+        """Sets the DSN
+
+        Args:
+            dsn (str): The Data Source Name
+        """
+        cls.dsn = dsn
+
+
+    @classmethod
+    def set_geometry_srid(cls, srid: int):
+        """Sets the SRID, so it can be explicitly specified for PostGIS geometry on database insertion.
+
+        Args:
+            srid (int): The EPSG code of the SRID. See for example: https://epsg.io/3035.
+        """        
+        cls.__srid = srid
+
+
+    @classmethod
+    def add(cls, validation_result: GeometryResult):
+        """Adds a single GeometryResult to the repository.
+
+        Args:
+            validation_result (GeometryResult): The geometry result to be stored.
+        """        
+        cls.add_list([validation_result])
+
+
+    @classmethod
+    def add_list(cls, validation_results: list[GeometryResult]):
+        """Adds multiple GeometryResults to the repository.
+
+        Args:
+            validation_results (list[GeometryResult]): The geometry results to be stored.
+        """        
+        commands = pydapper.connect(cls.dsn)
+        try:
+            with commands:
+                for geometry_result in validation_results:
+                    _ = commands.execute(
+                        "INSERT INTO geometry_result " +
+                        "(run_id, validation_code, severity, feature_class, message, objectid, geometry, geometry_type) " +
+                        "VALUES (?run_id?, ?validation_code?, ?severity?, ?feature_class?, ?message?, ?objectid?, ST_Force2D(ST_SetSRID(?geometry?::geometry,?srid?)), ST_GeometryType(?geometry?))",
+                        param = geometry_result.as_param_dict(cls.__srid)
+                    )
+        finally:
+            commands.connection.close()
+
+
+    @classmethod
+    def get_by_run_id(cls, run_id: int) -> list[GeometryResult]:
+        """Gets all GeometryResults for the validation-run with the given run_id.
+
+        Args:
+            run_id (int): The run id.
+
+        Returns:
+            list[GeometryResult]: All geometry results for the corresponding run.
+        """        
+        commands = pydapper.connect(cls.dsn)
+        try:
+            with commands:
+                return commands.query(
+                    "SELECT result_id, " +
+					"       run_id, " +
+					"		validation_code, " +
+					"		severity, " +
+					"		feature_class, " +
+					"		message, " +
+					"		objectid, " +
+					"		ST_AsBinary(geometry) as geometry, " + # Converted to QgsGeometry in GeometryResult.from_query_row()
+					"		geometry_type " +
+                    "FROM geometry_result " + 
+                    "WHERE run_id = ?run_id? " + 
+                    "ORDER BY result_id ASC",
+                    param = { "run_id": run_id},
+                    model = GeometryResult.from_query_row)
+        finally:
+            commands.connection.close()
+
+
+    @classmethod
+    def get_by_vc_and_run_id(cls, validation_code: str, run_id: int) -> list[GeometryResult]:
+        """Gets all GeometryResults for the given run_id and validation_code.
+
+        Args:
+            validation_code (str): The validation code.
+            run_id (int): The run id.
+
+        Returns:
+            list[GeometryResult]: All geometry results for the corresponding run and validation code.
+        """        
+        commands = pydapper.connect(cls.dsn)
+        try:
+            with commands:
+                return commands.query(
+                    "SELECT result_id, " +
+					"       run_id, " +
+					"		validation_code, " +
+					"		severity, " +
+					"		feature_class, " +
+					"		message, " +
+					"		objectid, " +
+					"		ST_AsBinary(geometry) as geometry, " + # Converted to QgsGeometry in GeometryResult.from_query_row()
+					"		geometry_type " +
+                    "FROM geometry_result " + 
+                    "WHERE validation_code = ?validation_code? and run_id = ?run_id? " + 
+                    "ORDER BY result_id ASC",
+                    param = { "validation_code": validation_code, "run_id": run_id},
+                    model = GeometryResult.from_query_row)
+        finally:
+            commands.connection.close()
