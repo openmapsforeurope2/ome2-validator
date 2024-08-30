@@ -20,5 +20,6 @@ from .minimum_length_validator import *
 from .no_adjacent_faces_same_attribute_validator import *
 from .proximity_validator import *
 from .feature_area_identifier_consistency_validator import *
+from .geometry_type_validator import *
 
 from .topology import *

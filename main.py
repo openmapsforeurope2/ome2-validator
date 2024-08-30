@@ -190,10 +190,14 @@ def main():
         runway_line = QgisUtilities.create_postgres_vector_layer(TN_SCHEMA, "runway_line", "geom", "")
         road_service_area = QgisUtilities.create_postgres_vector_layer(TN_SCHEMA, "road_service_area", "geom", "")
 
-        FeatureAreaIdentifierConsistencyValidator.run(current_run.run_id, "F001", "ERROR", port_point, administrative_unit_area_1, "country")
-        FeatureAreaIdentifierConsistencyValidator.run(current_run.run_id, "F002", "ERROR", runway_line, administrative_unit_area_1, "country")
-        FeatureAreaIdentifierConsistencyValidator.run(current_run.run_id, "F003", "ERROR", road_service_area, administrative_unit_area_1, "country")
+        # FeatureAreaIdentifierConsistencyValidator.run(current_run.run_id, "F001", "ERROR", port_point, administrative_unit_area_1, "country")
+        # FeatureAreaIdentifierConsistencyValidator.run(current_run.run_id, "F002", "ERROR", runway_line, administrative_unit_area_1, "country")
+        # FeatureAreaIdentifierConsistencyValidator.run(current_run.run_id, "F003", "ERROR", road_service_area, administrative_unit_area_1, "country")
 
+
+        GeometryTypeValidator.run(current_run.run_id, "G008", "ERROR", port_point, expected_geometry_type=QgsWkbTypes.PointZ)
+        GeometryTypeValidator.run(current_run.run_id, "G009", "ERROR", administrative_unit_area_1, expected_geometry_type=QgsWkbTypes.MultiPolygon)
+        GeometryTypeValidator.run(current_run.run_id, "G010", "ERROR", port_point, expected_geometry_type=QgsWkbTypes.MultiPointZ)
 
         logger.info("")
         geom_results = GeometryResultRepository.get_by_run_id(current_run.run_id)
