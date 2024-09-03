@@ -72,6 +72,9 @@ def main():
         QgisUtilities.initialize_qgis()
         QgisUtilities.setup_postgis_connection(params.input_db_params.host, params.input_db_params.port, params.input_db_params.name, params.input_db_params.username, params.input_db_params.password)
         
+
+        DataSchemaValidator.set_dsn(params.input_db_params.create_pg_dsn())
+
         # Create layers for QGIS
 
         # Test data
@@ -195,9 +198,32 @@ def main():
         # FeatureAreaIdentifierConsistencyValidator.run(current_run.run_id, "F003", "ERROR", road_service_area, administrative_unit_area_1, "country")
 
 
-        GeometryTypeValidator.run(current_run.run_id, "G008", "ERROR", port_point, expected_geometry_type=QgsWkbTypes.PointZ)
-        GeometryTypeValidator.run(current_run.run_id, "G009", "ERROR", administrative_unit_area_1, expected_geometry_type=QgsWkbTypes.MultiPolygon)
-        GeometryTypeValidator.run(current_run.run_id, "G010", "ERROR", port_point, expected_geometry_type=QgsWkbTypes.MultiPointZ)
+        # GeometryTypeValidator.run(current_run.run_id, "G008", "ERROR", port_point, expected_geometry_type=QgsWkbTypes.PointZ)
+        # GeometryTypeValidator.run(current_run.run_id, "G009", "ERROR", administrative_unit_area_1, expected_geometry_type=QgsWkbTypes.MultiPolygon)
+        # GeometryTypeValidator.run(current_run.run_id, "G010", "ERROR", port_point, expected_geometry_type=QgsWkbTypes.MultiPointZ)
+
+        #CrsValidator.run(current_run.run_id, "C001", "ERROR", port_point, epsg_code=28992, schema=TN_SCHEMA)
+
+        port_point_attributes = {
+            'objectid': 'uuid',
+            'country': 'character varying',
+            'begin_lifespan_version': 'timestamp without time zone',
+            'end_lifespan_version': 'timestamp without time zone',
+            'geom': 'USER-DEFINED',
+            'name': 'jsonb',
+            'label': 'character varying',
+            'un_locode': 'character varying',
+            'tent_network': 'character varying',
+            'w_national_identifier': 'character varying',
+            'w_step': 'integer',
+            'xy_source': 'character varying',
+            'z_source': 'character varying',
+            #'w_scale': 'character varying',
+            'w_scale': 'jsonb', # for test purposes only
+            'wwww_release': 'integer' # for test purposes only, should be 'w_release'
+        }
+        DataSchemaValidator.run(current_run.run_id, "D009", "STATISTIC", port_point, expected_attribute_types=port_point_attributes, schema=TN_SCHEMA) # TODO Enable ERROR severiry and rename result type?
+
 
         logger.info("")
         geom_results = GeometryResultRepository.get_by_run_id(current_run.run_id)
