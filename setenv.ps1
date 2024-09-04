@@ -47,9 +47,9 @@ if ([string]::IsNullOrEmpty($QgisPath)) {
 # Main logic
 $vars = ReadEnvFile "$QgisPath/bin/qgis-bin.env"
 $env:PYTHONHOME = $vars['PYTHONHOME']
-$newPathPrefix = "$($vars['PATH']);"
+$newPathPrefix = "$($env:PYTHONHOME);$($vars['PATH']);"
 if (-not $env:Path.StartsWith($newPathPrefix)) {
-    $env:Path = "$($vars['PATH']);$env:Path"
+    $env:Path = "$newPathPrefix;$env:Path"
 }
 else {
     Write-Host "Note: PATH env variable is already up to date"
