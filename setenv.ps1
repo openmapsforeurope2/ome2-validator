@@ -6,7 +6,11 @@ param (
 
 # Helper functions
 function GetWin32QgisDirs() {
-    $candidates = Get-Item "$env:ProgramFiles\QGIS *" | Where-Object {Test-Path "$_/bin/qgis-bin.env"}
+    $candidates = Get-Item "$env:ProgramFiles\QGIS *" | Where-Object {
+        (Test-Path "$_/bin/qgis-bin.env") `
+        -or `
+        (Test-Path "$_/bin/qgis-ltr-bin.env")
+    }
     $candidates | ForEach-Object {Add-Member -InputObject $_ -NotePropertyName 'Version' -NotePropertyValue (GetQgisVersionNumber $_)}
     return $candidates | Sort-Object -Property Version -Descending
 }
@@ -45,7 +49,12 @@ if ([string]::IsNullOrEmpty($QgisPath)) {
 }
 
 # Main logic
-$vars = ReadEnvFile "$QgisPath/bin/qgis-bin.env"
+if (Test-Path "$QgisPath/bin/qgis-bin.env") {
+    $vars = ReadEnvFile "$QgisPath/bin/qgis-bin.env"
+}
+elseif (Test-Path "$QgisPath/bin/qgis-ltr-bin.env") {
+    $vars = ReadEnvFile "$QgisPath/bin/qgis-ltr-bin.env"
+}
 $env:PYTHONHOME = $vars['PYTHONHOME']
 $newPathPrefix = "$($env:PYTHONHOME);$($vars['PATH']);"
 if (-not $env:Path.StartsWith($newPathPrefix)) {
