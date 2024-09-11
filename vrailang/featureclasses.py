@@ -21,7 +21,8 @@ Example usage:
 from abc import ABCMeta
 from collections import OrderedDict
 from dataclasses import dataclass, make_dataclass
-from typing import Annotated, Any, Callable, ClassVar, Optional, Protocol, Tuple, TypeVar, Union, get_args, get_origin
+from typing import Annotated, Any, Callable, ClassVar, Optional, Protocol, Tuple, Type, TypeVar, Union, get_args, get_origin
+from typing_extensions import Self
 
 from vrailang.dataconstraints import DataTypeAnnotation
 from vrailang.datatypes import DataType
@@ -46,6 +47,7 @@ def __dataclass_transform__(
     return lambda a: a
 
 
+_C = TypeVar("_C")
 @dataclass
 class FeatureclassAttribute(MixinAttributeRules):
     """The type used for describing a featureclass's fields.
@@ -64,6 +66,17 @@ class FeatureclassAttribute(MixinAttributeRules):
     constraints: Tuple[DataTypeAnnotation]
     '''Constraints on the datatype'''
 
+    def get_constraint(self: Self, constraint_type: Type[_C]) -> Optional[_C]:
+        """Returns constraint.
+
+        Args:
+            constraint_type (Type[_C]): The type of constraint to find.
+
+        Returns:
+            Optional[_C]: The queried constraint for this attribute, if any.
+        """
+        return next(filter(lambda c: isinstance(c, constraint_type), self.constraints), None)
+        
     
 
 
