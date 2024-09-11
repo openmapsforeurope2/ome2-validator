@@ -23,6 +23,8 @@ class AllowedAttributeValidator(FeatureValidator):
 
         Returns:
             list[ValidationResult]: A list of results, containing the features of which the specified field does not have an allowed value.
+
+        # TODO Support wildcard values such as 'void_*'
         """        
         results = []
         

@@ -13,7 +13,6 @@ in order to provide type hints.
 
 
 from typing import Annotated
-from qgis.core import QgsGeometry
 from vrailang.rules import MixinAttributeRules
 
 # TODO: Document implementation notes, such as having these types inherit from int, float, str, etc.
@@ -21,7 +20,7 @@ from vrailang.rules import MixinAttributeRules
 #       --> Rationale: it's just for the type hints, since we are not actually instantiating any of these types
 
 __all__ = [
-    'smallint', 'integer', 'bigint',
+    'smallint', 'integer', 'bigint', 'int4',
     'smallserial', 'serial', 'bigserial',
 
     'numeric', 'decimal',
@@ -32,7 +31,14 @@ __all__ = [
 
     'varchar', 'text',
 
-    'multilinestringz',
+    'jsonb',
+
+    'Point', 'PointZ',
+    'MultiPoint', 'MultiPointZ',
+    'LineString', 'LineStringZ',
+    'MultiLineString', 'MultiLineStringZ',
+    'Polygon', 'PolygonZ',
+    'MultiPolygon', 'MultiPolygonZ'
 ]
 
 
@@ -56,6 +62,12 @@ class DataType(MixinAttributeRules):
         if not isinstance(specifications[0], tuple):
             specifications = (specifications,)
         return Annotated.__class_getitem__((cls,) + specifications)
+    
+    def as_string(self):
+        if isinstance(self, GeometryType):
+            return 'geometry'
+        else:
+            return self.__name__
 
 
 class IntegralType(DataType, int):
@@ -66,6 +78,9 @@ class smallint(IntegralType):
 
 class integer(IntegralType):
     size = 4
+
+class int4(integer):
+    pass
 
 class bigint(IntegralType):
     size = 8
@@ -118,9 +133,47 @@ class text(CharacterType):
     size = VARIABLE_SIZE
 
 
-
-class GeometryType(DataType, QgsGeometry):
+class jsonb(DataType):
     size = VARIABLE_SIZE
 
-class multilinestringz(GeometryType):
+
+class GeometryType(DataType):
+    size = VARIABLE_SIZE
+
+
+class Point(GeometryType):
     pass
+
+class MultiPoint(GeometryType):
+    pass
+
+class PointZ(GeometryType):
+    pass
+
+class MultiPointZ(GeometryType):
+    pass
+
+class LineString(GeometryType):
+    pass
+
+class MultiLineString(GeometryType):
+    pass
+
+class LineStringZ(GeometryType):
+    pass
+
+class MultiLineStringZ(GeometryType):
+    pass
+
+class Polygon(GeometryType):
+    pass
+
+class MultiPolygon(GeometryType):
+    pass
+
+class PolygonZ(GeometryType):
+    pass
+
+class MultiPolygonZ(GeometryType):
+    pass
+

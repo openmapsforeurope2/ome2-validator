@@ -12,6 +12,9 @@ from validators.abstract_validator import AbstractValidator
 import validators
 from vrailang.errors import VraiSpecificationError
 from vrailang.specs import CURRENT_SPEC_STATE
+from vrailang.dataconstraints import srid, length
+
+from utilities import QgisUtilities
 
 if TYPE_CHECKING:
     from vrailang.featureclasses import feature, FeatureclassAttribute
@@ -45,6 +48,13 @@ class ValidationRule:
             _set_validation_code_via_assignment(self, frame=2)
 
         return self
+    
+
+    def run(self, run_id: int):
+        feature_layer = QgisUtilities.create_postgres_vector_layer(self.feature_class.THEME.schema, self.feature_class.__name__, "geom") 
+        # TODO replace vrailang.feature by QgsVectorLayer in *args and **kwargs if present
+
+        self.validator.run(run_id, self.validation_code, self.severity, feature_layer, *self.args, *self.kwargs)
 
     @property
     def HasValidationCode(self) -> bool:
@@ -82,7 +92,6 @@ def _set_validation_code_via_assignment(obj, frame=3):
 
 
 class MixinAttributeRules:
-    
     def MustNotBeNull(self: 'FeatureclassAttribute') -> ValidationRule:
         return _create_rule_and_register(
             validators.AttributeNotNullValidator,
@@ -90,9 +99,49 @@ class MixinAttributeRules:
             (self.name,),
             {}
         )
+    
+    def MustHaveCorrectCRS(self: 'FeatureclassAttribute') -> ValidationRule:
+        srid_constraint = next(filter(lambda c: isinstance(c, srid), self.constraints), None)
+        if srid_constraint is None:
+            raise VraiSpecificationError(f'MustHaveCorrectCRS can only be used on attributes with an srid constraint.')
+        
+        return _create_rule_and_register(
+            validators.CrsValidator,
+            self.featureclass,
+            (srid_constraint.id, self.featureclass.THEME.schema),
+            {}
+        )
+    
+    def MustHaveCorrectGeometryType(self: 'FeatureclassAttribute') -> ValidationRule:
+        return _create_rule_and_register(
+            validators.GeometryTypeValidator,
+            self.featureclass,
+            (self.datatype.__name__,),
+            {}
+
+        )
+    
+    def MustBeOfValues(self: 'FeatureclassAttribute', allowed_values: list[str]) -> ValidationRule: # TODO separator
+        return _create_rule_and_register(
+            validators.AllowedAttributeValidator,
+            self.featureclass,
+            (self.name, allowed_values),
+            {}
+        )
 
 
 class MixinFeatureclassRules:
+
+
+    @classmethod
+    def MustHaveValidGeometry(cls: 'feature') -> ValidationRule:
+        return _create_rule_and_register(
+            validators.ValidGeometryValidator,
+            cls,
+            (),
+            {}
+        )
+    
     
     @classmethod
     def LengthMustBeAtLeast(cls: 'feature', minimum_length, check_multilines_per_linestring=False) -> ValidationRule:

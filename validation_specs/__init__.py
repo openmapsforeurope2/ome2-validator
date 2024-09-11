@@ -1,5 +1,4 @@
-from vrailang import *
+from .domains import *
 
-begin_spec('DV1')
-from .trans import *
-end_spec()
+from .dv1 import *
+from .dv2 import *

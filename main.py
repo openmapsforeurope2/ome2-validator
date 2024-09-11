@@ -10,6 +10,9 @@ from models import ValidationTask, ValidationRun, ValidationParameters
 from validators import *
 import logging
 
+import validation_specs # This import is required for collecting the data specifications
+import vrailang
+
 def main():
     (_, validation_params_json_filename) = tuple(sys.argv)
 
@@ -75,6 +78,11 @@ def main():
 
         DataSchemaValidator.set_dsn(params.input_db_params.create_pg_dsn())
         CrsValidator.set_dsn(params.input_db_params.create_pg_dsn())
+        
+        # Retrieve the validation specs and start the validation
+        validation_specs = vrailang.ValidationSpecification.ALL_SPECIFICATIONS[params.specification]
+        validation_specs.run(current_run.run_id)
+
 
         # Create layers for QGIS
 
@@ -189,10 +197,10 @@ def main():
 
 
 
-        administrative_unit_area_1 = QgisUtilities.create_postgres_vector_layer(AU_SCHEMA, "administrative_unit_area_1", "geom", "")
-        port_point = QgisUtilities.create_postgres_vector_layer(TN_SCHEMA, "port_point", "geom", "")
-        runway_line = QgisUtilities.create_postgres_vector_layer(TN_SCHEMA, "runway_line", "geom", "")
-        road_service_area = QgisUtilities.create_postgres_vector_layer(TN_SCHEMA, "road_service_area", "geom", "")
+        # administrative_unit_area_1 = QgisUtilities.create_postgres_vector_layer(AU_SCHEMA, "administrative_unit_area_1", "geom", "")
+        # port_point = QgisUtilities.create_postgres_vector_layer(TN_SCHEMA, "port_point", "geom", "")
+        # runway_line = QgisUtilities.create_postgres_vector_layer(TN_SCHEMA, "runway_line", "geom", "")
+        # road_service_area = QgisUtilities.create_postgres_vector_layer(TN_SCHEMA, "road_service_area", "geom", "")
 
         # FeatureAreaIdentifierConsistencyValidator.run(current_run.run_id, "F001", "ERROR", port_point, administrative_unit_area_1, "country")
         # FeatureAreaIdentifierConsistencyValidator.run(current_run.run_id, "F002", "ERROR", runway_line, administrative_unit_area_1, "country")
@@ -203,7 +211,7 @@ def main():
         # GeometryTypeValidator.run(current_run.run_id, "G009", "ERROR", administrative_unit_area_1, expected_geometry_type=QgsWkbTypes.MultiPolygon)
         # GeometryTypeValidator.run(current_run.run_id, "G010", "ERROR", port_point, expected_geometry_type=QgsWkbTypes.MultiPointZ)
 
-        CrsValidator.run(current_run.run_id, "C001", "ERROR", port_point, epsg_code=3035, schema=TN_SCHEMA)
+        #CrsValidator.run(current_run.run_id, "C001", "ERROR", port_point, epsg_code=3035, schema=TN_SCHEMA)
 
         # port_point_attributes = {
         #     'objectid': 'uuid',
