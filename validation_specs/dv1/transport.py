@@ -168,7 +168,7 @@ class railway_line(feature):
     w_release: int4
 
 
-class railwy_station_area(feature):
+class railway_station_area(feature):
     objectid: uuid[notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
@@ -358,7 +358,7 @@ T005 = road_service_point.MustComplyWithDataschema()
 T006 = marker_post.MustComplyWithDataschema()
 T007 = railway_link.MustComplyWithDataschema()
 T008 = railway_line.MustComplyWithDataschema()
-T009 = railwy_station_area.MustComplyWithDataschema()
+T009 = railway_station_area.MustComplyWithDataschema()
 T010 = railway_station_point.MustComplyWithDataschema()
 T011 = aerodrome_area.MustComplyWithDataschema()
 T012 = aerodrome_point.MustComplyWithDataschema()
@@ -391,7 +391,7 @@ T017 = port_point.MustComplyWithDataschema()
 # T030 = railway_link.type.MustBeOfValues(RailwayTypeValue.to_list())
 # T031 = railway_link.electrified.MustBeOfValues(ElectrifiedValue.to_list())
 # T032 = railway_station_point.railway_use.MustBeOfValues(RailwayStationUseValue.to_list())
-# T033 = railwy_station_area.railway_use.MustBeOfValues(RailwayStationUseValue.to_list())
+# T033 = railway_station_area.railway_use.MustBeOfValues(RailwayStationUseValue.to_list())
 # T034 = aerodrome_point.aerodrome_category.MustBeOfValues(AerodromeCategoryValue.to_list())
 # T035 = aerodrome_area.aerodrome_category.MustBeOfValues(AerodromeCategoryValue.to_list())
 # T036 = aerodrome_point.aerodrome_type.MustBeOfValues(AerodromeTypeValue.to_list())
