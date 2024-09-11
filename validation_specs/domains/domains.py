@@ -16,7 +16,7 @@ class LandCoverTypeValue(DomainEnum):
 
 class MaritimeZoneTypeValue(DomainEnum):
     INTERNAL_WATERS = 'internal_waters'
-    TERRITORIAL_SEA = 'Territorial_sea'
+    TERRITORIAL_SEA = 'territorial_sea'
     CONTIGUOUS_AREA = 'contiguous_area'
     EXCLUSIVE_ECONOMIC_ZONE = 'exclusive_economic_zone'
     CONTINENTAL_SHELF = 'continental_shelf'
