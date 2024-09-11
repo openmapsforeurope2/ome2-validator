@@ -52,7 +52,7 @@ class ValidationTheme:
 @dataclass
 class ValidationSpecification:
     name: str
-    themes: dict[str, ValidationTheme] = None
+    themes: dict[str, ValidationTheme] = field(init=False)
 
     ALL_SPECIFICATIONS: ClassVar[dict[str, 'ValidationSpecification']] = {}
 
