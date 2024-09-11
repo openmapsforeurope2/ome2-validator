@@ -101,7 +101,7 @@ class MixinAttributeRules:
         )
     
     def MustHaveCorrectCRS(self: 'FeatureclassAttribute') -> ValidationRule:
-        srid_constraint = next(filter(lambda c: isinstance(c, srid), self.constraints), None)
+        srid_constraint = self.get_constraint(srid)
         if srid_constraint is None:
             raise VraiSpecificationError(f'MustHaveCorrectCRS can only be used on attributes with an srid constraint.')
         
@@ -138,12 +138,7 @@ class MixinFeatureclassRules:
 
         attr_dict = {}
         for key, value in cls.ATTRIBUTES.items():
-            length_value = None
-            length_constraint = next(filter(lambda c: isinstance(c, length), value.constraints), None)
-            if length_constraint:
-                length_value = length_constraint.value
-
-            attr_dict[key] = (value.datatype.as_string(), length_value)
+            attr_dict[key] = (value.datatype.as_string(), value.get_constraint(length))
 
         return _create_rule_and_register(
             validators.DataSchemaValidator,
