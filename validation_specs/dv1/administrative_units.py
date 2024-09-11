@@ -19,11 +19,11 @@ class administrative_unit_area_1(feature):
     valid_from: timestamp
     valid_to: timestamp
     w_national_identifier: varchar[length(255)]
-    w_step: integer
+    w_step: int4
     xy_source: varchar[length(255)]
     z_source: varchar[length(255)]
     w_scale: varchar[length(80)]
-    w_release: integer
+    w_release: int4
 
 class administrative_unit_area_2(feature):
     objectid: uuid[notnull]
@@ -41,11 +41,11 @@ class administrative_unit_area_2(feature):
     valid_from: timestamp
     valid_to: timestamp
     w_national_identifier: varchar[length(255)]
-    w_step: integer
+    w_step: int4
     xy_source: varchar[length(255)]
     z_source: varchar[length(255)]
     w_scale: varchar[length(80)]
-    w_release: integer
+    w_release: int4
 
 class administrative_unit_area_3(feature):
     objectid: uuid[notnull]
@@ -63,11 +63,11 @@ class administrative_unit_area_3(feature):
     valid_from: timestamp
     valid_to: timestamp
     w_national_identifier: varchar[length(255)]
-    w_step: integer
+    w_step: int4
     xy_source: varchar[length(255)]
     z_source: varchar[length(255)]
     w_scale: varchar[length(80)]
-    w_release: integer
+    w_release: int4
 
 class administrative_unit_area_4(feature):
     objectid: uuid[notnull]
@@ -85,11 +85,11 @@ class administrative_unit_area_4(feature):
     valid_from: timestamp
     valid_to: timestamp
     w_national_identifier: varchar[length(255)]
-    w_step: integer
+    w_step: int4
     xy_source: varchar[length(255)]
     z_source: varchar[length(255)]
     w_scale: varchar[length(80)]
-    w_release: integer
+    w_release: int4
 
 class administrative_unit_area_5(feature):
     objectid: uuid[notnull]
@@ -107,11 +107,11 @@ class administrative_unit_area_5(feature):
     valid_from: timestamp
     valid_to: timestamp
     w_national_identifier: varchar[length(255)]
-    w_step: integer
+    w_step: int4
     xy_source: varchar[length(255)]
     z_source: varchar[length(255)]
     w_scale: varchar[length(80)]
-    w_release: integer
+    w_release: int4
 
 class administrative_unit_area_6(feature):
     objectid: uuid[notnull]
@@ -129,11 +129,11 @@ class administrative_unit_area_6(feature):
     valid_from: timestamp
     valid_to: timestamp
     w_national_identifier: varchar[length(255)]
-    w_step: integer
+    w_step: int4
     xy_source: varchar[length(255)]
     z_source: varchar[length(255)]
     w_scale: varchar[length(80)]
-    w_release: integer
+    w_release: int4
 
 
 class maritime_zone(feature):
@@ -149,11 +149,11 @@ class maritime_zone(feature):
     national_level_code: varchar[length(255)]
     zone_type: varchar[length(255)]
     w_national_identifier: varchar[length(255)]
-    w_step: integer
+    w_step: int4
     xy_source: varchar[length(255)]
     z_source: varchar[length(255)]
     w_scale: varchar[length(80)]
-    w_release: integer
+    w_release: int4
 
 
 class residence_of_authority(feature):
@@ -165,28 +165,33 @@ class residence_of_authority(feature):
     name: jsonb
     label: varchar[length(255)]
     w_national_identifier: varchar[length(255)]
-    w_step: integer
+    w_step: int4
     xy_source: varchar[length(255)]
     z_source: varchar[length(255)]
     w_scale: varchar[length(80)]
-    w_release: integer
+    w_release: int4
 
 
 # General content
-#T001 = administrative_unit_area_1.MustComplyWithDataschema()
-
+A001 = administrative_unit_area_1.MustComplyWithDataschema()
+A002 = administrative_unit_area_2.MustComplyWithDataschema()
+A003 = administrative_unit_area_3.MustComplyWithDataschema()
+A004 = administrative_unit_area_4.MustComplyWithDataschema()
+A005 = administrative_unit_area_5.MustComplyWithDataschema()
+A006 = administrative_unit_area_6.MustComplyWithDataschema()
+A007 = maritime_zone.MustComplyWithDataschema()
+A008 = residence_of_authority.MustComplyWithDataschema()
 
 # # Geometric resolution
 
-T001 = administrative_unit_area_1.geom.MustHaveCorrectGeometryType()
-T002 = administrative_unit_area_2.geom.MustHaveCorrectGeometryType()
-T003 = administrative_unit_area_3.geom.MustHaveCorrectGeometryType()
-T004 = administrative_unit_area_4.geom.MustHaveCorrectGeometryType()
-T005 = administrative_unit_area_5.geom.MustHaveCorrectGeometryType()
-T006 = administrative_unit_area_6.geom.MustHaveCorrectGeometryType()
-
-T007 = residence_of_authority.geom.MustHaveCorrectGeometryType()
-T008 = maritime_zone.geom.MustHaveCorrectGeometryType()
+# A011 = administrative_unit_area_1.geom.MustHaveCorrectGeometryType()
+# A012 = administrative_unit_area_2.geom.MustHaveCorrectGeometryType()
+# A013 = administrative_unit_area_3.geom.MustHaveCorrectGeometryType()
+# A014 = administrative_unit_area_4.geom.MustHaveCorrectGeometryType()
+# A015 = administrative_unit_area_5.geom.MustHaveCorrectGeometryType()
+# A016 = administrative_unit_area_6.geom.MustHaveCorrectGeometryType()
+# A017 = residence_of_authority.geom.MustHaveCorrectGeometryType()
+# A018 = maritime_zone.geom.MustHaveCorrectGeometryType()
 
 # Data model and attribute resolution
 # A020 = administrative_unit_area_1.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())

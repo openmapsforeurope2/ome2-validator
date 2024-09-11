@@ -350,6 +350,24 @@ class port_point(feature):
 # General content
 #T001 = runway_line.MustComplyWithDataschema()
 
+T001 = road_link.MustComplyWithDataschema()
+T002 = road.MustComplyWithDataschema()
+T003 = road_node.MustComplyWithDataschema()
+T004 = road_service_area.MustComplyWithDataschema()
+T005 = road_service_point.MustComplyWithDataschema()
+T006 = marker_post.MustComplyWithDataschema()
+T007 = railway_link.MustComplyWithDataschema()
+T008 = railway_line.MustComplyWithDataschema()
+T009 = railwy_station_area.MustComplyWithDataschema()
+T010 = railway_station_point.MustComplyWithDataschema()
+T011 = aerodrome_area.MustComplyWithDataschema()
+T012 = aerodrome_point.MustComplyWithDataschema()
+T013 = runway_area.MustComplyWithDataschema()
+T014 = runway_line.MustComplyWithDataschema()
+T015 = ferry_crossing.MustComplyWithDataschema()
+T016 = port_area.MustComplyWithDataschema()
+T017 = port_point.MustComplyWithDataschema()
+
 # # Geometric resolution
 # T002 = runway_line.geom.MustHaveCorrectCRS()
 # T003 = runway_line.MustHaveValidGeometry()

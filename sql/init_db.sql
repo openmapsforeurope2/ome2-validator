@@ -77,7 +77,7 @@ CREATE TABLE statistic_result (
   result_id SERIAL PRIMARY KEY,
   run_id INT,
   validation_code VARCHAR (4),
-  severity VARCHAR (9) NOT NULL CHECK (severity IN ('STATISTIC')),
+  severity VARCHAR (9) NOT NULL CHECK (severity IN ('WARNING', 'ERROR', 'STATISTIC')),
   feature_class VARCHAR (255),
   message VARCHAR (255),
   CONSTRAINT fk_run

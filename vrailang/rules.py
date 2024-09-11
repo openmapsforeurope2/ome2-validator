@@ -134,6 +134,25 @@ class MixinFeatureclassRules:
 
 
     @classmethod
+    def MustComplyWithDataschema(cls: 'feature') -> ValidationRule:
+
+        attr_dict = {}
+        for key, value in cls.ATTRIBUTES.items():
+            length_value = None
+            length_constraint = next(filter(lambda c: isinstance(c, length), value.constraints), None)
+            if length_constraint:
+                length_value = length_constraint.value
+
+            attr_dict[key] = (value.datatype.as_string(), length_value)
+
+        return _create_rule_and_register(
+            validators.DataSchemaValidator,
+            cls,
+            (attr_dict, cls.THEME.schema),
+            {}
+        )
+
+    @classmethod
     def MustHaveValidGeometry(cls: 'feature') -> ValidationRule:
         return _create_rule_and_register(
             validators.ValidGeometryValidator,

@@ -19,6 +19,7 @@ class DataSchemaValidator(StatisticValidator):
     class AttributeTypeRecord:
         column_name: str
         data_type: str
+        length: int
 
 
     @classmethod
@@ -65,7 +66,7 @@ class DataSchemaValidator(StatisticValidator):
         try:
             with commands:
                 column_records = commands.query(
-                    f"SELECT column_name, data_type \
+                    f"SELECT column_name, udt_name as data_type, character_maximum_length as length \
                       FROM information_schema.columns \
                       WHERE table_schema = '{schema}' \
                       AND table_name = '{feature_class.name()}' \
@@ -93,11 +94,16 @@ class DataSchemaValidator(StatisticValidator):
             result = cls.create_result(run_id, validation_code, severity, feature_class, message)
             results.append(result)
 
-        # Find and report mismatches in datatype
+        # Find and report mismatches in datatype and length
         for column in [column for column in column_records if column.column_name not in added_column_names]:
-            expected_column_type = expected_attribute_types[column.column_name]
+            expected_column_type, expected_column_length = expected_attribute_types[column.column_name]
             if expected_column_type != column.data_type:
                 message = f"Featureclass '{feature_class.name()}' has a column named '{column.column_name}' of type '{column.data_type}', which should be of type '{expected_column_type}' according to the dataschema."
+                result = cls.create_result(run_id, validation_code, severity, feature_class, message)
+                results.append(result)
+
+            if expected_column_length is not None and expected_column_length != column.length:
+                message = f"Featureclass '{feature_class.name()}' has a column named '{column.column_name}' of length '{column.length}', which should be of length '{expected_column_length}' according to the dataschema."
                 result = cls.create_result(run_id, validation_code, severity, feature_class, message)
                 results.append(result)
 

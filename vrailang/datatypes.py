@@ -63,11 +63,12 @@ class DataType(MixinAttributeRules):
             specifications = (specifications,)
         return Annotated.__class_getitem__((cls,) + specifications)
     
-    def as_string(self):
-        if isinstance(self, GeometryType):
+    @classmethod
+    def as_string(cls):
+        if issubclass(cls, GeometryType):
             return 'geometry'
         else:
-            return self.__name__
+            return cls.__name__
 
 
 class IntegralType(DataType, int):
