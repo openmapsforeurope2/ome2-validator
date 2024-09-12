@@ -6,8 +6,10 @@ via the functions `begin_spec`/`end_spec` and `begin_theme`/`end_theme`.
 from dataclasses import dataclass, field
 from typing import ClassVar, Union, TYPE_CHECKING, Callable
 from qgis.core import QgsVectorLayer
-
+from models import ValidationParameters
 from vrailang.errors import VraiSpecificationError
+import logging
+from logging import Logger
 
 if TYPE_CHECKING:
     from vrailang.rules import ValidationRule
@@ -56,16 +58,26 @@ class ValidationSpecification:
     themes: dict[str, ValidationTheme] = field(init=False)
 
     ALL_SPECIFICATIONS: ClassVar[dict[str, 'ValidationSpecification']] = {}
+    logger: Logger = logging.getLogger(__name__)
 
     def __post_init__(self):
         self.themes = {}
 
 
-    def run(self, run_id: int, arg_loader: Callable[['object'], object]):
-        # TODO Pass a parameters object, including the current run_id, enabled themes, enabled checks, etc.
+    def run(self, params: ValidationParameters, arg_loader: Callable[['object'], object]):
         for validation_theme in self.themes.values():
+            # Skip disabled themes
+            if not params.theme_is_enabled(validation_theme.name):
+                self.logger.info(f"Skipping theme {validation_theme.name} since it is not enabled.")
+                continue
+
             for validation_rule in validation_theme.validation_rules.values():
-                validation_rule.run(run_id, arg_loader)
+                # Skip disabled checks
+                if not params.check_is_enabled(validation_rule.validation_code):
+                    self.logger.info(f"Skipping check {validation_rule.validation_code} since it is not enabled.")
+                    continue
+
+                validation_rule.run(params.run_id, arg_loader)
 
 
 @dataclass

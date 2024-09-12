@@ -19,8 +19,8 @@
         "password": "<password>"
     },
 
-    "themes" : ["HYDRO"],
-    "checks" : ["M001"],
+    "themes" : ["ADMINISTRATIVE_UNITS"],
+    "checks" : ["A068"],
     "groups" : [],
     "countries" : ["NL"],
     "min_required_only" : true

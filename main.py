@@ -47,6 +47,9 @@ def main():
     # Add run_id to the logging
     ValidationLoggingRepository.set_current_run_id(current_run.run_id)
 
+    params.task_id = current_task.task_id
+    params.run_id = current_run.run_id
+
     try:              
         # Get QGIS info
         version = QgisUtilities.get_version()
@@ -73,7 +76,7 @@ def main():
         
         # Retrieve the validation specification and start the validation
         validation_specs = vrailang.ValidationSpecification.ALL_SPECIFICATIONS[params.specification]
-        validation_specs.run(current_run.run_id, arg_loader)
+        validation_specs.run(params, arg_loader)
 
         logger.info("")
         geom_results = GeometryResultRepository.get_by_run_id(current_run.run_id)

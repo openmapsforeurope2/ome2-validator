@@ -13,6 +13,8 @@ class ValidationParameters:
     Attributes:
         specification (str): The ValidationSpecification on which these parameters are applicable.
         task_name (str): The task name.
+        task_id (int): The task id.
+        run_id (int): The run id.
         input_db_params (str): The database parameters which give access to the OME2 data which we want to validate.
         output_db_params (str): The database parameters which give access to database where we want to write the validation output.
         themes (list[str]): A selection of themes which we want to validate.
@@ -23,6 +25,8 @@ class ValidationParameters:
     """
     specification: str
     task_name: str
+    task_id: int
+    run_id: int
     input_db_params: DatabaseConnectionParameters
     output_db_params: DatabaseConnectionParameters
     themes: list[str]
@@ -32,6 +36,8 @@ class ValidationParameters:
     min_required_only: bool
 
     def __init__(self):
+        self.task_id = None
+        self.run_id = None
         self.input_db_params = self.DatabaseConnectionParameters()
         self.output_db_params = self.DatabaseConnectionParameters()
 
@@ -96,6 +102,29 @@ class ValidationParameters:
         """        
         return json.dumps(self, cls=self.ValidationParametersEncoder, indent=4)
     
+
+    def theme_is_enabled(self, theme_name: str) -> bool:
+        """Determines if a theme is enabled, based on the theme name and validation parameters.
+
+        Returns:
+            bool: True if the theme is enabled.
+        """
+        if len(self.themes) == 0:
+            return True
+        return theme_name in [t[:5].upper() for t in self.themes]
+    
+
+    def check_is_enabled(self, validation_code: str) -> bool:
+        """Determines if a check is enabled, based on the validation code and validation parameters.
+
+        Returns:
+            bool: True if the check is enabled.
+        """
+        if len(self.checks) == 0:
+            return True
+        return validation_code in self.checks
+    
+
     class DatabaseConnectionParameters():
         host: str
         port: int
