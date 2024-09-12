@@ -1,5 +1,5 @@
 from vrailang import *
-from validation_specs.domains import LandCoverTypeValue, MaritimeZoneTypeValue
+from validation_specs.domains import LandCoverTypeValue, MaritimeZoneTypeValue, CountryCodeValue
 
 begin_theme('ADMIN', 'au')
 
@@ -260,6 +260,16 @@ A023 = administrative_unit_area_4.land_cover_type.MustBeOfValues(LandCoverTypeVa
 A024 = administrative_unit_area_5.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
 A025 = administrative_unit_area_6.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
 A026 = maritime_zone.zone_type.MustBeOfValues(MaritimeZoneTypeValue)
+
+A051 = administrative_unit_area_1.country.MustBeOfValues(CountryCodeValue.to_list())
+A052 = administrative_unit_area_2.country.MustBeOfValues(CountryCodeValue.to_list())
+A053 = administrative_unit_area_3.country.MustBeOfValues(CountryCodeValue.to_list())
+A054 = administrative_unit_area_4.country.MustBeOfValues(CountryCodeValue.to_list())
+A055 = administrative_unit_area_5.country.MustBeOfValues(CountryCodeValue.to_list())
+A056 = administrative_unit_area_6.country.MustBeOfValues(CountryCodeValue.to_list())
+A057 = maritime_zone.country.MustBeOfValues(CountryCodeValue.to_list())
+A058 = residence_of_authority.country.MustBeOfValues(CountryCodeValue.to_list())
+
 
 #endregion
 
