@@ -273,6 +273,18 @@ A047 = residence_of_authority.MustBeInsideMatchingArea(administrative_unit_area_
 
 #endregion
 
+#region Statistics
+
+A091 = administrative_unit_area_1.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
+A092 = administrative_unit_area_2.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
+A093 = administrative_unit_area_3.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
+A094 = administrative_unit_area_4.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
+A095 = administrative_unit_area_5.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
+A096 = administrative_unit_area_6.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
+
+
+#endregion
+
 #endregion
 
 end_theme()

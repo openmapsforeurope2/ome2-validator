@@ -39,11 +39,20 @@ class ValidationRule:
     def __post_init__(self):
         self.theme = None
 
+
     def TreatAsWarning(self) -> Self:
-        self.severity = 'WARNING'
+        return self._set_severity('WARNING')
+    
+
+    def TreatAsStatistic(self) -> Self:
+        return self._set_severity('STATISTIC')
+
+
+    def _set_severity(self, severity: str) -> Self:
+        self.severity = severity
 
         if self.validation_code == NO_VALIDATION_CODE:
-            _set_validation_code_via_assignment(self, frame=2)
+            _set_validation_code_via_assignment(self, frame=3)
 
         return self
     
@@ -131,6 +140,15 @@ class MixinAttributeRules:
             (self.name, allowed_values),
             {}
         )
+    
+    def CalculateCompletionRate(self: 'FeatureclassAttribute') -> ValidationRule:
+        return _create_rule_and_register(
+            validators.CompletionRateValidator,
+            self.featureclass,
+            ([self.name],),
+            {}
+        )
+
 
 
 class MixinFeatureclassRules:
