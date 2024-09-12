@@ -228,4 +228,15 @@ class MixinFeatureclassRules:
             (),
             {}
         )
+    
+
+    @classmethod
+    def MustNotHaveOverlaps(cls: 'feature') -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MustNotOverlapValidator,
+            cls,
+            (),
+            {}
+        )
+
 

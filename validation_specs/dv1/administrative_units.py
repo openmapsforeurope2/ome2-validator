@@ -288,6 +288,14 @@ A104 = administrative_unit_area_4.MustNotHaveGaps()
 A105 = administrative_unit_area_5.MustNotHaveGaps()
 A106 = administrative_unit_area_6.MustNotHaveGaps()
 
+A111 = administrative_unit_area_1.MustNotHaveOverlaps()
+A112 = administrative_unit_area_2.MustNotHaveOverlaps()
+A113 = administrative_unit_area_3.MustNotHaveOverlaps()
+A114 = administrative_unit_area_4.MustNotHaveOverlaps()
+A115 = administrative_unit_area_5.MustNotHaveOverlaps()
+A116 = administrative_unit_area_6.MustNotHaveOverlaps()
+
+
 
 #endregion
 
