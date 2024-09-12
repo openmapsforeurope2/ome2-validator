@@ -191,3 +191,13 @@ class MixinFeatureclassRules:
             {}
         )
 
+    
+    @classmethod
+    def VerticesDistanceMustBeAtLeast(cls: 'feature', minimum_distance: Union[int, float]) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MinimumVertexDistanceValidator,
+            cls,
+            (minimum_distance,),
+            {}
+        )
+

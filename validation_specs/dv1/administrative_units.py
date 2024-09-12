@@ -211,14 +211,23 @@ class residence_of_authority(feature):
 # A038 = residence_of_authority.MustHaveValidGeometry()
 
 
-A051 = administrative_unit_area_1.AreaMustBeAtLeast(200_000_000)
-A052 = administrative_unit_area_2.AreaMustBeAtLeast(20_000_000)
-A053 = administrative_unit_area_3.AreaMustBeAtLeast(5_000_000)
-A054 = administrative_unit_area_4.AreaMustBeAtLeast(25_000_000)
-A055 = administrative_unit_area_5.AreaMustBeAtLeast(1_000_000)
-A056 = administrative_unit_area_6.AreaMustBeAtLeast(25_000)
-A057 = maritime_zone.AreaMustBeAtLeast(1_000_000_000)
+# A051 = administrative_unit_area_1.AreaMustBeAtLeast(200_000_000)
+# A052 = administrative_unit_area_2.AreaMustBeAtLeast(20_000_000)
+# A053 = administrative_unit_area_3.AreaMustBeAtLeast(5_000_000)
+# A054 = administrative_unit_area_4.AreaMustBeAtLeast(25_000_000)
+# A055 = administrative_unit_area_5.AreaMustBeAtLeast(1_000_000)
+# A056 = administrative_unit_area_6.AreaMustBeAtLeast(25_000)
+# A057 = maritime_zone.AreaMustBeAtLeast(1_000_000_000)
 
+
+A061 = administrative_unit_area_1.VerticesDistanceMustBeAtLeast(0.05)
+A062 = administrative_unit_area_2.VerticesDistanceMustBeAtLeast(0.05)
+A063 = administrative_unit_area_3.VerticesDistanceMustBeAtLeast(0.05)
+A064 = administrative_unit_area_4.VerticesDistanceMustBeAtLeast(0.05)
+A065 = administrative_unit_area_5.VerticesDistanceMustBeAtLeast(0.05)
+A066 = administrative_unit_area_6.VerticesDistanceMustBeAtLeast(0.05)
+A067 = maritime_zone.VerticesDistanceMustBeAtLeast(0.05)
+A068 = residence_of_authority.VerticesDistanceMustBeAtLeast(0.05)
 
 # Data model and attribute resolution
 # A020 = administrative_unit_area_1.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
