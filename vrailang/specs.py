@@ -4,7 +4,8 @@ via the functions `begin_spec`/`end_spec` and `begin_theme`/`end_theme`.
 '''
 
 from dataclasses import dataclass, field
-from typing import ClassVar, Union, TYPE_CHECKING
+from typing import ClassVar, Union, TYPE_CHECKING, Callable
+from qgis.core import QgsVectorLayer
 
 from vrailang.errors import VraiSpecificationError
 
@@ -60,11 +61,11 @@ class ValidationSpecification:
         self.themes = {}
 
 
-    def run(self, run_id: int):
+    def run(self, run_id: int, layer_loader: Callable[['feature'], QgsVectorLayer]):
         # TODO Pass a parameters object, including the current run_id, enabled themes, enabled checks, etc.
         for validation_theme in self.themes.values():
             for validation_rule in validation_theme.validation_rules.values():
-                validation_rule.run(run_id)
+                validation_rule.run(run_id, layer_loader)
 
 
 @dataclass

@@ -5,7 +5,7 @@ and in `MixinFeatureclassRules` for rules pertaining to a featureclass itself.
 '''
 
 from dataclasses import dataclass, field
-from typing import Any, Type, TYPE_CHECKING
+from typing import Any, Type, TYPE_CHECKING, Callable
 from typing_extensions import Self
 import varname
 from validators.abstract_validator import AbstractValidator
@@ -13,8 +13,7 @@ import validators
 from vrailang.errors import VraiSpecificationError
 from vrailang.specs import CURRENT_SPEC_STATE
 from vrailang.dataconstraints import srid, length
-
-from utilities import QgisUtilities
+from qgis.core import QgsVectorLayer
 
 if TYPE_CHECKING:
     from vrailang.featureclasses import feature, FeatureclassAttribute
@@ -50,8 +49,8 @@ class ValidationRule:
         return self
     
 
-    def run(self, run_id: int):
-        feature_layer = QgisUtilities.create_postgres_vector_layer(self.feature_class.THEME.schema, self.feature_class.__name__, "geom") 
+    def run(self, run_id: int, layer_loader: Callable[['feature'], QgsVectorLayer]):
+        feature_layer = layer_loader(self.feature_class)
         # TODO replace vrailang.feature by QgsVectorLayer in *args and **kwargs if present
 
         self.validator.run(run_id, self.validation_code, self.severity, feature_layer, *self.args, *self.kwargs)
@@ -138,7 +137,9 @@ class MixinFeatureclassRules:
 
         attr_dict = {}
         for key, value in cls.ATTRIBUTES.items():
-            attr_dict[key] = (value.datatype.as_string(), value.get_constraint(length))
+            length_constraint = value.get_constraint(length)
+            length_constraint_value = length_constraint.value if length_constraint else None
+            attr_dict[key] = (value.datatype.as_string(), length_constraint_value)
 
         return _create_rule_and_register(
             validators.DataSchemaValidator,

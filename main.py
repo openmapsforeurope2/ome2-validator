@@ -73,7 +73,7 @@ def main():
         
         # Retrieve the validation specification and start the validation
         validation_specs = vrailang.ValidationSpecification.ALL_SPECIFICATIONS[params.specification]
-        validation_specs.run(current_run.run_id)
+        validation_specs.run(current_run.run_id, load_layer)
 
         logger.info("")
         geom_results = GeometryResultRepository.get_by_run_id(current_run.run_id)
@@ -90,7 +90,11 @@ def main():
     finally:
         ValidationRunRepository.update_on_end(current_run)
         QgisUtilities.exit_qgis()
-        
+
+
+def load_layer(feature: vrailang.feature) -> QgsVectorLayer:
+    return QgisUtilities.create_postgres_vector_layer(feature.THEME.schema, feature.__name__, "geom")
+
 
 if __name__ == "__main__":
     main()
