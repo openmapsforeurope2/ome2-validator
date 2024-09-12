@@ -281,6 +281,14 @@ A045 = administrative_unit_area_5.MustBeInsideMatchingArea(administrative_unit_a
 A046 = administrative_unit_area_6.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
 A047 = residence_of_authority.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
 
+A101 = administrative_unit_area_1.MustNotHaveGaps()
+A102 = administrative_unit_area_2.MustNotHaveGaps()
+A103 = administrative_unit_area_3.MustNotHaveGaps()
+A104 = administrative_unit_area_4.MustNotHaveGaps()
+A105 = administrative_unit_area_5.MustNotHaveGaps()
+A106 = administrative_unit_area_6.MustNotHaveGaps()
+
+
 #endregion
 
 #region Statistics

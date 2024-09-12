@@ -218,4 +218,14 @@ class MixinFeatureclassRules:
             (minimum_distance,),
             {}
         )
+    
+
+    @classmethod
+    def MustNotHaveGaps(cls: 'feature') -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MustNotHaveGapsValidator,
+            cls,
+            (),
+            {}
+        )
 
