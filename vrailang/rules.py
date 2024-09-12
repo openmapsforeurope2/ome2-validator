@@ -5,7 +5,7 @@ and in `MixinFeatureclassRules` for rules pertaining to a featureclass itself.
 '''
 
 from dataclasses import dataclass, field
-from typing import Any, Type, TYPE_CHECKING, Callable
+from typing import Any, Type, TYPE_CHECKING, Callable, Union
 from typing_extensions import Self
 import varname
 from validators.abstract_validator import AbstractValidator
@@ -13,7 +13,6 @@ import validators
 from vrailang.errors import VraiSpecificationError
 from vrailang.specs import CURRENT_SPEC_STATE
 from vrailang.dataconstraints import srid, length
-from qgis.core import QgsVectorLayer
 
 if TYPE_CHECKING:
     from vrailang.featureclasses import feature, FeatureclassAttribute
@@ -179,6 +178,16 @@ class MixinFeatureclassRules:
             validators.FeatureAreaIdentifierConsistencyValidator,
             cls,
             (area_feature_class, id_field),
+            {}
+        )
+    
+
+    @classmethod
+    def AreaMustBeAtLeast(cls: 'feature', minimum_area: Union[int, float]) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MinimumAreaValidator,
+            cls,
+            (minimum_area,),
             {}
         )
 

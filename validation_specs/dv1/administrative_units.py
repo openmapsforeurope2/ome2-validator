@@ -210,6 +210,16 @@ class residence_of_authority(feature):
 # A037 = maritime_zone.MustHaveValidGeometry()
 # A038 = residence_of_authority.MustHaveValidGeometry()
 
+
+A051 = administrative_unit_area_1.AreaMustBeAtLeast(200_000_000)
+A052 = administrative_unit_area_2.AreaMustBeAtLeast(20_000_000)
+A053 = administrative_unit_area_3.AreaMustBeAtLeast(5_000_000)
+A054 = administrative_unit_area_4.AreaMustBeAtLeast(25_000_000)
+A055 = administrative_unit_area_5.AreaMustBeAtLeast(1_000_000)
+A056 = administrative_unit_area_6.AreaMustBeAtLeast(25_000)
+A057 = maritime_zone.AreaMustBeAtLeast(1_000_000_000)
+
+
 # Data model and attribute resolution
 # A020 = administrative_unit_area_1.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
 # A021 = administrative_unit_area_2.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
@@ -220,12 +230,12 @@ class residence_of_authority(feature):
 # A026 = maritime_zone.zone_type.MustBeOfValues(MaritimeZoneTypeValue)
 
 # Topology
-A042 = administrative_unit_area_2.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
-A043 = administrative_unit_area_3.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
-A044 = administrative_unit_area_4.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
-A045 = administrative_unit_area_5.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
-A046 = administrative_unit_area_6.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
-A047 = residence_of_authority.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+# A042 = administrative_unit_area_2.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+# A043 = administrative_unit_area_3.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+# A044 = administrative_unit_area_4.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+# A045 = administrative_unit_area_5.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+# A046 = administrative_unit_area_6.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+# A047 = residence_of_authority.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
 
 
 end_theme()
