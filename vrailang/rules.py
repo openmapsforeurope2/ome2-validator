@@ -49,11 +49,16 @@ class ValidationRule:
         return self
     
 
-    def run(self, run_id: int, layer_loader: Callable[['feature'], QgsVectorLayer]):
-        feature_layer = layer_loader(self.feature_class)
-        # TODO replace vrailang.feature by QgsVectorLayer in *args and **kwargs if present
+    def run(self, run_id: int, arg_loader: Callable[['object'], object]):
+        # Convert vrailang.feature to QgsVectorLayer in featureclass, *args and **kwargs.
+        feature_layer = arg_loader(self.feature_class)
+        
+        self.args = tuple([arg_loader(a) for a in list(self.args)])
 
-        self.validator.run(run_id, self.validation_code, self.severity, feature_layer, *self.args, *self.kwargs)
+        for key in self.kwargs:
+            self.kwargs.update({key: arg_loader(self.kwargs[key])})
+
+        self.validator.run(run_id, self.validation_code, self.severity, feature_layer, *self.args, **self.kwargs)
 
     @property
     def HasValidationCode(self) -> bool:
@@ -164,6 +169,16 @@ class MixinFeatureclassRules:
             validators.MinimumLengthValidator,
             cls,
             (minimum_length,),
+            {}
+        )
+    
+
+    @classmethod
+    def MustBeInsideMatchingArea(cls: 'feature', area_feature_class: 'feature', id_field: str) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.FeatureAreaIdentifierConsistencyValidator,
+            cls,
+            (area_feature_class, id_field),
             {}
         )
 

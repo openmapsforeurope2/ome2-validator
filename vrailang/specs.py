@@ -61,11 +61,11 @@ class ValidationSpecification:
         self.themes = {}
 
 
-    def run(self, run_id: int, layer_loader: Callable[['feature'], QgsVectorLayer]):
+    def run(self, run_id: int, arg_loader: Callable[['object'], object]):
         # TODO Pass a parameters object, including the current run_id, enabled themes, enabled checks, etc.
         for validation_theme in self.themes.values():
             for validation_rule in validation_theme.validation_rules.values():
-                validation_rule.run(run_id, layer_loader)
+                validation_rule.run(run_id, arg_loader)
 
 
 @dataclass

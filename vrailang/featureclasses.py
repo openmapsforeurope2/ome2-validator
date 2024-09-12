@@ -30,7 +30,8 @@ from vrailang.rules import MixinAttributeRules, MixinFeatureclassRules
 import vrailang.specs
 
 __all__ = [
-    'feature'
+    'feature',
+    'FeatureMetaclass'
 ]
 
 # https://github.com/microsoft/pyright/blob/597ccabd07bdb977e535380675092aca839ef692/specs/dataclass_transforms.md

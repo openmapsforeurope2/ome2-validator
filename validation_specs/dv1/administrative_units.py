@@ -173,16 +173,24 @@ class residence_of_authority(feature):
 
 
 # General content
-A001 = administrative_unit_area_1.MustComplyWithDataschema()
-A002 = administrative_unit_area_2.MustComplyWithDataschema()
-A003 = administrative_unit_area_3.MustComplyWithDataschema()
-A004 = administrative_unit_area_4.MustComplyWithDataschema()
-A005 = administrative_unit_area_5.MustComplyWithDataschema()
-A006 = administrative_unit_area_6.MustComplyWithDataschema()
-A007 = maritime_zone.MustComplyWithDataschema()
-A008 = residence_of_authority.MustComplyWithDataschema()
+# A001 = administrative_unit_area_1.MustComplyWithDataschema()
+# A002 = administrative_unit_area_2.MustComplyWithDataschema()
+# A003 = administrative_unit_area_3.MustComplyWithDataschema()
+# A004 = administrative_unit_area_4.MustComplyWithDataschema()
+# A005 = administrative_unit_area_5.MustComplyWithDataschema()
+# A006 = administrative_unit_area_6.MustComplyWithDataschema()
+# A007 = maritime_zone.MustComplyWithDataschema()
+# A008 = residence_of_authority.MustComplyWithDataschema()
 
 # # Geometric resolution
+# A021 = administrative_unit_area_1.geom.MustHaveCorrectCRS()
+# A022 = administrative_unit_area_2.geom.MustHaveCorrectCRS()
+# A023 = administrative_unit_area_3.geom.MustHaveCorrectCRS()
+# A024 = administrative_unit_area_4.geom.MustHaveCorrectCRS()
+# A025 = administrative_unit_area_5.geom.MustHaveCorrectCRS()
+# A026 = administrative_unit_area_6.geom.MustHaveCorrectCRS()
+# A027 = maritime_zone.geom.MustHaveCorrectCRS()
+# A028 = residence_of_authority.geom.MustHaveCorrectCRS()
 
 # A011 = administrative_unit_area_1.geom.MustHaveCorrectGeometryType()
 # A012 = administrative_unit_area_2.geom.MustHaveCorrectGeometryType()
@@ -193,6 +201,15 @@ A008 = residence_of_authority.MustComplyWithDataschema()
 # A017 = residence_of_authority.geom.MustHaveCorrectGeometryType()
 # A018 = maritime_zone.geom.MustHaveCorrectGeometryType()
 
+# A031 = administrative_unit_area_1.MustHaveValidGeometry()
+# A032 = administrative_unit_area_2.MustHaveValidGeometry()
+# A033 = administrative_unit_area_3.MustHaveValidGeometry()
+# A034 = administrative_unit_area_4.MustHaveValidGeometry()
+# A035 = administrative_unit_area_5.MustHaveValidGeometry()
+# A036 = administrative_unit_area_6.MustHaveValidGeometry()
+# A037 = maritime_zone.MustHaveValidGeometry()
+# A038 = residence_of_authority.MustHaveValidGeometry()
+
 # Data model and attribute resolution
 # A020 = administrative_unit_area_1.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
 # A021 = administrative_unit_area_2.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
@@ -201,5 +218,14 @@ A008 = residence_of_authority.MustComplyWithDataschema()
 # A024 = administrative_unit_area_5.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
 # A025 = administrative_unit_area_6.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
 # A026 = maritime_zone.zone_type.MustBeOfValues(MaritimeZoneTypeValue)
+
+# Topology
+A042 = administrative_unit_area_2.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A043 = administrative_unit_area_3.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A044 = administrative_unit_area_4.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A045 = administrative_unit_area_5.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A046 = administrative_unit_area_6.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A047 = residence_of_authority.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+
 
 end_theme()
