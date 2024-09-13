@@ -1,11 +1,11 @@
 from qgis.core import QgsVectorLayer
 from models import ValidationResult
-from . import StatisticValidator
+from . import GenericValidator
 import logging
 import pydapper
 from dataclasses import dataclass
 
-class DataSchemaValidator(StatisticValidator):
+class DataSchemaValidator(GenericValidator):
     logger = logging.getLogger(__name__)
     dsn = None
 

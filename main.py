@@ -5,7 +5,7 @@ sys.path.append(SCRIPT_DIR)
 
 
 from utilities import LogUtilities, QgisUtilities
-from storage import StorageUtilities, ValidationLoggingRepository, ValidationTaskRepository, ValidationRunRepository, GeometryResultRepository, StatisticResultRepository, ValidationCheckStatusRepository
+from storage import StorageUtilities, ValidationLoggingRepository, ValidationTaskRepository, ValidationRunRepository, GeometryResultRepository, GenericResultRepository, ValidationCheckStatusRepository
 from models import ValidationTask, ValidationRun, ValidationParameters
 from validators import *
 import logging
@@ -81,8 +81,8 @@ def main():
         logger.info("")
         geom_results = GeometryResultRepository.get_by_run_id(current_run.run_id)
         logger.info(f"{'Number of geometry results:':35} {len(geom_results)}")
-        stat_results = StatisticResultRepository.get_by_run_id(current_run.run_id)
-        logger.info(f"{'Number of statistic results:':35} {len(stat_results)}")
+        generic_results = GenericResultRepository.get_by_run_id(current_run.run_id)
+        logger.info(f"{'Number of generic results:':35} {len(generic_results)}")
         all_checks = ValidationCheckStatusRepository.get_checks_by_run_id(current_run.run_id)
         logger.info(f"{'Number of total checks:':35} {len(all_checks)}")
         failed_checks = ValidationCheckStatusRepository.get_checks_by_run_id(current_run.run_id, failed_only=True)

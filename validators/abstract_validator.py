@@ -16,7 +16,7 @@ class AbstractValidator(ABC):
         This method ensures that:
           1. a ValidationCheckStatus is created before the actual validation logic is started.
           2. the validation logic is started by calling the validate() function.
-          3. in case of success, the validation results are stored in the corresponding repository (being either the GeometryResultRepository or StatisticResultRepository, depending on the Validator type).
+          3. in case of success, the validation results are stored in the corresponding repository (being either the GeometryResultRepository or GenericResultRepository, depending on the Validator type).
           4. the ValidationCheckStatus is updated, both in case of success or failure.
 
         Args:

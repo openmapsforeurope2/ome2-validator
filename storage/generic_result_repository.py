@@ -1,8 +1,8 @@
 import pydapper
 
-from models import StatisticResult
+from models import GenericResult
 
-class StatisticResultRepository():
+class GenericResultRepository():
     dsn = None
     
     @classmethod
@@ -16,28 +16,28 @@ class StatisticResultRepository():
 
 
     @classmethod
-    def add(cls, validation_result: StatisticResult):
-        """Adds a single StatisticResult to the repository.
+    def add(cls, validation_result: GenericResult):
+        """Adds a single GenericResult to the repository.
 
         Args:
-            validation_result (StatisticResult): The statistic result to be stored.
+            validation_result (GenericResult): The generic result to be stored.
         """        
         cls.add_list([validation_result])
 
 
     @classmethod
-    def add_list(cls, statistic_results: list[StatisticResult]):
-        """Adds multiple StatisticResults to the repository.
+    def add_list(cls, generic_results: list[GenericResult]):
+        """Adds multiple GenericResults to the repository.
 
         Args:
-            statistic_results (list[StatisticResult]): The statistic results to be stored.
+            generic_results (list[GenericResult]): The generic results to be stored.
         """        
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
-                for validation_result in statistic_results:
+                for validation_result in generic_results:
                     _ = commands.execute(
-                        "INSERT INTO statistic_result " +
+                        "INSERT INTO generic_result " +
                         "(run_id, validation_code, severity, feature_class, message) " +
                         "VALUES (?run_id?, ?validation_code?, ?severity?, ?feature_class?, ?message?)",
                         param = validation_result.as_param_dict()
@@ -47,21 +47,21 @@ class StatisticResultRepository():
 
 
     @classmethod
-    def get_by_run_id(cls, run_id: int) -> list[StatisticResult]:
-        """Gets all StatisticResults for the validation-run with the given run_id.
+    def get_by_run_id(cls, run_id: int) -> list[GenericResult]:
+        """Gets all GenericResults for the validation-run with the given run_id.
 
         Args:
             run_id (int): The run id.
 
         Returns:
-            list[StatisticResult]: All statistic results for the corresponding run.
+            list[GenericResult]: All generic results for the corresponding run.
         """        
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
                 return commands.query(
-                    "SELECT * FROM statistic_result WHERE run_id = ?run_id? ORDER BY result_id ASC",
+                    "SELECT * FROM generic_result WHERE run_id = ?run_id? ORDER BY result_id ASC",
                     param = { "run_id": run_id},
-                    model = StatisticResult)
+                    model = GenericResult)
         finally:
             commands.connection.close()

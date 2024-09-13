@@ -3,7 +3,7 @@ import logging
 from pathlib import Path
 import pydapper
 from dataclasses import dataclass
-from storage import ValidationTaskRepository, ValidationRunRepository, GeometryResultRepository, StatisticResultRepository, ValidationCheckStatusRepository, ValidationLoggingRepository
+from storage import ValidationTaskRepository, ValidationRunRepository, GeometryResultRepository, GenericResultRepository, ValidationCheckStatusRepository, ValidationLoggingRepository
 
 class StorageUtilities:
     logger = logging.getLogger(__name__)
@@ -134,7 +134,7 @@ class StorageUtilities:
             ValidationTaskRepository.set_dsn(dsn)
             ValidationRunRepository.set_dsn(dsn)
             GeometryResultRepository.set_dsn(dsn)
-            StatisticResultRepository.set_dsn(dsn)
+            GenericResultRepository.set_dsn(dsn)
             ValidationCheckStatusRepository.set_dsn(dsn)
         else:
             raise RuntimeError("Database version does not match validator version.")

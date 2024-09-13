@@ -11,7 +11,7 @@ import logging
 
 @dataclass
 class GeometryResult(ValidationResult):
-    """Dataclass for storing statistic results in the database.
+    """Dataclass for storing geometry results in the database.
 
         Most attributes are inherited of the abstract ValidationResult.
     

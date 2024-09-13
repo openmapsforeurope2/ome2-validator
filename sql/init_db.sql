@@ -71,9 +71,9 @@ COMMENT ON TABLE geometry_result IS 'Table for storing the geometry results for 
 CREATE INDEX idx_geometry_result_id ON geometry_result(result_id);
 
 --
--- Create table for statistic results
+-- Create table for generic results
 -- 
-CREATE TABLE statistic_result (
+CREATE TABLE generic_result (
   result_id SERIAL PRIMARY KEY,
   run_id INT,
   validation_code VARCHAR (4),
@@ -85,9 +85,9 @@ CREATE TABLE statistic_result (
       REFERENCES validation_run(run_id)
 );
 
-COMMENT ON TABLE statistic_result IS 'Table for storing the statistic results for a validation.';
+COMMENT ON TABLE generic_result IS 'Table for storing the generic results for a validation.';
 
-CREATE INDEX idx_statistic_result_id ON statistic_result(result_id);
+CREATE INDEX idx_generic_result_id ON generic_result(result_id);
 
 
 --

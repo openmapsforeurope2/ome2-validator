@@ -1,6 +1,6 @@
 from .abstract_validator import *
 from .abstract_feature_validator import *
-from .abstract_statistic_validator import *
+from .abstract_generic_validator import *
 
 from .query_validator import *
 from .extent_validator import *

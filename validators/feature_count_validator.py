@@ -1,10 +1,10 @@
 from qgis.core import QgsVectorLayer
 from qgis.PyQt.QtCore import QVariant
 from models import ValidationResult
-from . import StatisticValidator
+from . import GenericValidator
 import logging
 
-class FeatureCountValidator(StatisticValidator):
+class FeatureCountValidator(GenericValidator):
     logger = logging.getLogger(__name__)
 
     @classmethod
