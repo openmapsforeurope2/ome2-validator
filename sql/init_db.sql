@@ -54,7 +54,7 @@ CREATE INDEX idx_validation_logging_run_id ON validation_logging(run_id);
 CREATE TABLE geometry_result (
   result_id SERIAL PRIMARY KEY,
   run_id INT,
-  validation_code VARCHAR (4),
+  validation_code VARCHAR (5) NOT NULL,
   severity VARCHAR (9) NOT NULL CHECK (severity IN ('WARNING', 'ERROR')),
   feature_class VARCHAR (255),
   message VARCHAR (255),
@@ -76,7 +76,7 @@ CREATE INDEX idx_geometry_result_id ON geometry_result(result_id);
 CREATE TABLE generic_result (
   result_id SERIAL PRIMARY KEY,
   run_id INT,
-  validation_code VARCHAR (4),
+  validation_code VARCHAR (5) NOT NULL,
   severity VARCHAR (9) NOT NULL CHECK (severity IN ('WARNING', 'ERROR', 'STATISTIC')),
   feature_class VARCHAR (255),
   message VARCHAR (255),
@@ -94,7 +94,7 @@ CREATE INDEX idx_generic_result_id ON generic_result(result_id);
 -- Create table for validation check status
 -- 
 CREATE TABLE validation_check_status (
-  validation_code VARCHAR(4) NOT NULL,
+  validation_code VARCHAR(5) NOT NULL,
   run_id INT NOT NULL,
   start_time TIMESTAMP NOT NULL,
   end_time TIMESTAMP,

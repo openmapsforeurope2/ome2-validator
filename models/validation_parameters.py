@@ -122,7 +122,9 @@ class ValidationParameters:
         """
         if len(self.checks) == 0:
             return True
-        return validation_code in self.checks
+        
+        # I.e. ["T001"] will enable both T001a and T001b
+        return validation_code.startswith(tuple(self.checks))
     
 
     class DatabaseConnectionParameters():

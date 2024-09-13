@@ -14,6 +14,7 @@ class LandCoverTypeValue(DomainEnum):
     IN_DISPUTE_AREA = 'in_dispute_area'
     VOID_UNK = 'void_unk'
 
+
 class MaritimeZoneTypeValue(DomainEnum):
     INTERNAL_WATERS = 'internal_waters'
     TERRITORIAL_SEA = 'territorial_sea'
@@ -42,6 +43,7 @@ class FormOfWayValue(DomainEnum):
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
 
+
 class TENTNetworkValue(DomainEnum):
     CORE_TENT_NETWORK = 'core_tent_network'
     COMPREHENSIVE_TENT_NETWORK = 'comprehensive_tent_network'
@@ -58,6 +60,7 @@ class ConditionOfFacilityValue(DomainEnum):
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
 
+
 class FunctionalRoadClass(DomainEnum):
     MAIN_ROAD = 'main-road'
     FIRST_CLASS = 'first_class'
@@ -70,12 +73,14 @@ class FunctionalRoadClass(DomainEnum):
     EIGHTH_CLASS = 'eighth_class'
     NINTH_CLASS = 'ninth_class'
 
+
 class TrafficFlowDirectionValue(DomainEnum):
     BOTH_DIRECTIONS = 'both_directions'
     INDIRECTION = 'indirection'
     OPPOSITE_DIRECTION = 'opposite_direction'
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
+
 
 class VerticalPositionValue(DomainEnum):
     ON_GROUND_LEVEL = 'on_ground_level'
@@ -89,6 +94,7 @@ class RoadSurfaceCategoryValue(DomainEnum):
     UNPAVED = 'unpaved'
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
+
 
 class AccessRestrictionValue(DomainEnum):
     FORBIDDEN_LEGALLY = 'forbidden_legally'
@@ -112,6 +118,7 @@ class FormOfRoadNodeValue(DomainEnum):
     ROAD_SERVICE_AREA = 'road_service_area'
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
+
 
 class RoadServiceTypeValue(DomainEnum):
     BUS_STATION = 'bus_station'
@@ -141,7 +148,6 @@ class ElectrifiedValue(DomainEnum):
     VOID_UNK = 'void_unk'
 
 
-
 class RailwayStationUseValue(DomainEnum):
     CAR_SHUTTLE = 'car_shuttle'
     CARGO = 'cargo'
@@ -158,6 +164,7 @@ class AerodromeCategoryValue(DomainEnum):
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
 
+
 class AerodromeTypeValue(DomainEnum):
     AERODROME_HELIPORT = 'aerodrome_heliport'
     AERODROME_ONLY = 'aerodrome_only'
@@ -166,11 +173,13 @@ class AerodromeTypeValue(DomainEnum):
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
 
+
 class UseRestrictionValue(DomainEnum):
     RESERVED_FOR_MILITARY = 'reserved_for_military'
     TEMPORAL_RESTRICTIONS = 'temporal_restrictions'
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
+
 
 class SurfaceCategoryValue(DomainEnum):
     ASPHALT = 'asphalt'
