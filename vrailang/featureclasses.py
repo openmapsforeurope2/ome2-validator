@@ -31,7 +31,7 @@ import vrailang.specs
 
 __all__ = [
     'feature',
-    'FeatureMetaclass'
+    'isfeatureclass'
 ]
 
 # https://github.com/microsoft/pyright/blob/597ccabd07bdb977e535380675092aca839ef692/specs/dataclass_transforms.md
@@ -171,4 +171,30 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclass):
                 return True
 
         return False
+
+
+def isfeatureclass(cls: type) -> bool:
+    """Checks if a given type is a featureclass type.
+
+    Example usage:
+        ```
+        # ...
+
+        class RoadLine(feature):
+            id: uuid[notnull]
+            geom: multilinestringz[srid(3035)]
+            name: varchar[length(255)]
+
+        # ...
+
+        res = isfeatureclass(RoadLine) # returns True
+        ```
+
+    Args:
+        cls (type): the type to check
+
+    Returns:
+        bool: True if and only if `cls` is a featureclass.
+    """
+    return issubclass(type(cls), vrailang.FeatureMetaclass)
 

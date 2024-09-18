@@ -97,7 +97,7 @@ def main():
 
 def arg_loader(arg: object) -> object:
     # We can't seem to do type checking during runtime on 'feature' or 'FeatureMetaclass' in rules.py due to circular dependencies.
-    if issubclass(type(arg), vrailang.FeatureMetaclass):
+    if vrailang.isfeatureclass(arg):
         return QgisUtilities.create_postgres_vector_layer(arg.THEME.schema, arg.__name__, "geom")
     return arg
 
