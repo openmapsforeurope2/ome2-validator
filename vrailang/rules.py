@@ -13,6 +13,7 @@ import validators
 from vrailang.errors import VraiSpecificationError
 from vrailang.specs import CURRENT_SPEC_STATE
 from vrailang.dataconstraints import srid, length
+from models import BaseExtent, BaseValueDomain
 
 if TYPE_CHECKING:
     from vrailang.featureclasses import feature, FeatureclassAttribute
@@ -133,11 +134,11 @@ class MixinAttributeRules:
 
         )
     
-    def MustBeOfValues(self: 'FeatureclassAttribute', allowed_values: list[str]) -> ValidationRule: # TODO separator
+    def MustBeOfValues(self: 'FeatureclassAttribute', value_domain: 'BaseValueDomain') -> ValidationRule: # TODO separator
         return _create_rule_and_register(
             validators.AllowedAttributeValidator,
             self.featureclass,
-            (self.name, allowed_values),
+            (self.name, value_domain.to_list()),
             {}
         )
     
@@ -176,6 +177,16 @@ class MixinFeatureclassRules:
             validators.ValidGeometryValidator,
             cls,
             (),
+            {}
+        )
+    
+
+    @classmethod
+    def MustBeWithinExtent(cls: 'feature', extent: 'BaseExtent') -> ValidationRule:
+        return _create_rule_and_register(
+            validators.ExtentValidator,
+            cls,
+            (extent,),
             {}
         )
     

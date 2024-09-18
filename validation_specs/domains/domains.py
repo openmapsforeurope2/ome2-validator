@@ -1,13 +1,6 @@
-from enum import Enum
+from models import BaseValueDomain
 
-class DomainEnum(Enum):
-
-    @classmethod
-    def to_list(cls):
-        return list(map(lambda x: x.value, cls))
-
-
-class LandCoverTypeValue(DomainEnum):
+class LandCoverTypeValue(BaseValueDomain):
     LAND_AREA = 'land_area'
     COASTAL_WATER = 'coastal_water'
     INLAND_WATER = 'inland_water'
@@ -15,7 +8,7 @@ class LandCoverTypeValue(DomainEnum):
     VOID_UNK = 'void_unk'
 
 
-class MaritimeZoneTypeValue(DomainEnum):
+class MaritimeZoneTypeValue(BaseValueDomain):
     INTERNAL_WATERS = 'internal_waters'
     TERRITORIAL_SEA = 'territorial_sea'
     CONTIGUOUS_AREA = 'contiguous_area'
@@ -24,7 +17,7 @@ class MaritimeZoneTypeValue(DomainEnum):
     VOID_UNK = 'void_unk'
 
 
-class FormOfWayValue(DomainEnum):
+class FormOfWayValue(BaseValueDomain):
     MOTORWAY = 'motorway'
     FREEWAY = 'freeway'
     SLIP_ROAD = 'slip_road'
@@ -44,14 +37,14 @@ class FormOfWayValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class TENTNetworkValue(DomainEnum):
+class TENTNetworkValue(BaseValueDomain):
     CORE_TENT_NETWORK = 'core_tent_network'
     COMPREHENSIVE_TENT_NETWORK = 'comprehensive_tent_network'
     NO_TENT_NETWORK = 'no_tent_network'
     VOID_WILDCARD = 'void_*'
 
 
-class ConditionOfFacilityValue(DomainEnum):
+class ConditionOfFacilityValue(BaseValueDomain):
     DISUSED = 'disused'
     DECOMMISSIONED = 'decommissioned'
     FUNCTIONAL = 'functional'
@@ -61,7 +54,7 @@ class ConditionOfFacilityValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class FunctionalRoadClass(DomainEnum):
+class FunctionalRoadClass(BaseValueDomain):
     MAIN_ROAD = 'main-road'
     FIRST_CLASS = 'first_class'
     SECOND_CLASS = 'second_class'
@@ -74,7 +67,7 @@ class FunctionalRoadClass(DomainEnum):
     NINTH_CLASS = 'ninth_class'
 
 
-class TrafficFlowDirectionValue(DomainEnum):
+class TrafficFlowDirectionValue(BaseValueDomain):
     BOTH_DIRECTIONS = 'both_directions'
     INDIRECTION = 'indirection'
     OPPOSITE_DIRECTION = 'opposite_direction'
@@ -82,21 +75,21 @@ class TrafficFlowDirectionValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class VerticalPositionValue(DomainEnum):
+class VerticalPositionValue(BaseValueDomain):
     ON_GROUND_LEVEL = 'on_ground_level'
     SUSPENDED_OR_ELEVATED = 'suspended_or_elevated'
     UNDERGROUND = 'underground'
     VOID_UNK = 'void_unk'
 
 
-class RoadSurfaceCategoryValue(DomainEnum):
+class RoadSurfaceCategoryValue(BaseValueDomain):
     PAVED = 'paved'
     UNPAVED = 'unpaved'
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
 
 
-class AccessRestrictionValue(DomainEnum):
+class AccessRestrictionValue(BaseValueDomain):
     FORBIDDEN_LEGALLY = 'forbidden_legally'
     PHYSICALLY_IMPOSSIBLE = 'physically_impossible'
     PRIVATE = 'private'
@@ -107,7 +100,7 @@ class AccessRestrictionValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class FormOfRoadNodeValue(DomainEnum):
+class FormOfRoadNodeValue(BaseValueDomain):
     ENCLOSED_TRAFFIC_AREA = 'enclosed_traffic_area'
     INTERCHANGE = 'interchange'
     JUNCTION = 'junction'
@@ -120,7 +113,7 @@ class FormOfRoadNodeValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class RoadServiceTypeValue(DomainEnum):
+class RoadServiceTypeValue(BaseValueDomain):
     BUS_STATION = 'bus_station'
     PARKING = 'parking'
     REST_AREA = 'rest_area'
@@ -130,7 +123,7 @@ class RoadServiceTypeValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class RailwayTypeValue(DomainEnum):
+class RailwayTypeValue(BaseValueDomain):
     COG_RAILWAY = 'cog_railway'
     FUNICULAR = 'funicular'
     MAGNETIC_LEVITATION = 'magnetic_levitation'
@@ -142,13 +135,13 @@ class RailwayTypeValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class ElectrifiedValue(DomainEnum):
+class ElectrifiedValue(BaseValueDomain):
     TRUE = 'true'
     FALSE = 'false'
     VOID_UNK = 'void_unk'
 
 
-class RailwayStationUseValue(DomainEnum):
+class RailwayStationUseValue(BaseValueDomain):
     CAR_SHUTTLE = 'car_shuttle'
     CARGO = 'cargo'
     MIXED = 'mixed'
@@ -157,7 +150,7 @@ class RailwayStationUseValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class AerodromeCategoryValue(DomainEnum):
+class AerodromeCategoryValue(BaseValueDomain):
     INTERNATIONAL = 'international'
     DOMESTIC_NATIONAL = 'domestic_national'
     DOMESTIC_REGIONAL = 'domestic_regional'
@@ -165,7 +158,7 @@ class AerodromeCategoryValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class AerodromeTypeValue(DomainEnum):
+class AerodromeTypeValue(BaseValueDomain):
     AERODROME_HELIPORT = 'aerodrome_heliport'
     AERODROME_ONLY = 'aerodrome_only'
     HELIPORT_ONLY = 'heliport_only'
@@ -174,14 +167,14 @@ class AerodromeTypeValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class UseRestrictionValue(DomainEnum):
+class UseRestrictionValue(BaseValueDomain):
     RESERVED_FOR_MILITARY = 'reserved_for_military'
     TEMPORAL_RESTRICTIONS = 'temporal_restrictions'
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
 
 
-class SurfaceCategoryValue(DomainEnum):
+class SurfaceCategoryValue(BaseValueDomain):
     ASPHALT = 'asphalt'
     CONCRETE = 'concrete'
     GRASS = 'grass'
@@ -189,7 +182,7 @@ class SurfaceCategoryValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class FerryUseValue(DomainEnum):
+class FerryUseValue(BaseValueDomain):
     CARS = 'cars'
     PASSENGERS = 'passengers'
     TRAIN = 'train'
@@ -198,7 +191,7 @@ class FerryUseValue(DomainEnum):
     VOID_WILDCARD = 'void_*'
 
 
-class CountryCodeValue(DomainEnum):
+class CountryCodeValue(BaseValueDomain):
     ALBANIA = 'al'
     AUSTRIA = 'at'
     BELGIUM = 'be'

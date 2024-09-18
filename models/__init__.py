@@ -7,3 +7,5 @@ from .validation_check_status import *
 from .geometry_result import *
 from .generic_result import *
 from .validation_parameters import *
+from .extent import *
+from .domain import *

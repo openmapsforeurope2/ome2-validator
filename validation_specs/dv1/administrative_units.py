@@ -1,5 +1,6 @@
 from vrailang import *
 from validation_specs.domains import LandCoverTypeValue, MaritimeZoneTypeValue, CountryCodeValue
+from validation_specs.extents import Epsg3035BoundsExtent
 
 begin_theme('ADMIN', 'au')
 
@@ -231,6 +232,15 @@ A004f = administrative_unit_area_6.MustHaveValidGeometry()
 A004g = maritime_zone.MustHaveValidGeometry()
 A004h = residence_of_authority.MustHaveValidGeometry()
 
+A005a = administrative_unit_area_1.MustBeWithinExtent(Epsg3035BoundsExtent)
+A005b = administrative_unit_area_2.MustBeWithinExtent(Epsg3035BoundsExtent)
+A005c = administrative_unit_area_3.MustBeWithinExtent(Epsg3035BoundsExtent)
+A005d = administrative_unit_area_4.MustBeWithinExtent(Epsg3035BoundsExtent)
+A005e = administrative_unit_area_5.MustBeWithinExtent(Epsg3035BoundsExtent)
+A005f = administrative_unit_area_6.MustBeWithinExtent(Epsg3035BoundsExtent)
+A005g = maritime_zone.MustBeWithinExtent(Epsg3035BoundsExtent)
+A005h = residence_of_authority.MustBeWithinExtent(Epsg3035BoundsExtent)
+
 
 A006a = administrative_unit_area_1.AreaMustBeAtLeast(200_000_000)
 A006b = administrative_unit_area_2.AreaMustBeAtLeast(20_000_000)
@@ -254,21 +264,21 @@ A007h = residence_of_authority.VerticesDistanceMustBeAtLeast(0.05)
 
 #region Data model and attribute resolution
 
-A014a = administrative_unit_area_1.country.MustBeOfValues(CountryCodeValue.to_list())
-A014b = administrative_unit_area_2.country.MustBeOfValues(CountryCodeValue.to_list())
-A014c = administrative_unit_area_3.country.MustBeOfValues(CountryCodeValue.to_list())
-A014d = administrative_unit_area_4.country.MustBeOfValues(CountryCodeValue.to_list())
-A014e = administrative_unit_area_5.country.MustBeOfValues(CountryCodeValue.to_list())
-A014f = administrative_unit_area_6.country.MustBeOfValues(CountryCodeValue.to_list())
-A014g = maritime_zone.country.MustBeOfValues(CountryCodeValue.to_list())
-A014h = residence_of_authority.country.MustBeOfValues(CountryCodeValue.to_list())
+A014a = administrative_unit_area_1.country.MustBeOfValues(CountryCodeValue)
+A014b = administrative_unit_area_2.country.MustBeOfValues(CountryCodeValue)
+A014c = administrative_unit_area_3.country.MustBeOfValues(CountryCodeValue)
+A014d = administrative_unit_area_4.country.MustBeOfValues(CountryCodeValue)
+A014e = administrative_unit_area_5.country.MustBeOfValues(CountryCodeValue)
+A014f = administrative_unit_area_6.country.MustBeOfValues(CountryCodeValue)
+A014g = maritime_zone.country.MustBeOfValues(CountryCodeValue)
+A014h = residence_of_authority.country.MustBeOfValues(CountryCodeValue)
 
-A015a = administrative_unit_area_1.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
-A015b = administrative_unit_area_2.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
-A015c = administrative_unit_area_3.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
-A015d = administrative_unit_area_4.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
-A015e = administrative_unit_area_5.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
-A015f = administrative_unit_area_6.land_cover_type.MustBeOfValues(LandCoverTypeValue.to_list())
+A015a = administrative_unit_area_1.land_cover_type.MustBeOfValues(LandCoverTypeValue)
+A015b = administrative_unit_area_2.land_cover_type.MustBeOfValues(LandCoverTypeValue)
+A015c = administrative_unit_area_3.land_cover_type.MustBeOfValues(LandCoverTypeValue)
+A015d = administrative_unit_area_4.land_cover_type.MustBeOfValues(LandCoverTypeValue)
+A015e = administrative_unit_area_5.land_cover_type.MustBeOfValues(LandCoverTypeValue)
+A015f = administrative_unit_area_6.land_cover_type.MustBeOfValues(LandCoverTypeValue)
 A015g = maritime_zone.zone_type.MustBeOfValues(MaritimeZoneTypeValue)
 
 
