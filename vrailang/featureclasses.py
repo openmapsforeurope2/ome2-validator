@@ -196,5 +196,4 @@ def isfeatureclass(cls: type) -> bool:
     Returns:
         bool: True if and only if `cls` is a featureclass.
     """
-    return issubclass(type(cls), vrailang.FeatureMetaclass)
-
+    return issubclass(type(cls), FeatureMetaclass)
