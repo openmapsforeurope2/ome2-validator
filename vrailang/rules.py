@@ -142,7 +142,7 @@ class MixinAttributeRules:
             {}
         )
     
-    def CalculateCompletionRate(self: 'FeatureclassAttribute') -> ValidationRule:
+    def DetermineCompletionRate(self: 'FeatureclassAttribute') -> ValidationRule:
         return _create_rule_and_register(
             validators.CompletionRateValidator,
             self.featureclass,
@@ -249,5 +249,13 @@ class MixinFeatureclassRules:
             (),
             {}
         )
+    
 
-
+    @classmethod
+    def DetermineFeatureCount(cls: 'feature', group_by_field_1: str = None, group_by_field_2: str = None, minimum_record_count: int=-1) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.FeatureCountValidator,
+            cls,
+            (group_by_field_1, group_by_field_2, minimum_record_count),
+            {}
+        )
