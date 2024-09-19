@@ -1,6 +1,6 @@
 from vrailang import *
 from validation_specs.domains import LandCoverTypeValue, MaritimeZoneTypeValue, CountryCodeValue
-from validation_specs.extents import Epsg3035BoundsExtent
+from validation_specs.extents import Epsg3035Bounds
 
 begin_theme('ADMIN', 'au')
 
@@ -232,14 +232,14 @@ A004f = administrative_unit_area_6.MustHaveValidGeometry()
 A004g = maritime_zone.MustHaveValidGeometry()
 A004h = residence_of_authority.MustHaveValidGeometry()
 
-A005a = administrative_unit_area_1.MustBeWithinExtent(Epsg3035BoundsExtent)
-A005b = administrative_unit_area_2.MustBeWithinExtent(Epsg3035BoundsExtent)
-A005c = administrative_unit_area_3.MustBeWithinExtent(Epsg3035BoundsExtent)
-A005d = administrative_unit_area_4.MustBeWithinExtent(Epsg3035BoundsExtent)
-A005e = administrative_unit_area_5.MustBeWithinExtent(Epsg3035BoundsExtent)
-A005f = administrative_unit_area_6.MustBeWithinExtent(Epsg3035BoundsExtent)
-A005g = maritime_zone.MustBeWithinExtent(Epsg3035BoundsExtent)
-A005h = residence_of_authority.MustBeWithinExtent(Epsg3035BoundsExtent)
+A005a = administrative_unit_area_1.MustBeWithinExtent(Epsg3035Bounds)
+A005b = administrative_unit_area_2.MustBeWithinExtent(Epsg3035Bounds)
+A005c = administrative_unit_area_3.MustBeWithinExtent(Epsg3035Bounds)
+A005d = administrative_unit_area_4.MustBeWithinExtent(Epsg3035Bounds)
+A005e = administrative_unit_area_5.MustBeWithinExtent(Epsg3035Bounds)
+A005f = administrative_unit_area_6.MustBeWithinExtent(Epsg3035Bounds)
+A005g = maritime_zone.MustBeWithinExtent(Epsg3035Bounds)
+A005h = residence_of_authority.MustBeWithinExtent(Epsg3035Bounds)
 
 
 A006a = administrative_unit_area_1.AreaMustBeAtLeast(200_000_000)

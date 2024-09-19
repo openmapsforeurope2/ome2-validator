@@ -1,8 +1,8 @@
-from abc import ABC
+from dataclasses import dataclass
 
-class BaseExtent(ABC):
+@dataclass
+class BaseExtent():
     x_min: float
     y_min: float
     x_max: float
     y_max: float
-
