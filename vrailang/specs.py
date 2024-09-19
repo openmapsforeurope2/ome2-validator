@@ -5,7 +5,6 @@ via the functions `begin_spec`/`end_spec` and `begin_theme`/`end_theme`.
 
 from dataclasses import dataclass, field
 from typing import ClassVar, Union, TYPE_CHECKING, Callable
-from qgis.core import QgsVectorLayer
 from models import ValidationParameters
 from vrailang.errors import VraiSpecificationError
 import logging
@@ -50,6 +49,13 @@ class ValidationTheme:
 
         del self._queued_validation_rules
         self._finalized = True
+
+
+    def featureclass(self, name: str) -> 'feature':
+        if not name in self.feature_classes:
+            raise VraiSpecificationError(f'Featureclass {name} cannot be retrieved from theme {self.name}: it is not part of this theme')    
+        
+        return self.feature_classes[name]
         
 
 @dataclass
@@ -78,6 +84,12 @@ class ValidationSpecification:
                     continue
 
                 validation_rule.run(params.run_id, arg_loader)
+
+    def theme(self, name: str) -> 'ValidationTheme':
+        if not name in self.themes:
+            raise VraiSpecificationError(f'Theme {name} cannot be retrieved from specification {self.name}: it is not part of this specification')    
+        
+        return self.themes[name]
 
 
 @dataclass

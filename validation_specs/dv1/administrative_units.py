@@ -312,17 +312,6 @@ A022f = administrative_unit_area_6.MustNotHaveOverlaps()
 
 #endregion
 
-#region Statistics
-
-A091a = administrative_unit_area_1.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
-A091b = administrative_unit_area_2.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
-A091c = administrative_unit_area_3.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
-A091d = administrative_unit_area_4.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
-A091e = administrative_unit_area_5.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
-A091f = administrative_unit_area_6.land_cover_type.CalculateCompletionRate().TreatAsStatistic()
-
-
-#endregion
 
 #endregion
 

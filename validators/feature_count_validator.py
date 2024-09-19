@@ -95,7 +95,7 @@ class FeatureCountValidator(GenericValidator):
         if expression:
             expression_part = f" for {expression}"
         plural = "" if feature_count == 1 else "s"
-        return f"Layer {feature_class.name()} has {feature_count} record{plural}{expression_part}."
+        return f"Featureclass '{feature_class.name()}' has {feature_count} record{plural}{expression_part}."
     
 
     @classmethod
