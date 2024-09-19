@@ -61,7 +61,6 @@ class ValidationRule:
     def run(self, run_id: int, arg_loader: Callable[['object'], object]):
         # Convert vrailang.feature to QgsVectorLayer in featureclass, *args and **kwargs.
         feature_layer = arg_loader(self.feature_class)
-        
         self.args = tuple([arg_loader(a) for a in list(self.args)])
 
         for key in self.kwargs:
@@ -250,6 +249,16 @@ class MixinFeatureclassRules:
             {}
         )
     
+
+    @classmethod
+    def AdjacentFacesMustDiffer(cls: 'feature', attributes: list[str]) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.NoAdjacentFacesSameAttributeValidator,
+            cls,
+            (attributes,),
+            {}
+        )
+
 
     @classmethod
     def DetermineFeatureCount(cls: 'feature', group_by_field_1: str = None, group_by_field_2: str = None, minimum_record_count: int=-1) -> ValidationRule:

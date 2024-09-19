@@ -260,6 +260,13 @@ A007f = administrative_unit_area_6.VerticesDistanceMustBeAtLeast(0.05)
 A007g = maritime_zone.VerticesDistanceMustBeAtLeast(0.05)
 A007h = residence_of_authority.VerticesDistanceMustBeAtLeast(0.05)
 
+
+A008a = administrative_unit_area_1.AdjacentFacesMustDiffer(['country'])
+A008b = administrative_unit_area_2.AdjacentFacesMustDiffer(['country','label'])
+A008c = administrative_unit_area_3.AdjacentFacesMustDiffer(['country','label'])
+A008d = administrative_unit_area_4.AdjacentFacesMustDiffer(['country','label'])
+
+
 #endregion
 
 #region Data model and attribute resolution
