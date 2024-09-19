@@ -111,6 +111,25 @@ class MixinAttributeRules:
             (self.name,),
             {}
         )
+
+
+    def MustNotBeEmpty(self: 'FeatureclassAttribute') -> ValidationRule:
+        return _create_rule_and_register(
+            validators.AttributeNotEmptyValidator,
+            self.featureclass,
+            (self.name,),
+            {}
+        )
+    
+
+    def MustNotBeUnknown(self: 'FeatureclassAttribute') -> ValidationRule:
+        return _create_rule_and_register(
+            validators.AttributeNotUnknownValidator,
+            self.featureclass,
+            (self.name,),
+            {}
+        )
+    
     
     def MustHaveCorrectCRS(self: 'FeatureclassAttribute') -> ValidationRule:
         srid_constraint = self.get_constraint(srid)

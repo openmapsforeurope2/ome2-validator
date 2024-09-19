@@ -271,6 +271,23 @@ A008d = administrative_unit_area_4.AdjacentFacesMustDiffer(['country','label'])
 
 #region Data model and attribute resolution
 
+A012a = administrative_unit_area_1.label.MustNotBeNull().TreatAsWarning()
+A012b = administrative_unit_area_2.label.MustNotBeNull().TreatAsWarning()
+A012c = administrative_unit_area_3.label.MustNotBeNull().TreatAsWarning()
+A012d = administrative_unit_area_4.label.MustNotBeNull().TreatAsWarning()
+A012e = administrative_unit_area_5.label.MustNotBeNull().TreatAsWarning()
+A012f = administrative_unit_area_6.label.MustNotBeNull().TreatAsWarning()
+A012g = maritime_zone.label.MustNotBeNull().TreatAsWarning()
+A012h = residence_of_authority.label.MustNotBeNull().TreatAsWarning()
+
+A013a = administrative_unit_area_1.land_cover_type.MustNotBeUnknown().TreatAsWarning()
+A013b = administrative_unit_area_2.land_cover_type.MustNotBeUnknown().TreatAsWarning()
+A013c = administrative_unit_area_3.land_cover_type.MustNotBeUnknown().TreatAsWarning()
+A013d = administrative_unit_area_4.land_cover_type.MustNotBeUnknown().TreatAsWarning()
+A013e = administrative_unit_area_5.land_cover_type.MustNotBeUnknown().TreatAsWarning()
+A013f = administrative_unit_area_6.land_cover_type.MustNotBeUnknown().TreatAsWarning()
+A013g = maritime_zone.zone_type.MustNotBeUnknown().TreatAsWarning()
+
 A014a = administrative_unit_area_1.country.MustBeOfValues(CountryCodeValue)
 A014b = administrative_unit_area_2.country.MustBeOfValues(CountryCodeValue)
 A014c = administrative_unit_area_3.country.MustBeOfValues(CountryCodeValue)
