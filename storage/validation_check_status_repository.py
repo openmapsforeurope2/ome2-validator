@@ -51,7 +51,7 @@ class ValidationCheckStatusRepository():
             with commands:
                 _ = commands.execute(
                     "UPDATE validation_check_status " + 
-                    "SET end_time = now(), last_update = now(), success = ?success? " +
+                    "SET end_time = now(), last_update = now(), success = ?success?, number_of_results = ?number_of_results? " +
                     "WHERE validation_code = ?validation_code? AND run_id = ?run_id?",
                     param = validation_check_status.as_param_dict()
                 )

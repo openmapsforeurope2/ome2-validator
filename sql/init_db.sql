@@ -100,6 +100,7 @@ CREATE TABLE validation_check_status (
   end_time TIMESTAMP,
   last_update TIMESTAMP,
   success BOOLEAN,
+  number_of_results INT,
   UNIQUE (validation_code, run_id),
   CONSTRAINT fk_run
     FOREIGN KEY(run_id) 

@@ -25,7 +25,7 @@ class AbstractValidator(ABC):
             severity (str): The severity to use (WARNING / ERROR / STATISTIC).
             feature_class (QgsVectorLayer): The feature class to check.
         """        
-        check_status = ValidationCheckStatus(validation_code, run_id, None, None, None, None)
+        check_status = ValidationCheckStatus(validation_code, run_id, None, None, None, None, -1)
         exception = False
         try:
             cls.logger.info(f'Start running the {cls.__name__} for {validation_code}')
@@ -40,11 +40,15 @@ class AbstractValidator(ABC):
         finally:
             if not exception:
                 cls.logger.info(f'Finished running the {cls.__name__} for {validation_code}')
-                cls.logger.info(f'Number of results for {validation_code}: {len(validation_results)}')
-                cls.result_repository.add_list(validation_results)
-                # TODO catch exceptions on database insertion, otherwise this may result in a crash
-
                 check_status.success = True
+                check_status.number_of_results = len(validation_results)
+                cls.logger.info(f'Number of results for {validation_code}: {check_status.number_of_results}')
+
+                try:
+                    cls.result_repository.add_list(validation_results)
+                except Exception:
+                    cls.logger.error(f'An exception occured while storing validation results of the {cls.__name__} for {validation_code}')
+
                 ValidationCheckStatusRepository.update_on_end(check_status)
 
 
