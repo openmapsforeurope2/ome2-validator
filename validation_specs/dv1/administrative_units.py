@@ -266,6 +266,15 @@ A008b = administrative_unit_area_2.AdjacentFacesMustDiffer(['country','label']).
 A008c = administrative_unit_area_3.AdjacentFacesMustDiffer(['country','label']).TreatAsWarning()
 A008d = administrative_unit_area_4.AdjacentFacesMustDiffer(['country','label']).TreatAsWarning()
 
+A009a = administrative_unit_area_1.objectid.MustBeUnique()
+A009b = administrative_unit_area_2.objectid.MustBeUnique()
+A009c = administrative_unit_area_3.objectid.MustBeUnique()
+A009d = administrative_unit_area_4.objectid.MustBeUnique()
+A009e = administrative_unit_area_5.objectid.MustBeUnique()
+A009f = administrative_unit_area_6.objectid.MustBeUnique()
+A009g = maritime_zone.objectid.MustBeUnique()
+A009h = residence_of_authority.objectid.MustBeUnique()
+
 
 #endregion
 

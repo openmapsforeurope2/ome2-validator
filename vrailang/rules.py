@@ -167,7 +167,14 @@ class MixinAttributeRules:
             ([self.name],),
             {}
         )
-
+    
+    def MustBeUnique(self: 'FeatureclassAttribute') -> ValidationRule:
+        return _create_rule_and_register(
+            validators.UniqueFieldValidator,
+            self.featureclass,
+            (self.name, self.featureclass.THEME.schema),
+            {}
+        )
 
 
 class MixinFeatureclassRules:

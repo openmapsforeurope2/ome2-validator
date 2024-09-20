@@ -73,6 +73,7 @@ def main():
 
         DataSchemaValidator.set_dsn(params.input_db_params.create_pg_dsn())
         CrsValidator.set_dsn(params.input_db_params.create_pg_dsn())
+        UniqueFieldValidator.set_dsn(params.input_db_params.create_pg_dsn())
         
         # Retrieve the validation specification and start the validation
         validation_specs = vrailang.ValidationSpecification.ALL_SPECIFICATIONS[params.specification]
