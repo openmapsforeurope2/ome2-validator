@@ -1,5 +1,6 @@
 from vrailang import *
 from validation_specs.domains import *
+from validation_specs.extents import Epsg3035Bounds
 begin_theme('TRANS', 'tn')
 
 #region Featuretypes
@@ -305,7 +306,7 @@ class port_area(feature):
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
-    geom: MultiPolygon[srid(3035)]
+    geom: MultiPolygonZ[srid(3035)]
     name: jsonb
     label: varchar[length(255)]
     un_locode: varchar[length(255)]
@@ -420,6 +421,24 @@ T004o = ferry_crossing.MustHaveValidGeometry()
 T004p = port_area.MustHaveValidGeometry()
 T004q = port_point.MustHaveValidGeometry()
 
+T005a = road_link.MustBeWithinExtent(Epsg3035Bounds)
+T005b = road.MustBeWithinExtent(Epsg3035Bounds)
+T005c = road_node.MustBeWithinExtent(Epsg3035Bounds)
+T005d = road_service_area.MustBeWithinExtent(Epsg3035Bounds)
+T005e = road_service_point.MustBeWithinExtent(Epsg3035Bounds)
+T005f = marker_post.MustBeWithinExtent(Epsg3035Bounds)
+T005g = railway_link.MustBeWithinExtent(Epsg3035Bounds)
+T005h = railway_line.MustBeWithinExtent(Epsg3035Bounds)
+T005i = railway_station_area.MustBeWithinExtent(Epsg3035Bounds)
+T005j = railway_station_point.MustBeWithinExtent(Epsg3035Bounds)
+T005k = aerodrome_area.MustBeWithinExtent(Epsg3035Bounds)
+T005l = aerodrome_point.MustBeWithinExtent(Epsg3035Bounds)
+T005m = runway_area.MustBeWithinExtent(Epsg3035Bounds)
+T005n = runway_line.MustBeWithinExtent(Epsg3035Bounds)
+T005o = ferry_crossing.MustBeWithinExtent(Epsg3035Bounds)
+T005p = port_area.MustBeWithinExtent(Epsg3035Bounds)
+T005q = port_point.MustBeWithinExtent(Epsg3035Bounds)
+
 
 T006n = runway_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
 
@@ -445,32 +464,32 @@ T011p = port_area.objectid.MustNotBeNull()
 T011q = port_point.objectid.MustNotBeNull()
 
 # TODO checks on road_link are very slow
-T014a = road_link.form_of_way.MustBeOfValues(FormOfWayValue)
-T014b = road_link.functional_road_class.MustBeOfValues(FunctionalRoadClass)
-T014c = road_link.vertical_position.MustBeOfValues(VerticalPositionValue)
-T014d = road_link.road_surface_category.MustBeOfValues(RoadSurfaceCategoryValue)
-T014e = road_link.tent_network.MustBeOfValues(TENTNetworkValue)
-T014f = road_link.traffic_flow_direction.MustBeOfValues(TrafficFlowDirectionValue)
-T014g = road_link.access_restriction.MustBeOfValues(AccessRestrictionValue)
-T014h = road_node.form_of_road_node.MustBeOfValues(FormOfRoadNodeValue)
-T014i = road_service_point.type.MustBeOfValues(RoadServiceTypeValue)
-T014j = road_service_area.type.MustBeOfValues(RoadServiceTypeValue)
-T014k = railway_link.type.MustBeOfValues(RailwayTypeValue)
-T014l = railway_link.electrified.MustBeOfValues(ElectrifiedValue)
-T014m = railway_station_point.railway_use.MustBeOfValues(RailwayStationUseValue)
-T014n = railway_station_area.railway_use.MustBeOfValues(RailwayStationUseValue)
-T014o = aerodrome_point.aerodrome_category.MustBeOfValues(AerodromeCategoryValue)
-T014p = aerodrome_area.aerodrome_category.MustBeOfValues(AerodromeCategoryValue)
-T014q = aerodrome_point.aerodrome_type.MustBeOfValues(AerodromeTypeValue)
-T014r = aerodrome_area.aerodrome_type.MustBeOfValues(AerodromeTypeValue)
-T014s = aerodrome_point.use_restriction.MustBeOfValues(UseRestrictionValue)
-T014t = aerodrome_area.use_restriction.MustBeOfValues(UseRestrictionValue)
-T014u = runway_line.surface_composition.MustBeOfValues(SurfaceCategoryValue)
-T014v = runway_area.surface_composition.MustBeOfValues(SurfaceCategoryValue)
-T014w = ferry_crossing.ferry_use.MustBeOfValues(FerryUseValue)
-T014x = ferry_crossing.tent_network.MustBeOfValues(TENTNetworkValue)
-T014y = port_point.tent_network.MustBeOfValues(TENTNetworkValue)
-T014z = port_area.tent_network.MustBeOfValues(TENTNetworkValue)
+T015a = road_link.form_of_way.MustBeOfValues(FormOfWayValue)
+T015b = road_link.functional_road_class.MustBeOfValues(FunctionalRoadClass)
+T015c = road_link.vertical_position.MustBeOfValues(VerticalPositionValue)
+T015d = road_link.road_surface_category.MustBeOfValues(RoadSurfaceCategoryValue)
+T015e = road_link.tent_network.MustBeOfValues(TENTNetworkValue)
+T015f = road_link.traffic_flow_direction.MustBeOfValues(TrafficFlowDirectionValue)
+T015g = road_link.access_restriction.MustBeOfValues(AccessRestrictionValue)
+T015h = road_node.form_of_road_node.MustBeOfValues(FormOfRoadNodeValue)
+T015i = road_service_point.type.MustBeOfValues(RoadServiceTypeValue)
+T015j = road_service_area.type.MustBeOfValues(RoadServiceTypeValue)
+T015k = railway_link.type.MustBeOfValues(RailwayTypeValue)
+T015l = railway_link.electrified.MustBeOfValues(ElectrifiedValue)
+T015m = railway_station_point.railway_use.MustBeOfValues(RailwayStationUseValue)
+T015n = railway_station_area.railway_use.MustBeOfValues(RailwayStationUseValue)
+T015o = aerodrome_point.aerodrome_category.MustBeOfValues(AerodromeCategoryValue)
+T015p = aerodrome_area.aerodrome_category.MustBeOfValues(AerodromeCategoryValue)
+T015q = aerodrome_point.aerodrome_type.MustBeOfValues(AerodromeTypeValue)
+T015r = aerodrome_area.aerodrome_type.MustBeOfValues(AerodromeTypeValue)
+T015s = aerodrome_point.use_restriction.MustBeOfValues(UseRestrictionValue)
+T015t = aerodrome_area.use_restriction.MustBeOfValues(UseRestrictionValue)
+T015u = runway_line.surface_composition.MustBeOfValues(SurfaceCategoryValue)
+T015v = runway_area.surface_composition.MustBeOfValues(SurfaceCategoryValue)
+T015w = ferry_crossing.ferry_use.MustBeOfValues(FerryUseValue)
+T015x = ferry_crossing.tent_network.MustBeOfValues(TENTNetworkValue)
+T015y = port_point.tent_network.MustBeOfValues(TENTNetworkValue)
+T015z = port_area.tent_network.MustBeOfValues(TENTNetworkValue)
 
 #endregion
 

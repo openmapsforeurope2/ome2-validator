@@ -37,6 +37,14 @@ A002f = administrative_unit_area_6.DetermineFeatureCount(group_by_field_1='count
 A002g = residence_of_authority.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
 A002h = maritime_zone.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
 
+A003a = administrative_unit_area_1.DetermineFeatureCount(group_by_field_1='country', group_by_field_2='land_cover_type')
+A003b = administrative_unit_area_2.DetermineFeatureCount(group_by_field_1='country', group_by_field_2='land_cover_type')
+A003c = administrative_unit_area_3.DetermineFeatureCount(group_by_field_1='country', group_by_field_2='land_cover_type')
+A003d = administrative_unit_area_4.DetermineFeatureCount(group_by_field_1='country', group_by_field_2='land_cover_type')
+A003e = administrative_unit_area_5.DetermineFeatureCount(group_by_field_1='country', group_by_field_2='land_cover_type')
+A003f = administrative_unit_area_6.DetermineFeatureCount(group_by_field_1='country', group_by_field_2='land_cover_type')
+A003g = maritime_zone.DetermineFeatureCount(group_by_field_1='country', group_by_field_2='zone_type')
+
 A010a = administrative_unit_area_1.land_cover_type.DetermineCompletionRate().TreatAsStatistic()
 A010b = administrative_unit_area_2.land_cover_type.DetermineCompletionRate().TreatAsStatistic()
 A010c = administrative_unit_area_3.land_cover_type.DetermineCompletionRate().TreatAsStatistic()

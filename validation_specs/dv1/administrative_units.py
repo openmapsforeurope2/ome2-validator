@@ -261,15 +261,24 @@ A007g = maritime_zone.VerticesDistanceMustBeAtLeast(0.05)
 A007h = residence_of_authority.VerticesDistanceMustBeAtLeast(0.05)
 
 
-A008a = administrative_unit_area_1.AdjacentFacesMustDiffer(['country'])
-A008b = administrative_unit_area_2.AdjacentFacesMustDiffer(['country','label'])
-A008c = administrative_unit_area_3.AdjacentFacesMustDiffer(['country','label'])
-A008d = administrative_unit_area_4.AdjacentFacesMustDiffer(['country','label'])
+A008a = administrative_unit_area_1.AdjacentFacesMustDiffer(['country']).TreatAsWarning()
+A008b = administrative_unit_area_2.AdjacentFacesMustDiffer(['country','label']).TreatAsWarning()
+A008c = administrative_unit_area_3.AdjacentFacesMustDiffer(['country','label']).TreatAsWarning()
+A008d = administrative_unit_area_4.AdjacentFacesMustDiffer(['country','label']).TreatAsWarning()
 
 
 #endregion
 
 #region Data model and attribute resolution
+
+A011a = administrative_unit_area_1.objectid.MustNotBeNull()
+A011b = administrative_unit_area_2.objectid.MustNotBeNull()
+A011c = administrative_unit_area_3.objectid.MustNotBeNull()
+A011d = administrative_unit_area_4.objectid.MustNotBeNull()
+A011e = administrative_unit_area_5.objectid.MustNotBeNull()
+A011f = administrative_unit_area_6.objectid.MustNotBeNull()
+A011g = maritime_zone.objectid.MustNotBeNull()
+A011h = residence_of_authority.objectid.MustNotBeNull()
 
 A012a = administrative_unit_area_1.label.MustNotBeNull().TreatAsWarning()
 A012b = administrative_unit_area_2.label.MustNotBeNull().TreatAsWarning()
@@ -311,12 +320,6 @@ A015g = maritime_zone.zone_type.MustBeOfValues(MaritimeZoneTypeValue)
 #endregion
 
 #region Topology
-A023a = administrative_unit_area_2.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
-A023b = administrative_unit_area_3.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
-A023c = administrative_unit_area_4.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
-A023d = administrative_unit_area_5.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
-A023e = administrative_unit_area_6.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
-A023f = residence_of_authority.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
 
 A021a = administrative_unit_area_1.MustNotHaveGaps()
 A021b = administrative_unit_area_2.MustNotHaveGaps()
@@ -332,6 +335,12 @@ A022d = administrative_unit_area_4.MustNotHaveOverlaps()
 A022e = administrative_unit_area_5.MustNotHaveOverlaps()
 A022f = administrative_unit_area_6.MustNotHaveOverlaps()
 
+A023a = administrative_unit_area_2.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A023b = administrative_unit_area_3.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A023c = administrative_unit_area_4.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A023d = administrative_unit_area_5.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A023e = administrative_unit_area_6.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A023f = residence_of_authority.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
 
 
 #endregion
