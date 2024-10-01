@@ -41,6 +41,7 @@ class TENTNetworkValue(BaseValueDomain):
     CORE_TENT_NETWORK = 'core_tent_network'
     COMPREHENSIVE_TENT_NETWORK = 'comprehensive_tent_network'
     NO_TENT_NETWORK = 'no_tent_network'
+    VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
 
 
@@ -248,3 +249,89 @@ class CountryCodeValue(BaseValueDomain):
     GREAT_BRITAIN = 'gb'
     NORTHERN_IRELAND = 'nd'
     UKRAINE = 'ua'
+
+
+class HydroNodeCategoryValue(BaseValueDomain):
+    BOUNDARY = 'boundary'
+    FLOW_CONSTRICTION = 'flow_constriction'
+    FLOW_REGULATION = 'flow_regulation'
+    JUNCTION = 'junction'
+    OUTLET = 'outlet'
+    SOURCE = 'source'
+    VOID_UNK = 'void_unk'
+    VOID_WILDCARD = 'void_*'
+
+
+class CEMTClassValue(BaseValueDomain):
+    I = 'I'
+    II = 'II'
+    III = 'III'
+    IV = 'IV'
+    Va = 'Va'
+    Vb = 'Vb'
+    VIa = 'VIa'
+    VIb = 'VIb'    
+    VIc = 'VIc'
+    VII = 'VII'
+
+
+class Boolean_OME2(BaseValueDomain):
+    TRUE ='true'
+    FALSE = 'false'
+    VOID_UNK = 'void_unk'
+
+
+class IceAreaTypeValue(BaseValueDomain):
+    GLACIER = 'glacier'
+    SNOWFIELD_ICEFIELD = 'snowfield/icefield'
+    VOID_UNK = 'void_unk'
+    VOID_WILDCARD = 'void_*'
+
+
+class ShoreTypeValue(BaseValueDomain):
+    BOULDERS = 'boulders'
+    CLAY = 'clay'
+    GRAVEL = 'gravel'
+    MUD = 'mud'
+    ROCK = 'rock'
+    SAND = 'sand'
+    SHINGLE = 'shingle'
+    STONE = 'stone'
+    VOID_UNK = 'void_unk'
+    VOID_WILDCARD = 'void_*'
+
+
+class WaterLevelValue(BaseValueDomain):
+    LOW_WATER = 'low_water'
+    LOWEST_LOW_WATER = 'lowest_low_water'
+    HIGH_WATER = 'high_water'
+    HIGHEST_HIGH_WATER = 'highest_high_water'
+    MEAN_SEA_LEVEL = 'mean_sea_level'
+    VOID_UNK = 'void_unk'
+    VOID_WILDCARD = 'void_*'
+
+
+class OriginValue(BaseValueDomain):
+    MAN_MADE = 'man_made'
+    NATURAL = 'natural'
+    VOID_UNK = 'void_unk'
+    VOID_WILDCARD = 'void_*'
+
+
+class HydrologicalPersistenceValue (BaseValueDomain):
+    DRY = 'dry'
+    EPHEMERAL = 'ephemeral'
+    INTERMITTENT = 'intermittent'
+    PERENNIAL = 'perennial'
+    VOID_UNK = 'void_unk'
+    VOID_WILDCARD = 'void_*'
+
+
+class ShorelineConstructionTypeValue(BaseValueDomain):
+    BREAKWATER = 'breakwater'
+    GROIN = 'groin'
+    RECREATIONAL_PIER = 'recreational pier'
+    TRAINING_WALL = 'training wall'
+    SEAWALL = 'seawall'
+    VOID_UNK = 'void_unk'
+    VOID_WILDCARD = 'void_*'
