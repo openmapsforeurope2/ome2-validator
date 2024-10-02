@@ -158,8 +158,8 @@ class railway_line(feature):
     end_lifespan_version: timestamp
     geom: MultiLineStringZ[srid(3035)]
     railway_line_code: varchar[length(255)]
-    raliway_line_name: jsonb
-    raliway_line_label: varchar[length(255)]
+    railway_line_name: jsonb
+    railway_line_label: varchar[length(255)]
     w_national_identifier: varchar[length(255)]
     w_step: int4
     xy_source: varchar[length(255)]
@@ -218,6 +218,7 @@ class aerodrome_area(feature):
     location_indicator_icao: varchar[length(255)]
     un_locode: varchar[length(255)]
     name: jsonb
+    label: varchar[length(255)]
     aerodrome_category: varchar[length(255)]
     aerodrome_type: varchar[length(255)]
     use_restriction: varchar[length(255)]
@@ -238,6 +239,7 @@ class aerodrome_point(feature):
     location_indicator_icao: varchar[length(255)]
     un_locode: varchar[length(255)]
     name: jsonb
+    label: varchar[length(255)]
     aerodrome_category: varchar[length(255)]
     aerodrome_type: varchar[length(255)]
     use_restriction: varchar[length(255)]
@@ -469,7 +471,7 @@ T015b = road_link.functional_road_class.MustBeOfValues(FunctionalRoadClass)
 T015c = road_link.vertical_position.MustBeOfValues(VerticalPositionValue)
 T015d = road_link.road_surface_category.MustBeOfValues(RoadSurfaceCategoryValue)
 T015e = road_link.tent_network.MustBeOfValues(TENTNetworkValue)
-T015f = road_link.traffic_flow_direction.MustBeOfValues(TrafficFlowDirectionValue)
+T015f = road_link.traffic_flow_direction.MustBeOfValues(LinkDirectionValue)
 T015g = road_link.access_restriction.MustBeOfValues(AccessRestrictionValue)
 T015h = road_node.form_of_road_node.MustBeOfValues(FormOfRoadNodeValue)
 T015i = road_service_point.type.MustBeOfValues(RoadServiceTypeValue)

@@ -68,7 +68,7 @@ class FunctionalRoadClass(BaseValueDomain):
     NINTH_CLASS = 'ninth_class'
 
 
-class TrafficFlowDirectionValue(BaseValueDomain):
+class LinkDirectionValue(BaseValueDomain):
     BOTH_DIRECTIONS = 'both_directions'
     INDIRECTION = 'indirection'
     OPPOSITE_DIRECTION = 'opposite_direction'
