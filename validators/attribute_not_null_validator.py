@@ -1,6 +1,7 @@
 from qgis.core import QgsFeatureRequest, QgsVectorLayer, QgsExpression
 from models import ValidationResult
 from . import FeatureValidator
+from utilities import QgisUtilities
 import logging
 
 class AttributeNotNullValidator(FeatureValidator):
@@ -23,6 +24,11 @@ class AttributeNotNullValidator(FeatureValidator):
             list[ValidationResult]: A list of results, containing the features of which the specified field has a NULL value.
         """        
         results = []
+
+        # Check field existence
+        if not QgisUtilities.layer_has_field(feature_class, field_name):
+            cls.logger.warning(f"Cannot run the {cls.__name__} on {feature_class.name()} for field {field_name} because the field does not exist.")
+            return results
         
         is_null_expression = f'"{field_name}" is NULL'
 

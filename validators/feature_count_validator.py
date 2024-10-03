@@ -2,6 +2,7 @@ from qgis.core import QgsVectorLayer
 from qgis.PyQt.QtCore import QVariant
 from models import ValidationResult
 from . import GenericValidator
+from utilities import QgisUtilities
 import logging
 
 class FeatureCountValidator(GenericValidator):
@@ -27,11 +28,11 @@ class FeatureCountValidator(GenericValidator):
         """
         results = []
 
-        if group_by_field_1 and not cls.field_exists(feature_class, group_by_field_1):
+        if group_by_field_1 and not QgisUtilities.layer_has_field(feature_class, group_by_field_1):
             cls.logger.warning(cls.create_field_doesnt_exist_message(feature_class, group_by_field_1))
             return results
         
-        if group_by_field_2 and not cls.field_exists(feature_class, group_by_field_2):
+        if group_by_field_2 and not QgisUtilities.layer_has_field(feature_class, group_by_field_2):
             cls.logger.warning(cls.create_field_doesnt_exist_message(feature_class, group_by_field_2))
             return results
         
@@ -71,10 +72,6 @@ class FeatureCountValidator(GenericValidator):
         return results
     
 
-    @classmethod
-    def field_exists(cls, feature_class, group_by_field) -> bool:
-        field_index_1 = feature_class.fields().indexFromName(group_by_field) 
-        return field_index_1 > -1
                 
 
     @classmethod

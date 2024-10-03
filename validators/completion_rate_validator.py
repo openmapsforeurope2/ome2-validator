@@ -2,6 +2,7 @@ from PyQt5.QtCore import QVariant
 from qgis.core import QgsVectorLayer
 from models import ValidationResult
 from . import GenericValidator
+from utilities import QgisUtilities
 import logging
 
 class CompletionRateValidator(GenericValidator):
@@ -28,6 +29,12 @@ class CompletionRateValidator(GenericValidator):
             list[ValidationResult]: A list of results, containing the percentage of NULL, 'void_unk' and/or empty string values per field.
         """        
         results = []
+
+        # Check field existence
+        for field_name in field_names:
+            if not QgisUtilities.layer_has_field(feature_class, field_name):
+                cls.logger.warning(f"Cannot run the {cls.__name__} on {feature_class.name()} for field {field_name} because the field does not exist.")
+                return results
 
         # Get total feature count
         total_records = feature_class.featureCount()

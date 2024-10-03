@@ -1,6 +1,7 @@
 from qgis.core import QgsFeatureRequest, QgsVectorLayer, QgsExpression
 from models import ValidationResult
 from . import FeatureValidator
+from utilities import QgisUtilities
 import logging
 
 class AttributeNotUnknownValidator(FeatureValidator):
@@ -25,6 +26,11 @@ class AttributeNotUnknownValidator(FeatureValidator):
         """
  
         results = []
+
+        # Check field existence
+        if not QgisUtilities.layer_has_field(feature_class, field_name):
+            cls.logger.warning(f"Cannot run the {cls.__name__} on {feature_class.name()} for field {field_name} because the field does not exist.")
+            return results
         
         is_unknown_expression = f'"{field_name}" = \'{unknown_value}\''
         

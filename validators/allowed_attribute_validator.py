@@ -1,6 +1,7 @@
 from qgis.core import QgsFeatureRequest, QgsVectorLayer, QgsFeature
 from models import ValidationResult
 from . import FeatureValidator
+from utilities import QgisUtilities
 import logging
 
 class AllowedAttributeValidator(FeatureValidator):
@@ -27,6 +28,10 @@ class AllowedAttributeValidator(FeatureValidator):
         # TODO Support wildcard values such as 'void_*'
         """        
         results = []
+
+        if not QgisUtilities.layer_has_field(feature_class, field_name):
+            cls.logger.warning(f"Cannot run the {cls.__name__} on {feature_class.name()} for field {field_name} because the field does not exist.")
+            return results
         
         allowed_attributes_quoted = [f"\'{attr}\'" for attr in allowed_attributes]
         allowed_attributes_list = f"({','.join(allowed_attributes_quoted)})"

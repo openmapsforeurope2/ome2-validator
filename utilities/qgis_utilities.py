@@ -383,5 +383,4 @@ class QgisUtilities:
         Returns:
             bool: True if the field exists on this layer.
         """
-        index = layer.fields().indexFromName(field_name)
-        return index > -1
+        return layer.fields().indexFromName(field_name) > -1

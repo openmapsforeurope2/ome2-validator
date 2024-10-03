@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from qgis.core import QgsVectorLayer
 from models import ValidationResult
 from . import GenericValidator
+from utilities import QgisUtilities
 import logging
 import pydapper
 
@@ -34,6 +35,10 @@ class UniqueFieldValidator(GenericValidator):
     @classmethod
     def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, fieldname: str, schema: str) -> list[ValidationResult]:
         results = []
+
+        if not QgisUtilities.layer_has_field(feature_class, fieldname):
+            cls.logger.warning(f"Cannot run the {cls.__name__} on {feature_class.name()} for field {fieldname} because the field does not exist.")
+            return results
 
         is_unique_record = None
         commands = pydapper.connect(cls.dsn)
