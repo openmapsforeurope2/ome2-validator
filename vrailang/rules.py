@@ -294,3 +294,13 @@ class MixinFeatureclassRules:
             (group_by_field_1, group_by_field_2, minimum_record_count),
             {}
         )
+
+
+    @classmethod
+    def MustBeConsistentAcrossBorder(cls: 'feature', border_feature_class: 'feature', consistent_attributes: list[str]) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.AttributeAcrossBorderConsistencyValidator,
+            cls,
+            (border_feature_class, consistent_attributes),
+            {}
+        )

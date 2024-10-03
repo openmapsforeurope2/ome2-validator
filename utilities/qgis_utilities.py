@@ -370,3 +370,18 @@ class QgisUtilities:
             cls.logger.error(f"Something went wrong while creating a memory layer for {layer.name()}. {data_provider.errors()}")
 
         return new_layer
+
+
+    @classmethod
+    def layer_has_field(cls, layer: QgsVectorLayer, field_name: str):
+        """ Checks if a given field name exists on the given layer.
+
+        Args:
+            layer (QgsVectorLayer): The vector layer to check.
+            attribute (str): The field name.
+
+        Returns:
+            bool: True if the field exists on this layer.
+        """
+        index = layer.fields().indexFromName(field_name)
+        return index > -1
