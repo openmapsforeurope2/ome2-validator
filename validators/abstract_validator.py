@@ -4,6 +4,7 @@ from storage import ValidationCheckStatusRepository
 from qgis.core import QgsGeometry, QgsFeature, QgsFields, QgsField, QgsVectorLayer, QgsWkbTypes
 from qgis.PyQt.QtCore import QVariant
 import logging
+import traceback
 
 class AbstractValidator(ABC):
     result_repository = None
@@ -33,10 +34,9 @@ class AbstractValidator(ABC):
             validation_results = cls.validate( run_id, validation_code, severity, feature_class, *args, **kwargs)
         except Exception:
             exception = True
-            cls.logger.error(f'An exception occured while running the {cls.__name__} for {validation_code}')
+            cls.logger.error(f'An exception occured while running the {cls.__name__} for {validation_code}: {traceback.format_exc()}')
             check_status.success = False
             ValidationCheckStatusRepository.update_on_end(check_status)
-            raise
         finally:
             if not exception:
                 cls.logger.info(f'Finished running the {cls.__name__} for {validation_code}')

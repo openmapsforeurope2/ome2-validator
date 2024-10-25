@@ -39,7 +39,7 @@ CREATE TABLE validation_logging (
   timestamp TIMESTAMP NOT NULL,
   run_id INT,
   severity VARCHAR (7) NOT NULL CHECK (severity IN ('VERBOSE', 'DEBUG', 'INFO', 'WARNING', 'ERROR')),
-  message VARCHAR (255) NOT NULL,
+  message TEXT NOT NULL,
   module VARCHAR (255) NOT NULL
 );
 
