@@ -1,6 +1,43 @@
 from vrailang import *
 
+from validation_specs.dv1 import transport
+
 begin_theme('TRANS', 'tn')
 
+T001a = transport.road_link.DetermineFeatureCount().TreatAsStatistic()
+T001b = transport.road.DetermineFeatureCount().TreatAsStatistic()
+T001c = transport.road_node.DetermineFeatureCount().TreatAsStatistic()
+T001d = transport.road_service_area.DetermineFeatureCount().TreatAsStatistic()
+T001e = transport.road_service_point.DetermineFeatureCount().TreatAsStatistic()
+T001f = transport.marker_post.DetermineFeatureCount().TreatAsStatistic()
+T001g = transport.railway_link.DetermineFeatureCount().TreatAsStatistic()
+T001h = transport.railway_line.DetermineFeatureCount().TreatAsStatistic()
+T001i = transport.railway_station_area.DetermineFeatureCount().TreatAsStatistic()
+T001j = transport.railway_station_point.DetermineFeatureCount().TreatAsStatistic()
+T001k = transport.aerodrome_area.DetermineFeatureCount().TreatAsStatistic()
+T001l = transport.aerodrome_point.DetermineFeatureCount().TreatAsStatistic()
+T001m = transport.runway_area.DetermineFeatureCount().TreatAsStatistic()
+T001n = transport.runway_line.DetermineFeatureCount().TreatAsStatistic()
+T001o = transport.ferry_crossing.DetermineFeatureCount().TreatAsStatistic()
+T001p = transport.port_area.DetermineFeatureCount().TreatAsStatistic()
+T001q = transport.port_point.DetermineFeatureCount().TreatAsStatistic()
+
+T002a = transport.road_link.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002b = transport.road.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002c = transport.road_node.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002d = transport.road_service_area.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002e = transport.road_service_point.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002f = transport.marker_post.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002g = transport.railway_link.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002h = transport.railway_line.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002i = transport.railway_station_area.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002j = transport.railway_station_point.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002k = transport.aerodrome_area.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002l = transport.aerodrome_point.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002m = transport.runway_area.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002n = transport.runway_line.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002o = transport.ferry_crossing.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002p = transport.port_area.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+T002q = transport.port_point.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
 
 end_theme()
