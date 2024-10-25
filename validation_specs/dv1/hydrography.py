@@ -212,47 +212,47 @@ class drainage_basin(feature):
     basin_order: varchar[length(255)]
 
 
-class glacier_snowfield(feature):
-    objectid: uuid[notnull]
-    country: varchar[length(8)]
-    begin_lifespan_version: timestamp
-    end_lifespan_version: timestamp
-    geom: MultiPolygonZ[srid(3035)]
-    ice_area_type: varchar[length(255)]
-    name: jsonb
-    label: varchar[length(255)]
+# class glacier_snowfield(feature):
+#     objectid: uuid[notnull]
+#     country: varchar[length(8)]
+#     begin_lifespan_version: timestamp
+#     end_lifespan_version: timestamp
+#     geom: MultiPolygonZ[srid(3035)]
+#     ice_area_type: varchar[length(255)]
+#     name: jsonb
+#     label: varchar[length(255)]
 
 
-class shoreline_construction_area(feature):
-    objectid: uuid[notnull]
-    country: varchar[length(8)]
-    begin_lifespan_version: timestamp
-    end_lifespan_version: timestamp
-    geom: MultiPolygonZ[srid(3035)]
-    shoreline_construction_type: varchar[length(255)]
-    name: jsonb
-    label: varchar[length(255)]
+# class shoreline_construction_area(feature):
+#     objectid: uuid[notnull]
+#     country: varchar[length(8)]
+#     begin_lifespan_version: timestamp
+#     end_lifespan_version: timestamp
+#     geom: MultiPolygonZ[srid(3035)]
+#     shoreline_construction_type: varchar[length(255)]
+#     name: jsonb
+#     label: varchar[length(255)]
 
 
-class shoreline_construction_line(feature):
-    objectid: uuid[notnull]
-    country: varchar[length(8)]
-    begin_lifespan_version: timestamp
-    end_lifespan_version: timestamp
-    geom: LineStringZ[srid(3035)]
-    shoreline_construction_type: varchar[length(255)]
-    name: jsonb
-    label: varchar[length(255)]
+# class shoreline_construction_line(feature):
+#     objectid: uuid[notnull]
+#     country: varchar[length(8)]
+#     begin_lifespan_version: timestamp
+#     end_lifespan_version: timestamp
+#     geom: LineStringZ[srid(3035)]
+#     shoreline_construction_type: varchar[length(255)]
+#     name: jsonb
+#     label: varchar[length(255)]
 
 
-class wetland(feature):
-    objectid: uuid[notnull]
-    country: varchar[length(8)]
-    begin_lifespan_version: timestamp
-    end_lifespan_version: timestamp
-    geom: MultiPolygonZ[srid(3035)]
-    local_name: varchar[length(255)]
-    tidal: varchar[length(255)]
+# class wetland(feature):
+#     objectid: uuid[notnull]
+#     country: varchar[length(8)]
+#     begin_lifespan_version: timestamp
+#     end_lifespan_version: timestamp
+#     geom: MultiPolygonZ[srid(3035)]
+#     local_name: varchar[length(255)]
+#     tidal: varchar[length(255)]
 
 #endregion
 
@@ -280,10 +280,10 @@ H001n = standing_water.MustComplyWithDataschema()
 H001o = shoreline.MustComplyWithDataschema()
 H001p = shore.MustComplyWithDataschema()
 H001q = drainage_basin.MustComplyWithDataschema()
-H001r = glacier_snowfield.MustComplyWithDataschema()
-H001s = shoreline_construction_area.MustComplyWithDataschema()
-H001t = shoreline_construction_line.MustComplyWithDataschema()
-H001u = wetland.MustComplyWithDataschema()
+# H001r = glacier_snowfield.MustComplyWithDataschema()
+# H001s = shoreline_construction_area.MustComplyWithDataschema()
+# H001t = shoreline_construction_line.MustComplyWithDataschema()
+# H001u = wetland.MustComplyWithDataschema()
 
 #endregion
 
@@ -306,10 +306,10 @@ H002n = standing_water.geom.MustHaveCorrectCRS()
 H002o = shoreline.geom.MustHaveCorrectCRS()
 H002p = shore.geom.MustHaveCorrectCRS()
 H002q = drainage_basin.geom.MustHaveCorrectCRS()
-H002r = glacier_snowfield.geom.MustHaveCorrectCRS()
-H002s = shoreline_construction_area.geom.MustHaveCorrectCRS()
-H002t = shoreline_construction_line.geom.MustHaveCorrectCRS()
-H002u = wetland.geom.MustHaveCorrectCRS()
+# H002r = glacier_snowfield.geom.MustHaveCorrectCRS()
+# H002s = shoreline_construction_area.geom.MustHaveCorrectCRS()
+# H002t = shoreline_construction_line.geom.MustHaveCorrectCRS()
+# H002u = wetland.geom.MustHaveCorrectCRS()
 
 H003a = watercourse_link.geom.MustHaveCorrectGeometryType()
 H003b = watercourse.geom.MustHaveCorrectGeometryType()
@@ -328,10 +328,10 @@ H003n = standing_water.geom.MustHaveCorrectGeometryType()
 H003o = shoreline.geom.MustHaveCorrectGeometryType()
 H003p = shore.geom.MustHaveCorrectGeometryType()
 H003q = drainage_basin.geom.MustHaveCorrectGeometryType()
-H003r = glacier_snowfield.geom.MustHaveCorrectGeometryType()
-H003s = shoreline_construction_area.geom.MustHaveCorrectGeometryType()
-H003t = shoreline_construction_line.geom.MustHaveCorrectGeometryType()
-H003u = wetland.geom.MustHaveCorrectGeometryType()
+# H003r = glacier_snowfield.geom.MustHaveCorrectGeometryType()
+# H003s = shoreline_construction_area.geom.MustHaveCorrectGeometryType()
+# H003t = shoreline_construction_line.geom.MustHaveCorrectGeometryType()
+# H003u = wetland.geom.MustHaveCorrectGeometryType()
 
 H004a = watercourse_link.MustHaveValidGeometry()
 H004b = watercourse.MustHaveValidGeometry()
@@ -350,10 +350,10 @@ H004n = standing_water.MustHaveValidGeometry()
 H004o = shoreline.MustHaveValidGeometry()
 H004p = shore.MustHaveValidGeometry()
 H004q = drainage_basin.MustHaveValidGeometry()
-H004r = glacier_snowfield.MustHaveValidGeometry()
-H004s = shoreline_construction_area.MustHaveValidGeometry()
-H004t = shoreline_construction_line.MustHaveValidGeometry()
-H004u = wetland.MustHaveValidGeometry()
+# H004r = glacier_snowfield.MustHaveValidGeometry()
+# H004s = shoreline_construction_area.MustHaveValidGeometry()
+# H004t = shoreline_construction_line.MustHaveValidGeometry()
+# H004u = wetland.MustHaveValidGeometry()
 
 H005a = watercourse_link.MustBeWithinExtent(Epsg3035Bounds)
 H005b = watercourse.MustBeWithinExtent(Epsg3035Bounds)
@@ -372,10 +372,10 @@ H005n = standing_water.MustBeWithinExtent(Epsg3035Bounds)
 H005o = shoreline.MustBeWithinExtent(Epsg3035Bounds)
 H005p = shore.MustBeWithinExtent(Epsg3035Bounds)
 H005q = drainage_basin.MustBeWithinExtent(Epsg3035Bounds)
-H005r = glacier_snowfield.MustBeWithinExtent(Epsg3035Bounds)
-H005s = shoreline_construction_area.MustBeWithinExtent(Epsg3035Bounds)
-H005t = shoreline_construction_line.MustBeWithinExtent(Epsg3035Bounds)
-H005u = wetland.MustBeWithinExtent(Epsg3035Bounds)
+# H005r = glacier_snowfield.MustBeWithinExtent(Epsg3035Bounds)
+# H005s = shoreline_construction_area.MustBeWithinExtent(Epsg3035Bounds)
+# H005t = shoreline_construction_line.MustBeWithinExtent(Epsg3035Bounds)
+# H005u = wetland.MustBeWithinExtent(Epsg3035Bounds)
 
 #endregion
 
@@ -399,10 +399,10 @@ H011n = standing_water.objectid.MustNotBeNull()
 H011o = shoreline.objectid.MustNotBeNull()
 H011p = shore.objectid.MustNotBeNull()
 H011q = drainage_basin.objectid.MustNotBeNull()
-H011r = glacier_snowfield.objectid.MustNotBeNull()
-H011s = shoreline_construction_area.objectid.MustNotBeNull()
-H011t = shoreline_construction_line.objectid.MustNotBeNull()
-H011u = wetland.objectid.MustNotBeNull()
+# H011r = glacier_snowfield.objectid.MustNotBeNull()
+# H011s = shoreline_construction_area.objectid.MustNotBeNull()
+# H011t = shoreline_construction_line.objectid.MustNotBeNull()
+# H011u = wetland.objectid.MustNotBeNull()
 
 H014a = watercourse_link.country.MustBeOfValues(CountryCodeValue)
 H014b = watercourse.country.MustBeOfValues(CountryCodeValue)
@@ -421,10 +421,10 @@ H014n = standing_water.country.MustBeOfValues(CountryCodeValue)
 H014o = shoreline.country.MustBeOfValues(CountryCodeValue)
 H014p = shore.country.MustBeOfValues(CountryCodeValue)
 H014q = drainage_basin.country.MustBeOfValues(CountryCodeValue)
-H014r = glacier_snowfield.country.MustBeOfValues(CountryCodeValue)
-H014s = shoreline_construction_area.country.MustBeOfValues(CountryCodeValue)
-H014t = shoreline_construction_line.country.MustBeOfValues(CountryCodeValue)
-H014u = wetland.country.MustBeOfValues(CountryCodeValue)
+# H014r = glacier_snowfield.country.MustBeOfValues(CountryCodeValue)
+# H014s = shoreline_construction_area.country.MustBeOfValues(CountryCodeValue)
+# H014t = shoreline_construction_line.country.MustBeOfValues(CountryCodeValue)
+# H014u = wetland.country.MustBeOfValues(CountryCodeValue)
 
 H015a = watercourse_link.level.MustBeOfValues(VerticalPositionValue)
 H015b = watercourse_link.persistence.MustBeOfValues(HydrologicalPersistenceValue)
@@ -436,8 +436,8 @@ H015g = hydro_node.hydro_node_category.MustBeOfValues(HydroNodeCategoryValue)
 H015h = shore.composition.MustBeOfValues(ShoreTypeValue)
 H015i = shoreline.water_level.MustBeOfValues(WaterLevelValue)
 H015j = shoreline.origin.MustBeOfValues(OriginValue)
-H015k = shoreline_construction_area.shoreline_construction_type.MustBeOfValues(ShorelineConstructionTypeValue)
-H015l = shoreline_construction_line.shoreline_construction_type.MustBeOfValues(ShorelineConstructionTypeValue)
+# H015k = shoreline_construction_area.shoreline_construction_type.MustBeOfValues(ShorelineConstructionTypeValue)
+# H015l = shoreline_construction_line.shoreline_construction_type.MustBeOfValues(ShorelineConstructionTypeValue)
 H015m = standing_water.persistence.MustBeOfValues(HydrologicalPersistenceValue)
 H015n = standing_water.origin.MustBeOfValues(OriginValue)
 H015o = watercourse_area.persistence.MustBeOfValues(HydrologicalPersistenceValue)
