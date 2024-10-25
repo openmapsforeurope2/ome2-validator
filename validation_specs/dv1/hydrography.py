@@ -2,6 +2,8 @@ from vrailang import *
 from validation_specs.domains import *
 from validation_specs.extents import Epsg3035Bounds
 
+from validation_specs.dv1 import administrative_units
+
 begin_theme('HYDRO', 'hy')
 
 #region Featuretypes
@@ -444,6 +446,29 @@ H015o = watercourse_area.persistence.MustBeOfValues(HydrologicalPersistenceValue
 H015p = watercourse_area.origin.MustBeOfValues(OriginValue)
 
 #endregion
+
+
+#region Topology
+
+H023a = watercourse_link.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023b = watercourse.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023c = hydro_node.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023d = dam_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023e = dam_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023f = dam_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023g = falls_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023h = falls_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023i = falls_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023j = lock_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023k = lock_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023l = lock_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023m = watercourse_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023n = standing_water.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023o = shore.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023p = drainage_basin.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+
+#endregion
+
 
 #endregion
 

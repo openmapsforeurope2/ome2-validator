@@ -1,6 +1,9 @@
 from vrailang import *
 from validation_specs.domains import *
 from validation_specs.extents import Epsg3035Bounds
+
+from validation_specs.dv1 import administrative_units
+
 begin_theme('TRANS', 'tn')
 
 #region Featuretypes
@@ -492,6 +495,28 @@ T015w = ferry_crossing.ferry_use.MustBeOfValues(FerryUseValue)
 T015x = ferry_crossing.tent_network.MustBeOfValues(TENTNetworkValue)
 T015y = port_point.tent_network.MustBeOfValues(TENTNetworkValue)
 T015z = port_area.tent_network.MustBeOfValues(TENTNetworkValue)
+
+#endregion
+
+
+#region Topology
+
+T023a = road_link.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023b = road.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023c = road_node.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023d = road_service_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023e = road_service_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023f = marker_post.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023g = railway_link.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023h = railway_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023i = railway_station_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023j = railway_station_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023k = aerodrome_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023l = aerodrome_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023m = runway_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023n = runway_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023o = port_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023p = port_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
 
 #endregion
 
