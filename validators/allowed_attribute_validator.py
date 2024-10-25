@@ -20,7 +20,7 @@ class AllowedAttributeValidator(FeatureValidator):
             feature_class (QgsVectorLayer): The feature class to check.
             field_name (str): The name of the field to check.
             allowed_attributes (list[str]): The values which are allowed.
-            separator (str): Optional separator used for splitting combined values, such as coountry = 'be#nl'. This defaults to None.
+            separator (str): Optional separator used for splitting combined values, such as country = 'be#nl'. This defaults to None.
 
         Returns:
             list[ValidationResult]: A list of results, containing the features of which the specified field does not have an allowed value.
