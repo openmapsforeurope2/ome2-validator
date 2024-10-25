@@ -518,6 +518,13 @@ T023n = runway_line.MustBeInsideMatchingArea(administrative_units.administrative
 T023o = port_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
 T023p = port_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
 
+
+#endregion
+
+#region Edge matching
+
+T031h = railway_link.MustBeConsistentAcrossBorder(administrative_units.administrative_unit_area_1, ["type", "condition_of_facility"])
+
 #endregion
 
 #endregion
