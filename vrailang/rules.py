@@ -7,9 +7,9 @@ and in `MixinFeatureclassRules` for rules pertaining to a featureclass itself.
 from dataclasses import dataclass, field
 from typing import Any, Type, TYPE_CHECKING, Callable, Union
 from typing_extensions import Self
-import varname
 from validators.abstract_validator import AbstractValidator
 import validators
+from vrailang._fastvarname import FastVarname
 from vrailang.errors import VraiSpecificationError
 from vrailang.specs import CURRENT_SPEC_STATE
 from vrailang.dataconstraints import srid, length
@@ -94,13 +94,11 @@ def _create_rule_and_register(
 
 def _set_validation_code_via_assignment(obj, frame=3):
     if not hasattr(obj, 'var'):
-        try:
-            obj.validation_code = varname.varname(frame=frame)
-        except varname.ImproperUseError as _:
-            # This could happen when called from _create_rule_and_register()
-            # and the rule is not assigned directly to a variable, 
-            # e.g.: `Example042 = RoadLine.id.MustNotBeNull().TreatAsWarning()`
-            pass
+        fv = FastVarname(depth=frame+1)
+        name = fv.varname
+        if name is not None:
+            obj.validation_code = name
+        
 
 
 class MixinAttributeRules:
