@@ -12,6 +12,9 @@ if os.name == 'nt':
     sys.path.append(pyqgis_path)
     sys.path.append(pyqgis_plugins_path)
     os.add_dll_directory(qgis_bin_dir)
+elif os.name == 'posix':
+    from qgis.core import QgsApplication
+    QgsApplication.setPrefixPath("/usr", True)
 
 
 from qgis.core import *
