@@ -1,0 +1,15 @@
+name: ome2-validator-devcontainer
+
+services:
+  validator:
+    image: eurogeographics/ome2-validator
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    
+    volumes:
+      - ..:/workspace
+    working_dir: /workspace
+
+    extra_hosts:
+      - host.docker.internal:host-gateway
