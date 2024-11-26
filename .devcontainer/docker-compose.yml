@@ -9,6 +9,7 @@ services:
     
     volumes:
       - ..:/workspace
+      #- ./resolv.google.conf:/etc/resolv.conf  # Uncomment to override host's DNS config
     working_dir: /workspace
 
     extra_hosts:
