@@ -10,7 +10,7 @@ from models import ValidationTask, ValidationRun, ValidationParameters
 from validators import *
 import logging
 
-import validation_specs # This import is required for collecting the data specifications
+import validation_specs # noqa: F401  # This import is required for collecting the data specifications
 import vrailang
 
 def main():
