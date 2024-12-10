@@ -20,7 +20,7 @@ Example usage:
 
 from abc import ABCMeta
 from collections import OrderedDict
-from dataclasses import dataclass, make_dataclass
+from dataclasses import dataclass
 from typing import Annotated, Any, Callable, ClassVar, Optional, Protocol, Tuple, Type, TypeVar, Union, get_args, get_origin
 from typing_extensions import Self
 
@@ -48,7 +48,7 @@ def __dataclass_transform__(
     return lambda a: a
 
 
-_C = TypeVar("_C")
+_C = TypeVar("_C", bound=DataTypeAnnotation)
 @dataclass
 class FeatureclassAttribute(MixinAttributeRules):
     """The type used for describing a featureclass's fields.
@@ -58,7 +58,7 @@ class FeatureclassAttribute(MixinAttributeRules):
     name: str
     '''Name of the field'''
     
-    featureclass: 'feature'
+    featureclass: Type['feature']
     '''To which featureclass this field belongs'''
 
     datatype: DataType
@@ -76,7 +76,7 @@ class FeatureclassAttribute(MixinAttributeRules):
         Returns:
             Optional[_C]: The queried constraint for this attribute, if any.
         """
-        return next(filter(lambda c: isinstance(c, constraint_type), self.constraints), None)
+        return next(filter(lambda c: isinstance(c, constraint_type), self.constraints), None) # type: ignore
         
     
 
@@ -131,7 +131,19 @@ class FeatureMetaclass(ABCMeta):
         return new_featureclass
 
 
-class feature(MixinFeatureclassRules, metaclass=FeatureMetaclass):
+
+class FeatureMetaclassWithProtocolSupport(type(Protocol), FeatureMetaclass): # type: ignore
+    """
+    This metaclass combines `FeatureMetaclass` with `Protocol`'s metaclass,
+    such that `feature` can inherit subclasses of `Protocol`.
+    If `feature` were to use `FeatureMetaclass` instead when inheriting a `Protocol`,
+    the following error is raised:
+    
+        `metaclass conflict: the metaclass of a derived class must be a (non-strict) subclass of the metaclasses of all its bases`
+    """
+    pass
+
+class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupport):
     """The base class for featureclasses."""
 
     ATTRIBUTES: ClassVar[dict[str, FeatureclassAttribute]]
