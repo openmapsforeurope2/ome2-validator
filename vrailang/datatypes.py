@@ -12,7 +12,7 @@ in order to provide type hints.
 '''
 
 
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated, Protocol
 from vrailang.rules import MixinAttributeRules
 
 # TODO: Document implementation notes, such as having these types inherit from int, float, str, etc.
@@ -50,18 +50,30 @@ class classproperty:
 
 VARIABLE_SIZE = -1
 
+class DataTypeProtocol(Protocol):
+    size: int
+    
+    @classmethod
+    def as_string(cls) -> str: ...
 
-class DataType(MixinAttributeRules):
+class DataType(MixinAttributeRules, DataTypeProtocol):
     """The base class for various datatypes."""
 
-    @classproperty
-    def size(cls):
-        raise NotImplemented('Subclasses of DataType should have a field or classproperty `size`')
+    if not TYPE_CHECKING: # Hide the default classproperty from the type-checker:
+        @classproperty
+        def size(cls) -> int:
+            raise NotImplementedError('Subclasses of DataType should have a field or classproperty `size`')
     
-    def __class_getitem__(cls, *specifications):
+    def __class_getitem__(cls, *specifications) -> Annotated:
+        """Annotates the datatype with specifications from `vrailang.dataconstraints`.
+        Example usage: `uuid[notnull]`.
+
+        Returns:
+            Annotated: An `Annotated` object wrapping this `DataType` with specifications from `vrailang.dataconstraints`.
+        """
         if not isinstance(specifications[0], tuple):
             specifications = (specifications,)
-        return Annotated.__class_getitem__((cls,) + specifications)
+        return Annotated.__class_getitem__((cls,) + specifications) # type: ignore
     
     @classmethod
     def as_string(cls):
@@ -82,9 +94,6 @@ class integer(IntegralType):
 
 class int4(integer):
     pass
-
-class bigint(IntegralType):
-    size = 8
 
 class bigint(IntegralType):
     size = 8
