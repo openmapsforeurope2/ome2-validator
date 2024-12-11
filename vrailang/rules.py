@@ -152,7 +152,7 @@ class MixinAttributeRules(FeatureclassAttributeProtocol):
 
         )
     
-    def MustBeOfValues(self, value_domain: 'BaseValueDomain') -> ValidationRule: # TODO separator
+    def MustBeOfValues(self, value_domain: Type['BaseValueDomain']) -> ValidationRule: # TODO separator
         return _create_rule_and_register(
             validators.AllowedAttributeValidator,
             self.featureclass,
