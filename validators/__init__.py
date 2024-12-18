@@ -8,6 +8,7 @@ from .minimum_area_validator import *
 from .minimum_vertex_distance_validator import *
 from .completion_rate_validator import *
 from .must_be_single_part_validator import *
+from .must_touch_corresponding_boundary_validator import *
 from .regex_validator import *
 from .valid_geometry_validator import *
 from .allowed_attribute_validator import *
