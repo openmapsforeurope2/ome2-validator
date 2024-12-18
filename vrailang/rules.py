@@ -296,10 +296,19 @@ class MixinFeatureclassRules(FeatureclassProtocol):
 
 
     @classmethod
-    def MustBeConsistentAcrossBorder(cls, border_feature_class: 'feature', consistent_attributes: list[str]) -> ValidationRule:
+    def MustBeConsistentAcrossBorder(cls, border_feature_class: Type['feature'], consistent_attributes: list[str]) -> ValidationRule:
         return _create_rule_and_register(
             validators.AttributeAcrossBorderConsistencyValidator,
             cls,
             (border_feature_class, consistent_attributes),
+            {}
+        )
+
+    @classmethod
+    def MustTouchCorrespondingBoundaryOf(cls, area_feature_class: Type['feature'], corresponding_attributes: list[str]) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MustTouchCorrespondingBoundaryValidator,
+            cls,
+            (area_feature_class, corresponding_attributes),
             {}
         )
