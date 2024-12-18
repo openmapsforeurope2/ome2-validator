@@ -351,6 +351,7 @@ A023d = administrative_unit_area_5.MustBeInsideMatchingArea(administrative_unit_
 A023e = administrative_unit_area_6.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
 A023f = residence_of_authority.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
 
+A024a = maritime_zone.MustTouchCorrespondingBoundaryOf(administrative_unit_area_1, ['country', 'country']).TreatAsWarning()
 
 #endregion
 
