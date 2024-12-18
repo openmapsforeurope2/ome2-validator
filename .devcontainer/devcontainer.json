@@ -9,6 +9,8 @@
 
     "overrideCommand": true, // Because the default command exits immediately
 
+    "postCreateCommand": "bash .devcontainer/install-tools.sh",
+
     "customizations": {
         "vscode": {
             "extensions": [
