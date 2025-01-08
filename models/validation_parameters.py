@@ -36,8 +36,8 @@ class ValidationParameters:
     min_required_only: bool
 
     def __init__(self):
-        self.task_id = None
-        self.run_id = None
+        self.task_id = None # type: ignore
+        self.run_id = None # type: ignore
         self.input_db_params = self.DatabaseConnectionParameters()
         self.output_db_params = self.DatabaseConnectionParameters()
 
@@ -83,16 +83,17 @@ class ValidationParameters:
         Returns:
             bool: True if all necessary attributes could be parsed from the JSON file.
         """        
-        return (self.specification and
-                self.task_name and
-                self.input_db_params.are_complete() and
-                self.output_db_params.are_complete() and
-                self.themes is not None and
-                self.checks is not None and
-                self.groups is not None and
-                self.countries is not None and
-                self.min_required_only is not None
-                )
+        return bool(
+            self.specification and
+            self.task_name and
+            self.input_db_params.are_complete() and
+            self.output_db_params.are_complete() and
+            self.themes is not None and
+            self.checks is not None and
+            self.groups is not None and
+            self.countries is not None and
+            self.min_required_only is not None
+            )
 
     def to_json(self) -> str:
         """Converts the object into a JSON string using an encoder.
@@ -140,7 +141,7 @@ class ValidationParameters:
             Returns:
                 bool: True if all necessary attributes could be parsed from the JSON file.
             """            
-            return self.host and self.name and self.username and self.password
+            return bool(self.host and self.name and self.username and self.password)
 
         def create_pg_dsn(self) -> str:
             """Create a Data Source Name
@@ -154,7 +155,7 @@ class ValidationParameters:
     class ValidationParametersEncoder(JSONEncoder):
         """A custom encoder for the ValidationParameters, which prevents the storage of passwords in the database.
         """
-        def default(self, o: object) -> __dict__:
+        def default(self, o: object) -> dict:
             """Creates a serializable object, without any passwords if it is of type ValidationParameters.
 
             Args:
