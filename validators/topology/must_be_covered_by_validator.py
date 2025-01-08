@@ -71,7 +71,8 @@ class MustBeCoveredByValidator(FeatureValidator):
                 
             if not covered:
                 # Create feature of the non covered geometry
-                error_feature = cls.create_error_feature(g1, feature.id())
+                feature_objectid = feature.attribute('objectid')
+                error_feature = cls.create_error_feature(g1, feature_objectid)
                 message = f'{feature_class.name()} object with objectid {feature.id()} is not covered by {feature_class_2.name()}.'
                 result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
                 results.append(result)
