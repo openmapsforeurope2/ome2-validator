@@ -1,5 +1,7 @@
+import argparse
 import os
 import sys
+from typing import override
 SCRIPT_DIR = os.path.dirname(__file__)
 sys.path.append(SCRIPT_DIR)
 
@@ -13,9 +15,44 @@ import logging
 import validation_specs # noqa: F401  # This import is required for collecting the data specifications
 import vrailang
 
-def main():
-    (_, validation_params_json_filename) = tuple(sys.argv)
 
+
+
+def get_parser() -> argparse.ArgumentParser:
+    class HelpAction(argparse.Action):
+        @override
+        def __call__(self, *args, **kwargs):
+            self.print_help()
+            sys.exit()
+
+        @abstractmethod
+        def print_help(self):
+            ...
+
+    class show_example_input_file(HelpAction):
+        def print_help(self):
+            print('// Example validation_parameters.json')
+            print(ValidationParameters.get_example_json())
+    
+    
+    parser = argparse.ArgumentParser(description='Runs the OME2 Validator tool')
+    
+    parser.add_argument('input', metavar='INPUT', type=str,
+                        help='the input parameters for the validation tool (.json)')
+
+    parser.add_argument('--help-input-file', action=show_example_input_file, nargs=0,
+                        help='show an example JSON file that can be used as input')
+
+    return parser
+
+
+
+
+def main():
+    parser = get_parser()
+    args = parser.parse_args()
+    validation_params_json_filename = args.input
+    
     params = ValidationParameters.from_json(validation_params_json_filename)
     if not params.are_complete():
         raise ValueError(f"Validation parameters are not complete. Check the parameters in {validation_params_json_filename}.")

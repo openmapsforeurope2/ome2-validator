@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import OrderedDict
 import os
 import json
 from json import JSONEncoder
@@ -40,6 +41,39 @@ class ValidationParameters:
         self.run_id = None # type: ignore
         self.input_db_params = self.DatabaseConnectionParameters()
         self.output_db_params = self.DatabaseConnectionParameters()
+
+    @classmethod
+    def get_example_json(cls) -> str:
+        """Returns example validation parameters.
+
+        Returns:
+            str: Example validation parameters in JSON format.
+        """
+        return json.dumps(OrderedDict(
+            specification='DV1',
+            task_name='Validation on OME2 data',
+            input_database=OrderedDict(
+                host='my-postgis-db.postgres.database.azure.com',
+                port=5432,
+                name='ome2_db',
+                username='postgres',
+                password='postgres'
+            ),
+            output_database=OrderedDict(
+                host='host.docker.internal',
+                port=5432,
+                name='ome2_validation_results',
+                username='postgres',
+                password='postgres'
+            ),
+            themes=['ADMINSTRATIVE_UNITS'],
+            checks=[],
+            groups=[],
+            countries=['NL'],
+            min_required_only=False
+            ), indent=4
+        )
+        
 
     @classmethod
     def from_json(cls, json_filename: str) -> ValidationParameters:
