@@ -20,7 +20,8 @@
                 "njpwerner.autodocstring",
                 "charliermarsh.ruff",
                 "ms-azuretools.vscode-docker",
-                "eamodio.gitlens"
+                "eamodio.gitlens",
+                "DavidAnson.vscode-markdownlint"
             ],
             "settings": {
                 "python.analysis.inlayHints.callArgumentNames": "all",
