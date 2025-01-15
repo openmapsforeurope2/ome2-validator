@@ -69,7 +69,7 @@ class CrsValidator(FeatureValidator):
                 )
 
         finally:
-            commands.connection.close() # type: ignore # close() *does exist* on connection object
+            commands.connection.close()
 
         for record in query_records:
             error_feature = cls.create_error_feature(record.geometry, record.objectid)

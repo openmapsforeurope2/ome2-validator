@@ -16,5 +16,15 @@ cat << EOF | sed -i '/class Commands(BaseCommands, ABC)/r /dev/stdin' /usr/local
 
 EOF
 
+cat << EOF | sed -i '/class ConnectionType/r /dev/stdin' /usr/local/lib/python3.12/dist-packages/pydapper/types.py
+
+    # begin type hint patch
+    @abstractmethod
+    def close(self):
+        ...
+    # end type hint patch
+
+EOF
+
 # Install any additional tools, e.g.:
 # apt update && apt install -y iputils-ping curl
