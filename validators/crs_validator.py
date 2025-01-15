@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import ClassVar
 from qgis.core import QgsVectorLayer, QgsCoordinateReferenceSystem, QgsGeometry
 from models import ValidationResult
 from . import FeatureValidator
@@ -11,7 +12,7 @@ import pydapper
 
 class CrsValidator(FeatureValidator):
     logger = logging.getLogger(__name__)
-    dsn = None
+    dsn: ClassVar[str | None] = None
 
     @classmethod
     def set_dsn(cls, dsn):
@@ -41,6 +42,8 @@ class CrsValidator(FeatureValidator):
     @classmethod
     def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, epsg_code: int, schema: str) -> list[ValidationResult]:
         results = []
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
 
         crs_string = f"EPSG:{epsg_code}"
         if not QgsCoordinateReferenceSystem(crs_string).isValid():
@@ -66,7 +69,7 @@ class CrsValidator(FeatureValidator):
                 )
 
         finally:
-            commands.connection.close()
+            commands.connection.close() # type: ignore # close() *does exist* on connection object
 
         for record in query_records:
             error_feature = cls.create_error_feature(record.geometry, record.objectid)
