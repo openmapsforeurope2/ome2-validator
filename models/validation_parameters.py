@@ -140,6 +140,8 @@ class ValidationParameters:
 
     def theme_is_enabled(self, theme_name: str) -> bool:
         """Determines if a theme is enabled, based on the theme name and validation parameters.
+        
+        Note: This check only considers the first 5 characters.
 
         Returns:
             bool: True if the theme is enabled.
