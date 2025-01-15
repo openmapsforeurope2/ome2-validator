@@ -25,7 +25,7 @@ class MustNotHaveDuplicatesValidator(FeatureValidator):
         """
         results = []
 
-        duplicate_ids = set()
+        duplicate_ids: set[int] = set()
     
         # Create index, store feature geometries so we can retrieve them later with index.geometry()
         index = QgsSpatialIndex(feature_class.getFeatures(), flags=QgsSpatialIndex.FlagStoreFeatureGeometries)
@@ -69,7 +69,8 @@ class MustNotHaveDuplicatesValidator(FeatureValidator):
         for duplicate_id in duplicate_ids:
             # Create feature of the duplicate geometry
             error_geom = index.geometry(duplicate_id)
-            error_feature = cls.create_error_feature(error_geom, duplicate_id)
+            orig_geom = feature_class.getFeature(duplicate_id)
+            error_feature = cls.create_error_feature(error_geom, orig_geom.attribute('objectid'))
             message = f'{feature_class.name()} object with objectid {duplicate_id} is a duplicate geometry.'
             result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
             results.append(result)
