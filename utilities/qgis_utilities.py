@@ -171,7 +171,7 @@ class QgisUtilities:
         Returns:
             list[list[QgsPoint]]: a list of polylines (list[QgsPoints]).
         """        
-        if not type(geometry) == QgsGeometry or not geometry.type() == QgsWkbTypes.GeometryType.LineGeometry:
+        if type(geometry) is not QgsGeometry or geometry.type() is not QgsWkbTypes.GeometryType.LineGeometry:
             raise TypeError("geometry must be a QgsGeometry of type Line")
         
         polylines = []
@@ -197,7 +197,7 @@ class QgisUtilities:
         Returns:
             list[QgsPoint]: a list of QgsPoints.
         """        
-        if not type(geometry) == QgsGeometry or not geometry.type() == QgsWkbTypes.GeometryType.PointGeometry:
+        if type(geometry) is not QgsGeometry or geometry.type() is not QgsWkbTypes.GeometryType.PointGeometry:
             raise TypeError("geometry must be a QgsGeometry of type Point")
         
         points = []
@@ -221,7 +221,7 @@ class QgisUtilities:
         Returns:
             bool: True if the geometry is empty or invalid.
         """        
-        if not type(geometry) == QgsGeometry:
+        if type(geometry) is not QgsGeometry:
             raise TypeError("geometry must be a QgsGeometry")
         return geometry.isNull() or geometry.isEmpty() or not geometry.isGeosValid()
 

@@ -52,7 +52,7 @@ class ValidationTheme:
 
 
     def featureclass(self, name: str) -> 'feature':
-        if not name in self.feature_classes:
+        if name not in self.feature_classes:
             raise VraiSpecificationError(f'Featureclass {name} cannot be retrieved from theme {self.name}: it is not part of this theme')    
         
         return self.feature_classes[name]
@@ -86,7 +86,7 @@ class ValidationSpecification:
                 validation_rule.run(params.run_id, arg_loader)
 
     def theme(self, name: str) -> 'ValidationTheme':
-        if not name in self.themes:
+        if name not in self.themes:
             raise VraiSpecificationError(f'Theme {name} cannot be retrieved from specification {self.name}: it is not part of this specification')    
         
         return self.themes[name]
