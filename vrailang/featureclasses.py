@@ -26,6 +26,7 @@ from typing_extensions import Self
 
 from vrailang.dataconstraints import DataTypeAnnotation
 from vrailang.datatypes import DataType
+from vrailang.errors import VraiSpecificationError
 from vrailang.rules import MixinAttributeRules, MixinFeatureclassRules
 import vrailang.specs
 
@@ -116,7 +117,10 @@ class FeatureMetaclass(ABCMeta):
         namespace['ATTRIBUTES'] = featureclass_attrs
         
         # Set the theme
-        namespace['THEME'] = vrailang.specs.CURRENT_SPEC_STATE.current_theme
+        if vrailang.specs.CURRENT_SPEC_STATE.current_theme is not None:
+            namespace['THEME'] = vrailang.specs.CURRENT_SPEC_STATE.current_theme
+        else:
+            raise VraiSpecificationError('A featureclass must be defined between begin_theme() and end_theme()')
         
         # Create the class
         new_featureclass = super().__new__(mcls, name, bases, namespace, **kwargs)
@@ -149,7 +153,7 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
     ATTRIBUTES: ClassVar[dict[str, FeatureclassAttribute]]
     '''All declared attributes of the featureclass.'''
 
-    THEME: ClassVar[Union[vrailang.specs.ValidationTheme, None]]
+    THEME: ClassVar[vrailang.specs.ValidationTheme]
     '''The `ValidationTheme` this featureclass belongs to.'''
 
     def __init__(self, **data):

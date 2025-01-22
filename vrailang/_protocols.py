@@ -3,7 +3,7 @@ The `vrailang._protocols` module contains protocols
 for type hints purposes.
 '''
 
-from typing import TYPE_CHECKING, ClassVar, Optional, Protocol, Self, Type, TypeVar, Union
+from typing import TYPE_CHECKING, ClassVar, Optional, Protocol, Self, Type, TypeVar
 
 if TYPE_CHECKING:
     from vrailang.dataconstraints import DataTypeAnnotation
@@ -25,5 +25,5 @@ class FeatureclassAttributeProtocol(Protocol):
 
 class FeatureclassProtocol(Protocol):
     ATTRIBUTES: ClassVar[dict[str, 'FeatureclassAttribute']]
-    THEME: ClassVar[Union['vrailang.specs.ValidationTheme', None]]
+    THEME: ClassVar['vrailang.specs.ValidationTheme']
     
