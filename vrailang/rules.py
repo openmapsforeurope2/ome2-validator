@@ -39,7 +39,7 @@ class ValidationRule:
     theme: 'ValidationTheme' = field(init=False)
     
     def __post_init__(self):
-        self.theme = None
+        self.theme = None # type: ignore # Initialized by _create_rule_and_register
 
 
     def TreatAsWarning(self) -> Self:
@@ -90,8 +90,9 @@ def _create_rule_and_register(
     cur_theme = CURRENT_SPEC_STATE.current_theme
     if cur_theme is None:
         raise VraiSpecificationError('A rule must be defined between begin_theme() and end_theme()')
-    if cur_theme is not None:
+    else:
         cur_theme.add_validation_rule(rule)
+        rule.theme = cur_theme
 
     return rule
 
