@@ -21,7 +21,7 @@ Example usage:
 from abc import ABCMeta
 from collections import OrderedDict
 from dataclasses import dataclass
-from typing import Annotated, Any, Callable, ClassVar, Optional, Protocol, Tuple, Type, TypeGuard, TypeVar, Union, get_args, get_origin
+from typing import Annotated, Any, Callable, ClassVar, Optional, Protocol, Tuple, Type, TypeGuard, TypeVar, Union, cast, get_args, get_origin
 from typing_extensions import Self
 
 from vrailang.dataconstraints import DataTypeAnnotation
@@ -97,7 +97,7 @@ class FeatureMetaclass(ABCMeta):
         
         featureclass_attrs: dict[str, FeatureclassAttribute] = OrderedDict()
 
-        PATCH_IN_LATER = None
+        PATCH_IN_LATER: type[feature] = None # type: ignore # Featureclass is patched in later once created
 
         for field_name, annotation in annotations.items():
             origin = get_origin(annotation)
@@ -126,7 +126,9 @@ class FeatureMetaclass(ABCMeta):
             raise VraiSpecificationError('A featureclass must be defined between begin_theme() and end_theme()')
         
         # Create the class
-        new_featureclass = super().__new__(mcls, name, bases, namespace, **kwargs)
+        new_featureclass = cast(type['feature'], 
+            super().__new__(mcls, name, bases, namespace, **kwargs)
+        )
 
         # Patch the reference to the new class into the featureclass attributes
         for attr in featureclass_attrs.values():
