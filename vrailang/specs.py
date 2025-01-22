@@ -97,7 +97,7 @@ class CurrentSpecState:
     name: Union[None, str] = None
 
     current_theme: Union[None, ValidationTheme] = None
-    known_themes: dict[str, ValidationTheme] = None
+    known_themes: dict[str, ValidationTheme] = None  # type: ignore # Correctly initialized in __post_init__
 
     def __post_init__(self):
         self.known_themes = {}
@@ -107,7 +107,7 @@ CURRENT_SPEC: Union[None, ValidationSpecification] = None
 CURRENT_SPEC_STATE = CurrentSpecState()
 
 
-def begin_theme(name: str, schema: str = None):
+def begin_theme(name: str, schema: str | None = None):
     if CURRENT_SPEC is None:
         raise VraiSpecificationError('Cannot create a theme without calling begin_spec() first')
 
