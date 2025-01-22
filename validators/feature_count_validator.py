@@ -9,7 +9,7 @@ class FeatureCountValidator(GenericValidator):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, group_by_field_1: str = None, group_by_field_2: str = None, minimum_record_count: int = -1) -> list[ValidationResult]:
+    def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, group_by_field_1: str | None = None, group_by_field_2: str | None = None, minimum_record_count: int = -1) -> list[ValidationResult]:
         """Runs the FeatureCountValidator
 
         Check if a featureclass has less features than the minimum record count.
@@ -81,7 +81,7 @@ class FeatureCountValidator(GenericValidator):
 
     @classmethod
     def get_equals_expression(cls, field, value) -> str:
-        if type(value) == QVariant and value.isNull():
+        if type(value) is QVariant and value.isNull():
             return f'"{field}" is {value}'
         return f'"{field}" = \'{value}\''
 
