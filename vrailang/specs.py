@@ -23,7 +23,7 @@ class ValidationTheme:
     schema: str = field(default='public')
 
     validation_rules: dict[str, 'ValidationRule'] = field(init=False)
-    feature_classes: dict[str, 'feature'] = field(init=False)
+    feature_classes: dict[str, type['feature']] = field(init=False)
 
     def __post_init__(self):
         self.validation_rules = {}
@@ -51,7 +51,7 @@ class ValidationTheme:
         self._finalized = True
 
 
-    def featureclass(self, name: str) -> 'feature':
+    def featureclass(self, name: str) -> type['feature']:
         if name not in self.feature_classes:
             raise VraiSpecificationError(f'Featureclass {name} cannot be retrieved from theme {self.name}: it is not part of this theme')    
         
