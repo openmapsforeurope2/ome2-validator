@@ -21,7 +21,7 @@ Example usage:
 from abc import ABCMeta
 from collections import OrderedDict
 from dataclasses import dataclass
-from typing import Annotated, Any, Callable, ClassVar, Optional, Protocol, Tuple, Type, TypeVar, Union, get_args, get_origin
+from typing import Annotated, Any, Callable, ClassVar, Optional, Protocol, Tuple, Type, TypeGuard, TypeVar, Union, get_args, get_origin
 from typing_extensions import Self
 
 from vrailang.dataconstraints import DataTypeAnnotation
@@ -189,7 +189,7 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
         return False
 
 
-def isfeatureclass(cls: type) -> bool:
+def isfeatureclass(cls: object) -> TypeGuard[type[feature]]:
     """Checks if a given type is a featureclass type.
 
     Example usage:
@@ -207,7 +207,7 @@ def isfeatureclass(cls: type) -> bool:
         ```
 
     Args:
-        cls (type): the type to check
+        cls (object): the type to check
 
     Returns:
         bool: True if and only if `cls` is a featureclass.
