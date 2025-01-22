@@ -32,7 +32,7 @@ import vrailang.specs
 
 __all__ = [
     'feature',
-    'isfeatureclass'
+    'is_featureclass'
 ]
 
 # https://github.com/microsoft/pyright/blob/597ccabd07bdb977e535380675092aca839ef692/specs/dataclass_transforms.md
@@ -189,7 +189,7 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
         return False
 
 
-def isfeatureclass(cls: object) -> TypeGuard[type[feature]]:
+def is_featureclass(cls: object) -> TypeGuard[type[feature]]:
     """Checks if a given type is a featureclass type.
 
     Example usage:
@@ -203,7 +203,7 @@ def isfeatureclass(cls: object) -> TypeGuard[type[feature]]:
 
         # ...
 
-        res = isfeatureclass(RoadLine) # returns True
+        res = is_featureclass(RoadLine) # returns True
         ```
 
     Args:
