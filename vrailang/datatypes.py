@@ -12,7 +12,7 @@ in order to provide type hints.
 '''
 
 
-from typing import TYPE_CHECKING, Annotated, Protocol
+from typing import TYPE_CHECKING, Annotated, Protocol, TypeGuard
 from vrailang.rules import MixinAttributeRules
 
 # TODO: Document implementation notes, such as having these types inherit from int, float, str, etc.
@@ -20,6 +20,8 @@ from vrailang.rules import MixinAttributeRules
 #       --> Rationale: it's just for the type hints, since we are not actually instantiating any of these types
 
 __all__ = [
+    'is_datatype',
+    
     'smallint', 'integer', 'bigint', 'int4',
     'smallserial', 'serial', 'bigserial',
 
@@ -187,3 +189,15 @@ class PolygonZ(GeometryType):
 class MultiPolygonZ(GeometryType):
     pass
 
+
+
+def is_datatype(cls: object) -> TypeGuard[type[DataType]]:
+    """Checks if a given type is a DataType type.
+
+    Args:
+        cls (object): the type to check
+
+    Returns:
+        bool: True if and only if `cls` is a DataType type.
+    """
+    return isinstance(cls, type) and issubclass(cls, DataType)
