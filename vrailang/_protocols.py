@@ -17,7 +17,7 @@ _C = TypeVar("_C", bound='DataTypeAnnotation')
 class FeatureclassAttributeProtocol(Protocol):
     name: str
     featureclass: Type['feature']
-    datatype: 'DataType'
+    datatype: Type['DataType']
 
     def get_constraint(self: Self, constraint_type: Type[_C]) -> Optional[_C]: ...
 

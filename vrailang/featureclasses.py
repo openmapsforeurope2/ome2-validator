@@ -62,7 +62,7 @@ class FeatureclassAttribute(MixinAttributeRules):
     featureclass: Type['feature']
     '''To which featureclass this field belongs'''
 
-    datatype: DataType
+    datatype: Type[DataType]
     '''The field's datatype'''
     
     constraints: Tuple[DataTypeAnnotation]
@@ -110,6 +110,9 @@ class FeatureMetaclass(ABCMeta):
             else:
                 raise AssertionError('Should not happen')
             
+            if not vrailang.is_datatype(field_type):
+                raise VraiSpecificationError(f'Attribute {field_name} in featureclass {name} has unsupported datatype: {field_type}')
+
             namespace[field_name] = featureclass_attrs[field_name] = FeatureclassAttribute(
                 field_name, PATCH_IN_LATER, field_type, field_constraints
             )
