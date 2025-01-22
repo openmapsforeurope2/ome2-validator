@@ -134,7 +134,7 @@ class MixinAttributeRules(FeatureclassAttributeProtocol):
     def MustHaveCorrectCRS(self) -> ValidationRule:
         srid_constraint = self.get_constraint(srid)
         if srid_constraint is None:
-            raise VraiSpecificationError(f'MustHaveCorrectCRS can only be used on attributes with an srid constraint.')
+            raise VraiSpecificationError('MustHaveCorrectCRS can only be used on attributes with an srid constraint.')
         
         return _create_rule_and_register(
             validators.CrsValidator,
