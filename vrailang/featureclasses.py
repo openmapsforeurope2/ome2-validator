@@ -113,6 +113,9 @@ class FeatureMetaclass(ABCMeta):
             if not vrailang.is_datatype(field_type):
                 raise VraiSpecificationError(f'Attribute {field_name} in featureclass {name} has unsupported datatype: {field_type}')
 
+            if not vrailang.are_dataconstraints(field_constraints):
+                raise VraiSpecificationError(f'Constraints for {field_name} in featureclass {name} are not supported: {field_constraints}')
+
             namespace[field_name] = featureclass_attrs[field_name] = FeatureclassAttribute(
                 field_name, PATCH_IN_LATER, field_type, field_constraints
             )
