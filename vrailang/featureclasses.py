@@ -180,7 +180,7 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
     def __eq__(self, other: object) -> bool:
         if isinstance(other, feature):
             
-            if type(self) != type(other):
+            if type(self) is not type(other):
                 return False
             
             if self.__dict__ == other.__dict__:
