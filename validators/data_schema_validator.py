@@ -1,3 +1,4 @@
+from typing import ClassVar
 from qgis.core import QgsVectorLayer
 from models import ValidationResult
 from . import GenericValidator
@@ -6,8 +7,8 @@ import pydapper
 from dataclasses import dataclass
 
 class DataSchemaValidator(GenericValidator):
-    logger = logging.getLogger(__name__)
-    dsn = None
+    logger: ClassVar[logging.Logger] = logging.getLogger(__name__)
+    dsn: ClassVar[str | None] = None
 
     
     @dataclass
@@ -36,6 +37,9 @@ class DataSchemaValidator(GenericValidator):
     def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, expected_attribute_types: dict, schema: str) -> list[ValidationResult]:
         """Runs the DataSchemaValidator.
         """
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         results = []
 
         # Check if the source-table exists in Postgres

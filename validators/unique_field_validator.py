@@ -1,5 +1,6 @@
 
 from dataclasses import dataclass
+from typing import ClassVar
 from qgis.core import QgsVectorLayer
 from models import ValidationResult
 from . import GenericValidator
@@ -8,8 +9,8 @@ import logging
 import pydapper
 
 class UniqueFieldValidator(GenericValidator):
-    logger = logging.getLogger(__name__)
-    dsn = None
+    logger: ClassVar[logging.Logger] = logging.getLogger(__name__)
+    dsn: ClassVar[str | None] = None
 
     @classmethod
     def set_dsn(cls, dsn):
@@ -34,6 +35,9 @@ class UniqueFieldValidator(GenericValidator):
     
     @classmethod
     def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, fieldname: str, schema: str) -> list[ValidationResult]:
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         results = []
 
         if not QgisUtilities.layer_has_field(feature_class, fieldname):

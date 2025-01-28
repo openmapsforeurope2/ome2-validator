@@ -1,9 +1,10 @@
+from typing import ClassVar
 import pydapper
 
 from models import GenericResult
 
 class GenericResultRepository():
-    dsn = None
+    dsn: ClassVar[str | None] = None
     
     @classmethod
     def set_dsn(cls, dsn: str):
@@ -32,6 +33,9 @@ class GenericResultRepository():
         Args:
             generic_results (list[GenericResult]): The generic results to be stored.
         """        
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
@@ -56,6 +60,9 @@ class GenericResultRepository():
         Returns:
             list[GenericResult]: All generic results for the corresponding run.
         """        
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:

@@ -1,9 +1,10 @@
+from typing import ClassVar
 import pydapper
 
 from models import ValidationCheckStatus
 
 class ValidationCheckStatusRepository():
-    dsn = None
+    dsn: ClassVar[str | None] = None
 
     @classmethod
     def set_dsn(cls, dsn: str):
@@ -24,6 +25,9 @@ class ValidationCheckStatusRepository():
         Args:
             validation_check_status (ValidationCheckStatus): The checkstatus to be stored.
         """        
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
@@ -46,6 +50,9 @@ class ValidationCheckStatusRepository():
         Args:
             validation_check_status (ValidationCheckStatus): The checkstatus to be updated.
         """        
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
@@ -72,6 +79,9 @@ class ValidationCheckStatusRepository():
         Returns:
             list[ValidationCheckStatus]: A list of checkstatussen corresponding to the given run_id.
         """        
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         failed_only_clause = "AND success = false" if failed_only else ""
         commands = pydapper.connect(cls.dsn)
         try:

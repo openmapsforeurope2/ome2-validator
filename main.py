@@ -58,7 +58,7 @@ def main():
         raise ValueError(f"Validation parameters are not complete. Check the parameters in {validation_params_json_filename}.")
     
     # Set srid
-    SRID = "3035"
+    SRID = 3035
 
     # Setup repositories
     StorageUtilities.setup_repositories(params.output_db_params.create_pg_dsn())
