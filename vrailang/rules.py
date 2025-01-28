@@ -287,7 +287,7 @@ class MixinFeatureclassRules(FeatureclassProtocol):
 
 
     @classmethod
-    def DetermineFeatureCount(cls, group_by_field_1: str = None, group_by_field_2: str = None, minimum_record_count: int=-1) -> ValidationRule:
+    def DetermineFeatureCount(cls, group_by_field_1: str | None = None, group_by_field_2: str | None = None, minimum_record_count: int=-1) -> ValidationRule:
         return _create_rule_and_register(
             validators.FeatureCountValidator,
             cls,
