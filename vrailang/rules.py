@@ -5,12 +5,12 @@ and in `MixinFeatureclassRules` for rules pertaining to a featureclass itself.
 '''
 
 from dataclasses import dataclass, field
-from typing import Any, Type, TYPE_CHECKING, Callable, Union, cast
+from typing import Any, Type, TYPE_CHECKING, Union, cast
 from typing_extensions import Self
 from validators.abstract_validator import AbstractValidator
 import validators
 from vrailang._fastvarname import FastVarname
-from vrailang._protocols import FeatureclassProtocol, FeatureclassAttributeProtocol
+from vrailang._protocols import ArgLoader, FeatureclassProtocol, FeatureclassAttributeProtocol
 from vrailang.errors import VraiSpecificationError
 from vrailang.specs import CURRENT_SPEC_STATE
 from vrailang.dataconstraints import srid, length
@@ -59,7 +59,7 @@ class ValidationRule:
         return self
     
 
-    def run(self, run_id: int, arg_loader: Callable[['object'], object]):
+    def run(self, run_id: int, arg_loader: ArgLoader):
         # Convert vrailang.feature to QgsVectorLayer in featureclass, *args and **kwargs.
         feature_layer = arg_loader(self.feature_class)
         self.args = tuple([arg_loader(a) for a in list(self.args)])

@@ -4,8 +4,9 @@ via the functions `begin_spec`/`end_spec` and `begin_theme`/`end_theme`.
 '''
 
 from dataclasses import dataclass, field
-from typing import ClassVar, Union, TYPE_CHECKING, Callable
+from typing import ClassVar, Union, TYPE_CHECKING
 from models import ValidationParameters
+from vrailang._protocols import ArgLoader
 from vrailang.errors import VraiSpecificationError
 import logging
 from logging import Logger
@@ -70,7 +71,7 @@ class ValidationSpecification:
         self.themes = {}
 
 
-    def run(self, params: ValidationParameters, arg_loader: Callable[['object'], object]):
+    def run(self, params: ValidationParameters, arg_loader: ArgLoader):
         for validation_theme in self.themes.values():
             # Skip disabled themes
             if not params.theme_is_enabled(validation_theme.name):
