@@ -263,7 +263,7 @@ class HydroNodeCategoryValue(BaseValueDomain):
 
 
 class CEMTClassValue(BaseValueDomain):
-    I = 'I'
+    I = 'I' # noqa: E741 # ambiguous-variable-name
     II = 'II'
     III = 'III'
     IV = 'IV'
