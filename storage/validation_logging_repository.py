@@ -1,10 +1,11 @@
+from typing import ClassVar
 import pydapper
 
 from models import ValidationLogging
 
 class ValidationLoggingRepository():
-    dsn = None
-    __current_run_id = None
+    dsn: ClassVar[str | None] = None
+    __current_run_id: ClassVar[int | None] = None
 
     @classmethod
     def set_dsn(cls, dsn: str):
@@ -33,7 +34,10 @@ class ValidationLoggingRepository():
 
         Args:
             validation_logging (ValidationLogging): The logging to be stored.
-        """        
+        """ 
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+               
         validation_logging.run_id = cls.__current_run_id
         commands = pydapper.connect(cls.dsn)
         try:
