@@ -60,6 +60,11 @@ def main():
     # Set srid
     SRID = 3035
 
+    # Typed nulls for satisfying the typechecker
+    GENERATE_ID: int = None  # type: ignore
+    DEFAULT_DATE: 'datetime.date' = None # type: ignore
+    DEFAULT_BOOL: bool = None # type: ignore
+
     # Setup repositories
     StorageUtilities.setup_repositories(params.output_db_params.create_pg_dsn())
     GeometryResultRepository.set_geometry_srid(SRID)
@@ -74,12 +79,15 @@ def main():
     logger.info("Setting up the current task")
     current_task = ValidationTaskRepository.get_by_task_name(params.task_name)
     if current_task is None:
-        ValidationTaskRepository.add(ValidationTask(None, params.task_name))
+        ValidationTaskRepository.add(ValidationTask(GENERATE_ID, params.task_name))
         current_task = ValidationTaskRepository.get_by_task_name(params.task_name)
+
+        if current_task is None:
+            raise RuntimeError("Could not retrieve added task from database")
 
     # Create a new run
     logger.info("Setting up the current run")
-    ValidationRunRepository.add(ValidationRun(None, current_task.task_id, params.to_json(), None, None, None))
+    ValidationRunRepository.add(ValidationRun(GENERATE_ID, current_task.task_id, params.to_json(), DEFAULT_DATE, DEFAULT_DATE, DEFAULT_BOOL))
     current_run = ValidationRunRepository.get_latest_by_task_id(current_task.task_id)
     # Add run_id to the logging
     ValidationLoggingRepository.set_current_run_id(current_run.run_id)
