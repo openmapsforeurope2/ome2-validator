@@ -52,10 +52,10 @@ class ProximityValidator(FeatureValidator):
             'OUTPUT':buffer_layer
         }
 
-        cls.logger.info(f"Start creating buffer ...")
+        cls.logger.info("Start creating buffer ...")
         buffer = processing.run("native:buffer", buffer_parameters) # Run processing.algorithmHelp("native:buffer") for documentation
         buffer_layer = buffer['OUTPUT']
-        cls.logger.info(f"Finished creating buffer.")
+        cls.logger.info("Finished creating buffer.")
 
         
         index = QgsSpatialIndex(buffer_layer.getFeatures(), flags=QgsSpatialIndex.FlagStoreFeatureGeometries)
