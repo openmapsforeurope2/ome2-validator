@@ -17,7 +17,7 @@ elif os.name == 'posix':
     QgsApplication.setPrefixPath("/usr", True)
 
 
-from qgis.core import *
+from qgis.core import * # type: ignore
 from qgis import processing
 from qgis.PyQt.QtCore import QMetaType
 
@@ -77,7 +77,7 @@ class QgisUtilities:
 
 
     @classmethod
-    def create_postgres_vector_layer(cls, schema: str, table_name: str, geometry_column: str, sql: str = '', key_column: str = '', layer_name: str = None) -> QgsVectorLayer:
+    def create_postgres_vector_layer(cls, schema: str, table_name: str, geometry_column: str, sql: str = '', key_column: str = '', layer_name: str | None = None) -> QgsVectorLayer:
         """Creates a vectorlayer based on a PostGIS table.
 
         TODO Test using 'objectid' as key_column for OME2 data. This may enable using feature.id() in stead of feature['objectid']?
@@ -305,7 +305,7 @@ class QgisUtilities:
         }
         merge = processing.run("native:mergevectorlayers", parameters) # Run processing.algorithmHelp("native:mergevectorlayers") for documentation
         merge_layer = merge['OUTPUT']
-        cls.logger.info(f"Finished merging layers.")
+        cls.logger.info("Finished merging layers.")
 
         # Set the layername
         if merge_layer_name == "":
