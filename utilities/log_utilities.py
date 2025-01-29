@@ -1,3 +1,6 @@
+# Ignore type errors when monkeypatching VERBOSE into the logging module:
+# pyright: reportAttributeAccessIssue=false
+ 
 import logging
 from .log_handlers import PostgresHandler
 
@@ -26,7 +29,7 @@ class LogUtilities:
 
         # Setup VERBOSE log level, do we really need this?
         # Module is always set to 'log_utilities' for verbose logging..
-        if not logging.getLevelName(cls.VERBOSE) == "VERBOSE":
+        if logging.getLevelName(cls.VERBOSE) != "VERBOSE":
             logging.VERBOSE = cls.VERBOSE
             logging.addLevelName(logging.VERBOSE, "VERBOSE")
             logging.Logger.verbose = lambda inst, msg, *args, **kwargs: inst.log(logging.VERBOSE, msg, *args, **kwargs)
