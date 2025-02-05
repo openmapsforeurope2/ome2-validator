@@ -7,7 +7,6 @@ from . import FeatureValidator
 import logging
 from utilities import QgisUtilities
 from qgis.PyQt.QtCore import QMetaType
-import os
 
 from itertools import combinations
 
