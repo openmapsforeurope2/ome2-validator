@@ -8,7 +8,8 @@ class AllowedAttributeValidator(FeatureValidator):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def validate(cls, run_id :int, validation_code: str, severity: str, feature_class: QgsVectorLayer, field_name: str, allowed_attributes: list[str], separator: str = None) -> list[ValidationResult]:
+    def validate(cls, run_id :int, validation_code: str, severity: str, feature_class: QgsVectorLayer, 
+                 field_name: str, allowed_attributes: list[str], separator: str | None = None) -> list[ValidationResult]:
         """Runs the AllowedAttributeValidator.
 
         Checks for features which have a field value which is different than the allowed values.
