@@ -1,4 +1,4 @@
-from qgis.core import QgsFeatureRequest, QgsVectorLayer
+from qgis.core import QgsFeatureRequest, QgsVectorLayer  # noqa: F401 # QgsFeatureRequest is unused for now
 from models import ValidationResult
 from . import FeatureValidator
 import re
@@ -25,7 +25,7 @@ class RegexValidator(FeatureValidator):
         Returns:
             list[ValidationResult]: A list of results, containing the features of which the specified field value does not match the given regex.
         """        
-        results = []
+        results: list[ValidationResult] = []
 
         # TODO Using the regex in the filter expression will probably have better performance, but regex is not parsed correctly
         #filter_regex = f"regexp_match(\"{field_name}\", {regex})"
@@ -35,7 +35,7 @@ class RegexValidator(FeatureValidator):
         field_index = feature_class.fields().indexFromName(field_name)
         if field_index == -1:
             cls.logger.error(f"FeatureClass {feature_class} does not have field {field_name}")
-            return
+            return results
 
         pattern = re.compile(regex)
 
