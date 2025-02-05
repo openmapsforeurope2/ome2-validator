@@ -2,8 +2,9 @@ from typing import ClassVar
 import pydapper
 
 from models import GeometryResult
+from storage.result_repository_protocol import ResultRepositoryProtocol
 
-class GeometryResultRepository():
+class GeometryResultRepository(ResultRepositoryProtocol[GeometryResult]):
     dsn: ClassVar[str | None] = None
     __srid: ClassVar[int | None] = None
 

@@ -2,8 +2,9 @@ from typing import ClassVar
 import pydapper
 
 from models import GenericResult
+from storage.result_repository_protocol import ResultRepositoryProtocol
 
-class GenericResultRepository():
+class GenericResultRepository(ResultRepositoryProtocol[GenericResult]):
     dsn: ClassVar[str | None] = None
     
     @classmethod

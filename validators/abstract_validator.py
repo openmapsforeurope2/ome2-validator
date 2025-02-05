@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import ClassVar
 from models import ValidationCheckStatus, ValidationResult
 from storage import ValidationCheckStatusRepository
 from qgis.core import QgsGeometry, QgsFeature, QgsFields, QgsField, QgsVectorLayer, QgsWkbTypes
@@ -6,8 +7,10 @@ from qgis.PyQt.QtCore import QVariant
 import logging
 import traceback
 
+from storage.result_repository_protocol import ResultRepositoryProtocol
+
 class AbstractValidator(ABC):
-    result_repository = None
+    result_repository: ClassVar[type[ResultRepositoryProtocol]]
     logger = logging.getLogger(__name__)
 
     @classmethod
@@ -28,6 +31,7 @@ class AbstractValidator(ABC):
         """        
         check_status = ValidationCheckStatus(validation_code, run_id, None, None, None, None, -1)
         exception = False
+        validation_results: list[ValidationResult] = []
         try:
             cls.logger.info(f'Start running the {cls.__name__} for {validation_code}')
             ValidationCheckStatusRepository.add(check_status)
