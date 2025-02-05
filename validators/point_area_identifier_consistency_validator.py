@@ -1,10 +1,9 @@
-from qgis.core import QgsProject, QgsVectorLayer
+from qgis.core import QgsVectorLayer
 from qgis import processing
 from models import ValidationResult
 from . import FeatureValidator
 
 from processing.tools import *
-from qgis.analysis import QgsNativeAlgorithms
 import logging
 
 class PointAreaIdentifierConsistencyValidator(FeatureValidator):
