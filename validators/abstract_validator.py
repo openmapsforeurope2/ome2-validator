@@ -4,6 +4,7 @@ from models import ValidationCheckStatus, ValidationResult
 from storage import ValidationCheckStatusRepository
 from qgis.core import QgsGeometry, QgsFeature, QgsFields, QgsField, QgsVectorLayer, QgsWkbTypes
 from qgis.PyQt.QtCore import QVariant
+import datetime
 import logging
 import traceback
 
@@ -28,8 +29,14 @@ class AbstractValidator(ABC):
             validation_code (str): The validation code to use.
             severity (str): The severity to use (WARNING / ERROR / STATISTIC).
             feature_class (QgsVectorLayer): The feature class to check.
-        """        
-        check_status = ValidationCheckStatus(validation_code, run_id, None, None, None, None, -1)
+        """
+
+        # Typed nulls for satisfying the typechecker
+        GENERATE_DATE: datetime.date = None  # type: ignore
+
+        check_status = ValidationCheckStatus(validation_code, run_id, 
+                                             GENERATE_DATE, GENERATE_DATE, GENERATE_DATE, 
+                                             None, -1)
         exception = False
         validation_results: list[ValidationResult] = []
         try:
@@ -56,6 +63,7 @@ class AbstractValidator(ABC):
                 ValidationCheckStatusRepository.update_on_end(check_status)
 
 
+    @classmethod
     @abstractmethod
     def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, *args, **kwargs) -> list[ValidationResult]:
         """Abstract method for the actual validation logic.
