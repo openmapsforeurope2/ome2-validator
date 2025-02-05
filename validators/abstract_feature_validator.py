@@ -25,8 +25,12 @@ class FeatureValidator(AbstractValidator, ABC):
             GeometryResult: A geometry result ready for database insertion.
         """        
 
+        # Typed nulls for satisfying the typechecker
+        GENERATE_ID: int = None  # type: ignore
+        DETECT_TYPE: str = None # type: ignore
+
         return GeometryResult(
-            result_id = None,
+            result_id = GENERATE_ID,
             run_id = run_id,
             validation_code = validation_code,
             severity  = severity,
@@ -34,5 +38,5 @@ class FeatureValidator(AbstractValidator, ABC):
             message = message,
             objectid = '00000000-0000-0000-0000-000000000000' if feature is None else feature['objectid'],
             geometry = None if feature is None else feature.geometry(),
-            geometry_type = None
+            geometry_type = DETECT_TYPE
         )

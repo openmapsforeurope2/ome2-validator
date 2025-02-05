@@ -22,10 +22,13 @@ class GenericValidator(AbstractValidator, ABC):
 
         Returns:
             GenericResult: A generic result ready for database insertion.
-        """        
+        """
+
+        # Typed nulls for satisfying the typechecker
+        GENERATE_ID: int = None  # type: ignore
 
         return GenericResult(
-            result_id = None,
+            result_id = GENERATE_ID,
             run_id = run_id,
             validation_code = validation_code,
             severity  = severity,
