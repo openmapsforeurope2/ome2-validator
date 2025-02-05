@@ -25,15 +25,15 @@ class MinimumAreaValidator(FeatureValidator):
             list[ValidationResult]: A list of results, containing the features which are smaller than the minimum area.
         """        
         results = []
-
+        
+        # Parameter may be an array of QgsVectorLayers or a single one
+        if type(feature_classes) is QgsVectorLayer:
+            feature_classes = [feature_classes]
+        
         if type(minimum_area) not in [int, float] or minimum_area < 0:
-            log_message = f"Skipping {cls.__name__} on '{feature_class.name()}' since the minimum_area is not an int or float larger than 0."
+            log_message = f"Skipping {cls.__name__} on '{tuple(f.name() for f in feature_classes)}' since the minimum_area is not an int or float larger than 0."
             cls.logger.warning(log_message)
             return results
-
-        # Parameter may be an array of QgsVectorLayers or a single one
-        if type(feature_classes) == QgsVectorLayer:
-            feature_classes = [feature_classes]
 
         d = QgsDistanceArea()
 
