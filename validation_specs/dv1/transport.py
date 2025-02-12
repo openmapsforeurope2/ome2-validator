@@ -452,6 +452,12 @@ T006d = railway_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=Fa
 T006e = runway_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
 T006f = ferry_crossing.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
 
+T007a = aerodrome_area.AreaMustBeAtLeast(60000).TreatAsWarning()
+T007b = port_area.AreaMustBeAtLeast(60000).TreatAsWarning()
+T007c = railway_station_area.AreaMustBeAtLeast(60000).TreatAsWarning()
+T007d = road_service_area.AreaMustBeAtLeast(60000).TreatAsWarning()
+T007e = runway_area.AreaMustBeAtLeast(60000).TreatAsWarning()
+
 #endregion
 
 #region Data model and attribute resolution
