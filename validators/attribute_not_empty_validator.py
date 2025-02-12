@@ -30,7 +30,7 @@ class AttributeNotEmptyValidator(FeatureValidator):
             cls.logger.warning(f"Cannot run the {cls.__name__} on {feature_class.name()} for field {field_name} because the field does not exist.")
             return results
     
-        is_empty_expression = f'length("{field_name}") = length(regexp_substr("{field_name}", \'\\\s+\'))'
+        is_empty_expression = f'length(trim("{field_name}")) = 0'
 
         if not QgsExpression(is_empty_expression).isValid():
             log_message = f"Skipping {cls.__name__} on '{feature_class.name()}' as the following expression is not valid: {is_empty_expression}"
