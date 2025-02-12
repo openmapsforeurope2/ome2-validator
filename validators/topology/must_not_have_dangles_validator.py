@@ -1,6 +1,6 @@
 from models import ValidationResult
 from validators import FeatureValidator
-from qgis.core import QgsWkbTypes, QgsVectorLayer
+from qgis.core import QgsPoint, QgsWkbTypes, QgsVectorLayer
 from utilities import QgisUtilities
 import logging
 
@@ -31,7 +31,7 @@ class MustNotHaveDanglesValidator(FeatureValidator):
             cls.logger.warning(log_message)          
             return results
         
-        end_vertices_dict = {}
+        end_vertices_dict: dict[QgsPoint, list[int]] = {}
         
         # Loop over features
         for feature in feature_class.getFeatures():
@@ -58,7 +58,8 @@ class MustNotHaveDanglesValidator(FeatureValidator):
             repetitions = len(feature_ids)
             if repetitions == 1:
                 error_geom = QgisUtilities.pointxy_to_geometry(point)
-                error_feature = cls.create_error_feature(error_geom, feature.id())
+                feature = feature_class.getFeature(feature_ids[0])
+                error_feature = cls.create_error_feature(error_geom, feature.attribute('objectid'))
                 message = f'{feature_class.name()} object with objectid {feature.id()} has dangles.'
                 result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
                 results.append(result)

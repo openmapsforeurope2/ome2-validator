@@ -1,0 +1,53 @@
+# OME2 Validator
+
+The OME2 Validator is a tool for running the OME2 validation procedures on a topographic dataset.
+
+## Building the Docker image
+
+The validator tool is a containerized application
+that is built to run within a Docker container.
+This container contains all the required dependencies,
+which makes deployment of the tool easier.
+
+The Docker image can be built by running the command below
+from the root of this repository:
+
+```sh
+docker build -f Dockerfile . -t eurogeographics/ome2-validator:latest
+```
+
+If the image has been successfully built,
+running the command should show the tool's help message:
+
+```sh
+docker run --rm eurogeographics/ome2-validator
+```
+
+## Running the validator
+
+Once the Docker image has been built, the validator tool can be run with a command like the one below:
+
+```sh
+docker run --rm --add-host host.docker.internal:host-gateway -v "$(pwd):/pwd" eurogeographics/ome2-validator /pwd/validation_parameters.json
+```
+
+This command consists of several parts:
+
+1. `docker run` to create a container from a Docker image.
+2. `--rm` to clean up and remove the container after the validator has run.
+3. `--add-host host.docker.internal:host-gateway` to expose the host machine running Docker as `host.docker.internal` to the validator tool within the container.
+   Note that within the container `127.0.0.1` *does not* refer to the host machine, but to the container itself.
+4. `-v "$(pwd):/pwd"` to mount the current working directory as `/pwd` within the container.
+5. The name of the Docker image: `eurogeographics/ome2-validator`.
+6. The path to the file `/pwd/validation_parameters.json` that contains the validation parameters for the validation run.
+   These parameters indicate, e.g., the location of the input data,
+   which validation checks to perform and where to store the results.
+
+## Development
+
+This project comes with a definition for a [dev container](https://containers.dev/) that is tailored for [Visual Studio Code](https://code.visualstudio.com/)
+When you open the project's root folder,
+Visual Studio Code will recognize the existence of a dev container definition
+and will prompt whether it should load the project in a dev container.
+The advantage of a dev container is that it provisions an environment with all the required software and dependencies installed.
+The developer only needs to have Docker and Visual Studio Code on its machine.

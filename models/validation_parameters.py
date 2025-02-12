@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import OrderedDict
 import os
 import json
 from json import JSONEncoder
@@ -13,6 +14,8 @@ class ValidationParameters:
     Attributes:
         specification (str): The ValidationSpecification on which these parameters are applicable.
         task_name (str): The task name.
+        task_id (int): The task id.
+        run_id (int): The run id.
         input_db_params (str): The database parameters which give access to the OME2 data which we want to validate.
         output_db_params (str): The database parameters which give access to database where we want to write the validation output.
         themes (list[str]): A selection of themes which we want to validate.
@@ -23,6 +26,8 @@ class ValidationParameters:
     """
     specification: str
     task_name: str
+    task_id: int
+    run_id: int
     input_db_params: DatabaseConnectionParameters
     output_db_params: DatabaseConnectionParameters
     themes: list[str]
@@ -32,8 +37,43 @@ class ValidationParameters:
     min_required_only: bool
 
     def __init__(self):
+        self.task_id = None # type: ignore
+        self.run_id = None # type: ignore
         self.input_db_params = self.DatabaseConnectionParameters()
         self.output_db_params = self.DatabaseConnectionParameters()
+
+    @classmethod
+    def get_example_json(cls) -> str:
+        """Returns example validation parameters.
+
+        Returns:
+            str: Example validation parameters in JSON format.
+        """
+        return json.dumps(OrderedDict(
+            specification='DV1',
+            task_name='Validation on OME2 data',
+            input_database=OrderedDict(
+                host='my-postgis-db.postgres.database.azure.com',
+                port=5432,
+                name='ome2_db',
+                username='postgres',
+                password='postgres'
+            ),
+            output_database=OrderedDict(
+                host='host.docker.internal',
+                port=5432,
+                name='ome2_validation_results',
+                username='postgres',
+                password='postgres'
+            ),
+            themes=['ADMINSTRATIVE_UNITS'],
+            checks=[],
+            groups=[],
+            countries=['NL'],
+            min_required_only=False
+            ), indent=4
+        )
+        
 
     @classmethod
     def from_json(cls, json_filename: str) -> ValidationParameters:
@@ -77,16 +117,17 @@ class ValidationParameters:
         Returns:
             bool: True if all necessary attributes could be parsed from the JSON file.
         """        
-        return (self.specification and
-                self.task_name and
-                self.input_db_params.are_complete() and
-                self.output_db_params.are_complete() and
-                self.themes is not None and
-                self.checks is not None and
-                self.groups is not None and
-                self.countries is not None and
-                self.min_required_only is not None
-                )
+        return bool(
+            self.specification and
+            self.task_name and
+            self.input_db_params.are_complete() and
+            self.output_db_params.are_complete() and
+            self.themes is not None and
+            self.checks is not None and
+            self.groups is not None and
+            self.countries is not None and
+            self.min_required_only is not None
+            )
 
     def to_json(self) -> str:
         """Converts the object into a JSON string using an encoder.
@@ -96,6 +137,33 @@ class ValidationParameters:
         """        
         return json.dumps(self, cls=self.ValidationParametersEncoder, indent=4)
     
+
+    def theme_is_enabled(self, theme_name: str) -> bool:
+        """Determines if a theme is enabled, based on the theme name and validation parameters.
+        
+        Note: This check only considers the first 5 characters.
+
+        Returns:
+            bool: True if the theme is enabled.
+        """
+        if len(self.themes) == 0:
+            return True
+        return theme_name in [t[:5].upper() for t in self.themes]
+    
+
+    def check_is_enabled(self, validation_code: str) -> bool:
+        """Determines if a check is enabled, based on the validation code and validation parameters.
+
+        Returns:
+            bool: True if the check is enabled.
+        """
+        if len(self.checks) == 0:
+            return True
+        
+        # I.e. ["T001"] will enable both T001a and T001b
+        return validation_code.startswith(tuple(self.checks))
+    
+
     class DatabaseConnectionParameters():
         host: str
         port: int
@@ -109,7 +177,7 @@ class ValidationParameters:
             Returns:
                 bool: True if all necessary attributes could be parsed from the JSON file.
             """            
-            return self.host and self.name and self.username and self.password
+            return bool(self.host and self.name and self.username and self.password)
 
         def create_pg_dsn(self) -> str:
             """Create a Data Source Name
@@ -123,7 +191,7 @@ class ValidationParameters:
     class ValidationParametersEncoder(JSONEncoder):
         """A custom encoder for the ValidationParameters, which prevents the storage of passwords in the database.
         """
-        def default(self, o: object) -> __dict__:
+        def default(self, o: object) -> dict:
             """Creates a serializable object, without any passwords if it is of type ValidationParameters.
 
             Args:

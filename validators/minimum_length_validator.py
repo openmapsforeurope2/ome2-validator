@@ -27,14 +27,14 @@ class MinimumLengthValidator(FeatureValidator):
         """        
         results = []
 
+        # Parameter may be an array of QgsVectorLayers or a single one
+        if type(feature_classes) is QgsVectorLayer:
+            feature_classes = [feature_classes]
+
         if type(minimum_length) not in [int, float] or minimum_length < 0:
-            log_message = f"Skipping {cls.__name__} on '{feature_class.name()}' since the minimum_length is not an int or float larger than 0."
+            log_message = f"Skipping {cls.__name__} on '{tuple(f.name() for f in feature_classes)}' since the minimum_length is not an int or float larger than 0."
             cls.logger.warning(log_message)
             return results
-
-        # Parameter may be an array of QgsVectorLayers or a single one
-        if type(feature_classes) == QgsVectorLayer:
-            feature_classes = [feature_classes]
 
         # Using a request filter improves performance, however this does not easily allow for separate handling of linestrings of a multiline
         # request = QgsFeatureRequest(QgsExpression(f'$length < {minimum_length}'))

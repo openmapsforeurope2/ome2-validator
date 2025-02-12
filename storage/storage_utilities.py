@@ -1,14 +1,15 @@
 import os
 import logging
 from pathlib import Path
+from typing import ClassVar
 import pydapper
 from dataclasses import dataclass
-from storage import ValidationTaskRepository, ValidationRunRepository, GeometryResultRepository, StatisticResultRepository, ValidationCheckStatusRepository, ValidationLoggingRepository
+from storage import ValidationTaskRepository, ValidationRunRepository, GeometryResultRepository, GenericResultRepository, ValidationCheckStatusRepository, ValidationLoggingRepository
 
 class StorageUtilities:
     logger = logging.getLogger(__name__)
     current_version = '0.1'
-    dsn = None
+    dsn: ClassVar[str | None] = None
 
     SETTINGS_TABLE_NOT_FOUND = 'SETTINGS_TABLE_NOT_FOUND'
     SETTING_NOT_FOUND = 'SETTING_NOT_FOUND'
@@ -45,6 +46,9 @@ class StorageUtilities:
         Returns:
             bool: True if the table 'validation_settings' already exists.
         """
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
@@ -66,6 +70,9 @@ class StorageUtilities:
         Returns:
             str: The value for the given setting name.
         """
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
@@ -86,6 +93,9 @@ class StorageUtilities:
         Args:
             sql_file (str): The name of the SQL file to execute.
         """        
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         curr_dir = os.path.dirname(os.path.realpath(__file__))
         sql_file_path = os.path.join(os.path.dirname(curr_dir), 'sql', sql_file)
         commands = pydapper.connect(cls.dsn)
@@ -100,7 +110,7 @@ class StorageUtilities:
     def setup_repositories(cls, dsn: str):
         """Sets up the repositories and underlying database structure.
 
-        Starts by retrieving the versio of the current database structure.
+        Starts by retrieving the version of the current database structure.
         If its equal to the version of the validator, we don't need to run any additional SQL-scripts.
         If the settings table could not be found, we fully initialize the database structure by running 'init_db.sql'.
         If the settings table exists but the database version could not be determined, an error is raised.
@@ -134,7 +144,7 @@ class StorageUtilities:
             ValidationTaskRepository.set_dsn(dsn)
             ValidationRunRepository.set_dsn(dsn)
             GeometryResultRepository.set_dsn(dsn)
-            StatisticResultRepository.set_dsn(dsn)
+            GenericResultRepository.set_dsn(dsn)
             ValidationCheckStatusRepository.set_dsn(dsn)
         else:
             raise RuntimeError("Database version does not match validator version.")

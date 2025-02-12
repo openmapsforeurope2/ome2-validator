@@ -1,9 +1,10 @@
+from typing import ClassVar
 import pydapper
 
 from models import ValidationRun
 
 class ValidationRunRepository():
-    dsn = None
+    dsn: ClassVar[str | None] = None
 
     @classmethod
     def set_dsn(cls, dsn: str):
@@ -21,7 +22,10 @@ class ValidationRunRepository():
 
         Args:
             validation_run (ValidationRun): The validation run.
-        """        
+        """
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
@@ -43,7 +47,10 @@ class ValidationRunRepository():
 
         Args:
             validation_run (ValidationRun): The validationrun to be updated.
-        """        
+        """
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
@@ -66,7 +73,10 @@ class ValidationRunRepository():
 
         Returns:
             ValidationRun: The latest validation run.
-        """        
+        """
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:

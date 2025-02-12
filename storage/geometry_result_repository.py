@@ -1,10 +1,12 @@
+from typing import ClassVar
 import pydapper
 
 from models import GeometryResult
+from storage.result_repository_protocol import ResultRepositoryProtocol
 
-class GeometryResultRepository():
-    dsn = None
-    __srid = None
+class GeometryResultRepository(ResultRepositoryProtocol[GeometryResult]):
+    dsn: ClassVar[str | None] = None
+    __srid: ClassVar[int | None] = None
 
     @classmethod
     def set_dsn(cls, dsn):
@@ -43,6 +45,11 @@ class GeometryResultRepository():
         Args:
             validation_results (list[GeometryResult]): The geometry results to be stored.
         """        
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        if cls.__srid is None:
+            raise Exception('SRID has not been set')
+
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
@@ -67,6 +74,9 @@ class GeometryResultRepository():
         Returns:
             list[GeometryResult]: All geometry results for the corresponding run.
         """        
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
@@ -99,7 +109,10 @@ class GeometryResultRepository():
 
         Returns:
             list[GeometryResult]: All geometry results for the corresponding run and validation code.
-        """        
+        """
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:

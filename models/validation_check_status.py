@@ -19,4 +19,5 @@ class ValidationCheckStatus(AbstractModel):
     start_time: datetime.date
     end_time: datetime.date
     last_update: datetime.date
-    success: bool
+    success: bool | None
+    number_of_results: int

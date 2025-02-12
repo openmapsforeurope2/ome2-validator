@@ -1,13 +1,15 @@
 from qgis.core import QgsFeatureRequest, QgsVectorLayer, QgsFeature
 from models import ValidationResult
 from . import FeatureValidator
+from utilities import QgisUtilities
 import logging
 
 class AllowedAttributeValidator(FeatureValidator):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def validate(cls, run_id :int, validation_code: str, severity: str, feature_class: QgsVectorLayer, field_name: str, allowed_attributes: list[str], separator: str = None) -> list[ValidationResult]:
+    def validate(cls, run_id :int, validation_code: str, severity: str, feature_class: QgsVectorLayer, 
+                 field_name: str, allowed_attributes: list[str], separator: str | None = None) -> list[ValidationResult]:
         """Runs the AllowedAttributeValidator.
 
         Checks for features which have a field value which is different than the allowed values.
@@ -19,12 +21,18 @@ class AllowedAttributeValidator(FeatureValidator):
             feature_class (QgsVectorLayer): The feature class to check.
             field_name (str): The name of the field to check.
             allowed_attributes (list[str]): The values which are allowed.
-            separator (str): Optional separator used for splitting combined values, such as coountry = 'be#nl'. This defaults to None.
+            separator (str): Optional separator used for splitting combined values, such as country = 'be#nl'. This defaults to None.
 
         Returns:
             list[ValidationResult]: A list of results, containing the features of which the specified field does not have an allowed value.
+
+        # TODO Support wildcard values such as 'void_*'
         """        
         results = []
+
+        if not QgisUtilities.layer_has_field(feature_class, field_name):
+            cls.logger.warning(f"Cannot run the {cls.__name__} on {feature_class.name()} for field {field_name} because the field does not exist.")
+            return results
         
         allowed_attributes_quoted = [f"\'{attr}\'" for attr in allowed_attributes]
         allowed_attributes_list = f"({','.join(allowed_attributes_quoted)})"

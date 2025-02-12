@@ -3,7 +3,7 @@ from qgis.core import QgsGeometry
 
 class AbstractModel(ABC):
 
-    def as_param_dict(self, srid: int = None) -> dict:
+    def as_param_dict(self, srid: int | None = None) -> dict:
         """Turns the model's attributes into a dict.
         
         PyDapper takes parameters from a dict to substitute placeholders in the query.

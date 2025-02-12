@@ -3,13 +3,12 @@ from models import ValidationResult
 from . import FeatureValidator
 import logging
 from utilities import QgisUtilities
-from typing import Union
 
 class MinimumAreaValidator(FeatureValidator):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def validate(cls, run_id: int, validation_code: str, severity: str, feature_classes: Union[QgsVectorLayer, list[QgsVectorLayer]], minimum_area: Union[int, float]) -> list[ValidationResult]:
+    def validate(cls, run_id: int, validation_code: str, severity: str, feature_classes:QgsVectorLayer | list[QgsVectorLayer], minimum_area: int | float) -> list[ValidationResult]:
         """Runs the MinimumAreaValidator.
 
         Checks if polygon features in the given featureclass are smaller than the minimum area.
@@ -24,16 +23,16 @@ class MinimumAreaValidator(FeatureValidator):
         Returns:
             list[ValidationResult]: A list of results, containing the features which are smaller than the minimum area.
         """        
-        results = []
-
+        results: list[ValidationResult] = []
+        
+        # Parameter may be an array of QgsVectorLayers or a single one
+        if type(feature_classes) is QgsVectorLayer:
+            feature_classes = [feature_classes]
+        
         if type(minimum_area) not in [int, float] or minimum_area < 0:
-            log_message = f"Skipping {cls.__name__} on '{feature_class.name()}' since the minimum_area is not an int or float larger than 0."
+            log_message = f"Skipping {cls.__name__} on '{tuple(f.name() for f in feature_classes)}' since the minimum_area is not an int or float larger than 0."
             cls.logger.warning(log_message)
             return results
-
-        # Parameter may be an array of QgsVectorLayers or a single one
-        if type(feature_classes) == QgsVectorLayer:
-            feature_classes = [feature_classes]
 
         d = QgsDistanceArea()
 

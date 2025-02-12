@@ -12,9 +12,12 @@ if os.name == 'nt':
     sys.path.append(pyqgis_path)
     sys.path.append(pyqgis_plugins_path)
     os.add_dll_directory(qgis_bin_dir)
+elif os.name == 'posix':
+    from qgis.core import QgsApplication
+    QgsApplication.setPrefixPath("/usr", True)
 
 
-from qgis.core import *
+from qgis.core import * # type: ignore
 from qgis import processing
 from qgis.PyQt.QtCore import QMetaType
 
@@ -74,7 +77,7 @@ class QgisUtilities:
 
 
     @classmethod
-    def create_postgres_vector_layer(cls, schema: str, table_name: str, geometry_column: str, sql: str = '', key_column: str = '', layer_name: str = None) -> QgsVectorLayer:
+    def create_postgres_vector_layer(cls, schema: str, table_name: str, geometry_column: str, sql: str = '', key_column: str = '', layer_name: str | None = None) -> QgsVectorLayer:
         """Creates a vectorlayer based on a PostGIS table.
 
         TODO Test using 'objectid' as key_column for OME2 data. This may enable using feature.id() in stead of feature['objectid']?
@@ -168,7 +171,7 @@ class QgisUtilities:
         Returns:
             list[list[QgsPoint]]: a list of polylines (list[QgsPoints]).
         """        
-        if not type(geometry) == QgsGeometry or not geometry.type() == QgsWkbTypes.GeometryType.LineGeometry:
+        if type(geometry) is not QgsGeometry or geometry.type() is not QgsWkbTypes.GeometryType.LineGeometry:
             raise TypeError("geometry must be a QgsGeometry of type Line")
         
         polylines = []
@@ -194,7 +197,7 @@ class QgisUtilities:
         Returns:
             list[QgsPoint]: a list of QgsPoints.
         """        
-        if not type(geometry) == QgsGeometry or not geometry.type() == QgsWkbTypes.GeometryType.PointGeometry:
+        if type(geometry) is not QgsGeometry or geometry.type() is not QgsWkbTypes.GeometryType.PointGeometry:
             raise TypeError("geometry must be a QgsGeometry of type Point")
         
         points = []
@@ -218,7 +221,7 @@ class QgisUtilities:
         Returns:
             bool: True if the geometry is empty or invalid.
         """        
-        if not type(geometry) == QgsGeometry:
+        if type(geometry) is not QgsGeometry:
             raise TypeError("geometry must be a QgsGeometry")
         return geometry.isNull() or geometry.isEmpty() or not geometry.isGeosValid()
 
@@ -302,7 +305,7 @@ class QgisUtilities:
         }
         merge = processing.run("native:mergevectorlayers", parameters) # Run processing.algorithmHelp("native:mergevectorlayers") for documentation
         merge_layer = merge['OUTPUT']
-        cls.logger.info(f"Finished merging layers.")
+        cls.logger.info("Finished merging layers.")
 
         # Set the layername
         if merge_layer_name == "":
@@ -370,3 +373,17 @@ class QgisUtilities:
             cls.logger.error(f"Something went wrong while creating a memory layer for {layer.name()}. {data_provider.errors()}")
 
         return new_layer
+
+
+    @classmethod
+    def layer_has_field(cls, layer: QgsVectorLayer, field_name: str):
+        """ Checks if a given field name exists on the given layer.
+
+        Args:
+            layer (QgsVectorLayer): The vector layer to check.
+            attribute (str): The field name.
+
+        Returns:
+            bool: True if the field exists on this layer.
+        """
+        return layer.fields().indexFromName(field_name) > -1

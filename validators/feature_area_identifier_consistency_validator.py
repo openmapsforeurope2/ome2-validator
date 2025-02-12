@@ -17,7 +17,7 @@ class FeatureAreaIdentifierConsistencyValidator(FeatureValidator):
     def validate(cls, run_id: int, validation_code: str, severity: str, check_feature_class: QgsVectorLayer, area_feature_class: QgsVectorLayer, id_field: str) -> list[ValidationResult]:
         """Runs the FeatureAreaIdentifierConsistencyValidator.
         
-        Checks if every point from the point-featureclass is inside an area of the area-featureclass while also having matching values for the id field.
+        Checks if every feature from the check-featureclass is inside an area of the area-featureclass while also having matching values for the id field.
 
         Args:
             run_id (int): The id of the current run.
@@ -40,7 +40,7 @@ class FeatureAreaIdentifierConsistencyValidator(FeatureValidator):
         join_layer = "memory:join_layer"
         parameters = {
         'INPUT':prepared_check_feature_class,
-        'PREDICATE':[0],
+        'PREDICATE':[5], # WITHIN
         'JOIN': prepared_area_feature_class,
         'JOIN_FIELDS':[],
         'METHOD':0,

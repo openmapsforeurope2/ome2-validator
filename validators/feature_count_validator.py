@@ -1,14 +1,15 @@
 from qgis.core import QgsVectorLayer
 from qgis.PyQt.QtCore import QVariant
 from models import ValidationResult
-from . import StatisticValidator
+from . import GenericValidator
+from utilities import QgisUtilities
 import logging
 
-class FeatureCountValidator(StatisticValidator):
+class FeatureCountValidator(GenericValidator):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, group_by_field_1: str = None, group_by_field_2: str = None, minimum_record_count: int = -1) -> list[ValidationResult]:
+    def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, group_by_field_1: str | None = None, group_by_field_2: str | None = None, minimum_record_count: int = -1) -> list[ValidationResult]:
         """Runs the FeatureCountValidator
 
         Check if a featureclass has less features than the minimum record count.
@@ -27,11 +28,11 @@ class FeatureCountValidator(StatisticValidator):
         """
         results = []
 
-        if group_by_field_1 and not cls.field_exists(feature_class, group_by_field_1):
+        if group_by_field_1 and not QgisUtilities.layer_has_field(feature_class, group_by_field_1):
             cls.logger.warning(cls.create_field_doesnt_exist_message(feature_class, group_by_field_1))
             return results
         
-        if group_by_field_2 and not cls.field_exists(feature_class, group_by_field_2):
+        if group_by_field_2 and not QgisUtilities.layer_has_field(feature_class, group_by_field_2):
             cls.logger.warning(cls.create_field_doesnt_exist_message(feature_class, group_by_field_2))
             return results
         
@@ -71,10 +72,6 @@ class FeatureCountValidator(StatisticValidator):
         return results
     
 
-    @classmethod
-    def field_exists(cls, feature_class, group_by_field) -> bool:
-        field_index_1 = feature_class.fields().indexFromName(group_by_field) 
-        return field_index_1 > -1
                 
 
     @classmethod
@@ -84,7 +81,7 @@ class FeatureCountValidator(StatisticValidator):
 
     @classmethod
     def get_equals_expression(cls, field, value) -> str:
-        if type(value) == QVariant and value.isNull():
+        if type(value) is QVariant and value.isNull():
             return f'"{field}" is {value}'
         return f'"{field}" = \'{value}\''
 
@@ -95,7 +92,7 @@ class FeatureCountValidator(StatisticValidator):
         if expression:
             expression_part = f" for {expression}"
         plural = "" if feature_count == 1 else "s"
-        return f"Layer {feature_class.name()} has {feature_count} record{plural}{expression_part}."
+        return f"Featureclass '{feature_class.name()}' has {feature_count} record{plural}{expression_part}."
     
 
     @classmethod

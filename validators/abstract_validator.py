@@ -1,12 +1,17 @@
 from abc import ABC, abstractmethod
+from typing import ClassVar
 from models import ValidationCheckStatus, ValidationResult
 from storage import ValidationCheckStatusRepository
 from qgis.core import QgsGeometry, QgsFeature, QgsFields, QgsField, QgsVectorLayer, QgsWkbTypes
 from qgis.PyQt.QtCore import QVariant
+import datetime
 import logging
+import traceback
+
+from storage.result_repository_protocol import ResultRepositoryProtocol
 
 class AbstractValidator(ABC):
-    result_repository = None
+    result_repository: ClassVar[type[ResultRepositoryProtocol]]
     logger = logging.getLogger(__name__)
 
     @classmethod
@@ -16,7 +21,7 @@ class AbstractValidator(ABC):
         This method ensures that:
           1. a ValidationCheckStatus is created before the actual validation logic is started.
           2. the validation logic is started by calling the validate() function.
-          3. in case of success, the validation results are stored in the corresponding repository (being either the GeometryResultRepository or StatisticResultRepository, depending on the Validator type).
+          3. in case of success, the validation results are stored in the corresponding repository (being either the GeometryResultRepository or GenericResultRepository, depending on the Validator type).
           4. the ValidationCheckStatus is updated, both in case of success or failure.
 
         Args:
@@ -24,29 +29,41 @@ class AbstractValidator(ABC):
             validation_code (str): The validation code to use.
             severity (str): The severity to use (WARNING / ERROR / STATISTIC).
             feature_class (QgsVectorLayer): The feature class to check.
-        """        
-        check_status = ValidationCheckStatus(validation_code, run_id, None, None, None, None)
+        """
+
+        # Typed nulls for satisfying the typechecker
+        GENERATE_DATE: datetime.date = None  # type: ignore
+
+        check_status = ValidationCheckStatus(validation_code, run_id, 
+                                             GENERATE_DATE, GENERATE_DATE, GENERATE_DATE, 
+                                             None, -1)
         exception = False
+        validation_results: list[ValidationResult] = []
         try:
             cls.logger.info(f'Start running the {cls.__name__} for {validation_code}')
             ValidationCheckStatusRepository.add(check_status)
             validation_results = cls.validate( run_id, validation_code, severity, feature_class, *args, **kwargs)
         except Exception:
             exception = True
-            cls.logger.error(f'An exception occured while running the {cls.__name__} for {validation_code}')
+            cls.logger.error(f'An exception occured while running the {cls.__name__} for {validation_code}: {traceback.format_exc()}')
             check_status.success = False
             ValidationCheckStatusRepository.update_on_end(check_status)
-            raise
         finally:
             if not exception:
                 cls.logger.info(f'Finished running the {cls.__name__} for {validation_code}')
-                cls.result_repository.add_list(validation_results)
-                # TODO catch exceptions on database insertion, otherwise this may result in a crash
-
                 check_status.success = True
+                check_status.number_of_results = len(validation_results)
+                cls.logger.info(f'Number of results for {validation_code}: {check_status.number_of_results}')
+
+                try:
+                    cls.result_repository.add_list(validation_results)
+                except Exception:
+                    cls.logger.error(f'An exception occured while storing validation results of the {cls.__name__} for {validation_code}')
+
                 ValidationCheckStatusRepository.update_on_end(check_status)
 
 
+    @classmethod
     @abstractmethod
     def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, *args, **kwargs) -> list[ValidationResult]:
         """Abstract method for the actual validation logic.

@@ -35,8 +35,7 @@ class NoAdjacentFacesSameAttributeValidator(FeatureValidator):
 
         # Check field existence
         for attribute in attributes:
-            index = feature_class.fields().indexFromName(attribute)
-            if index == -1:
+            if not QgisUtilities.layer_has_field(feature_class, attribute):
                 cls.logger.warning(f"Cannot run the {cls.__name__} on {feature_class.name()} for field {attribute} because the field does not exist.")
                 return results
         

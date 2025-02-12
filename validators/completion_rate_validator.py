@@ -1,10 +1,11 @@
 from PyQt5.QtCore import QVariant
 from qgis.core import QgsVectorLayer
 from models import ValidationResult
-from . import StatisticValidator
+from . import GenericValidator
+from utilities import QgisUtilities
 import logging
 
-class CompletionRateValidator(StatisticValidator):
+class CompletionRateValidator(GenericValidator):
     logger = logging.getLogger(__name__)
 
 
@@ -22,12 +23,18 @@ class CompletionRateValidator(StatisticValidator):
             validation_code (str): The validation code to use.
             severity (str): The severity to use (WARNING / ERROR / STATISTIC).
             feature_class (QgsVectorLayer): The feature class to check.
-            field_names (list[str]): A list of field names
+            field_names (list[str]): A list of field names.
 
         Returns:
             list[ValidationResult]: A list of results, containing the percentage of NULL, 'void_unk' and/or empty string values per field.
         """        
         results = []
+
+        # Check field existence
+        for field_name in field_names:
+            if not QgisUtilities.layer_has_field(feature_class, field_name):
+                cls.logger.warning(f"Cannot run the {cls.__name__} on {feature_class.name()} for field {field_name} because the field does not exist.")
+                return results
 
         # Get total feature count
         total_records = feature_class.featureCount()
@@ -58,17 +65,16 @@ class CompletionRateValidator(StatisticValidator):
             # Write results
             result_types = [
                 ("NULL", null_records),
-                ("void_unk", unknown_records),
-                ("Empty string", empty_string_records)
+                ("'void_unk'", unknown_records),
+                ("empty string", empty_string_records)
             ]
 
             for result_type in result_types:
                 name, records = result_type
                 perc = round(records * 100.0 / total_records, 1)
-
-                if perc > 0:
-                    message = f'Featureclass {feature_class.name()} field {field_name} has {perc}% {name} values ({records} out of {total_records})'
-                    result = cls.create_result(run_id, validation_code, severity, feature_class, message)
-                    results.append(result)
+                
+                message = f"Featureclass '{feature_class.name()}' field '{field_name}' has {perc}% {name} values ({records} out of {total_records})"
+                result = cls.create_result(run_id, validation_code, severity, feature_class, message)
+                results.append(result)
 
         return results

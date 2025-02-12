@@ -1,10 +1,10 @@
 import pydapper
 
 from models import ValidationTask
-from typing import Union
+from typing import ClassVar, Union
 
 class ValidationTaskRepository():
-    dsn = None
+    dsn: ClassVar[str | None] = None
 
     @classmethod
     def set_dsn(cls, dsn: str):
@@ -23,6 +23,9 @@ class ValidationTaskRepository():
         Args:
             validation_task (ValidationTask): The validation task.
         """        
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+        
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:
@@ -49,7 +52,9 @@ class ValidationTaskRepository():
         Returns:
             Union[ValidationTask, None]: The validation task with the given name, or None if it doesn't exist.
         """        
-    
+        if cls.dsn is None:
+            raise Exception('Data Source Name (dsn) has not been set')
+
         commands = pydapper.connect(cls.dsn)
         try:
             with commands:

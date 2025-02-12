@@ -39,7 +39,7 @@ CREATE TABLE validation_logging (
   timestamp TIMESTAMP NOT NULL,
   run_id INT,
   severity VARCHAR (7) NOT NULL CHECK (severity IN ('VERBOSE', 'DEBUG', 'INFO', 'WARNING', 'ERROR')),
-  message VARCHAR (255) NOT NULL,
+  message TEXT NOT NULL,
   module VARCHAR (255) NOT NULL
 );
 
@@ -54,7 +54,7 @@ CREATE INDEX idx_validation_logging_run_id ON validation_logging(run_id);
 CREATE TABLE geometry_result (
   result_id SERIAL PRIMARY KEY,
   run_id INT,
-  validation_code VARCHAR (4),
+  validation_code VARCHAR (5) NOT NULL,
   severity VARCHAR (9) NOT NULL CHECK (severity IN ('WARNING', 'ERROR')),
   feature_class VARCHAR (255),
   message VARCHAR (255),
@@ -71,13 +71,13 @@ COMMENT ON TABLE geometry_result IS 'Table for storing the geometry results for 
 CREATE INDEX idx_geometry_result_id ON geometry_result(result_id);
 
 --
--- Create table for statistic results
+-- Create table for generic results
 -- 
-CREATE TABLE statistic_result (
+CREATE TABLE generic_result (
   result_id SERIAL PRIMARY KEY,
   run_id INT,
-  validation_code VARCHAR (4),
-  severity VARCHAR (9) NOT NULL CHECK (severity IN ('STATISTIC')),
+  validation_code VARCHAR (5) NOT NULL,
+  severity VARCHAR (9) NOT NULL CHECK (severity IN ('WARNING', 'ERROR', 'STATISTIC')),
   feature_class VARCHAR (255),
   message VARCHAR (255),
   CONSTRAINT fk_run
@@ -85,21 +85,22 @@ CREATE TABLE statistic_result (
       REFERENCES validation_run(run_id)
 );
 
-COMMENT ON TABLE statistic_result IS 'Table for storing the statistic results for a validation.';
+COMMENT ON TABLE generic_result IS 'Table for storing the generic results for a validation.';
 
-CREATE INDEX idx_statistic_result_id ON statistic_result(result_id);
+CREATE INDEX idx_generic_result_id ON generic_result(result_id);
 
 
 --
 -- Create table for validation check status
 -- 
 CREATE TABLE validation_check_status (
-  validation_code VARCHAR(4) NOT NULL,
+  validation_code VARCHAR(5) NOT NULL,
   run_id INT NOT NULL,
   start_time TIMESTAMP NOT NULL,
   end_time TIMESTAMP,
   last_update TIMESTAMP,
   success BOOLEAN,
+  number_of_results INT,
   UNIQUE (validation_code, run_id),
   CONSTRAINT fk_run
     FOREIGN KEY(run_id) 

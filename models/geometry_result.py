@@ -11,7 +11,7 @@ import logging
 
 @dataclass
 class GeometryResult(ValidationResult):
-    """Dataclass for storing statistic results in the database.
+    """Dataclass for storing geometry results in the database.
 
         Most attributes are inherited of the abstract ValidationResult.
     
@@ -66,7 +66,7 @@ class GeometryResult(ValidationResult):
         feature.setAttributes(attributes)
 
         if len(fields) != len(attributes):
-            self.logger.error("The amount of fields and values for this features do not match.")
+            self.logger.error("The number of fields and values for this features do not match.")
         return feature
     
     
@@ -135,7 +135,7 @@ class GeometryResult(ValidationResult):
         data_provider.addAttributes(fields)
         layer.updateFields()        
 
-        features = [cls.to_qgs_feature(geom_result) for geom_result in geom_results]
+        features = [geom_result.to_qgs_feature() for geom_result in geom_results]
         data_provider.addFeatures(features)
         if (data_provider.hasErrors()):
             cls.logger.error(f"Something went wrong while turning geometry results into vector layer {layer.name()}. {data_provider.errors()}")

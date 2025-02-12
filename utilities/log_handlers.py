@@ -13,11 +13,16 @@ class PostgresHandler(logging.Handler):
         """The record is turned into a ValidationLogging object and added to the repository.
 
         Args:
-            record (logging.LogRecord): The log-record containg the information.
+            record (logging.LogRecord): The log-record containing the information.
         """        
-        log_record = ValidationLogging(log_id=None,
+        
+        # Typed nulls for satisfying the typechecker
+        GENERATE_ID: int = None  # type: ignore
+        ID_SET_BY_REPOSITORY: int = None  # type: ignore
+
+        log_record = ValidationLogging(log_id=GENERATE_ID,
                                        timestamp=datetime.fromtimestamp(record.created),
-                                       run_id=None,
+                                       run_id=ID_SET_BY_REPOSITORY,
                                        severity=record.levelname,
                                        message=record.msg,
                                        module=record.module)

@@ -57,7 +57,8 @@ class MustNotHavePseudosValidator(FeatureValidator):
             repetitions = len(feature_ids)
             if repetitions == 2:
                 error_geom = QgisUtilities.pointxy_to_geometry(point)
-                error_feature = cls.create_error_feature(error_geom, feature.id())
+                feature = feature_class.getFeature(feature_ids[0])
+                error_feature = cls.create_error_feature(error_geom, feature.attribute('objectid'))
                 message = f'{feature_class.name()} contains a pseudo-node between objects with objectid\'s {feature_ids[0]} and {feature_ids[1]}.'
                 result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
                 results.append(result)

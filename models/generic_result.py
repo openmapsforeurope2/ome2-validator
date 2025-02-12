@@ -4,8 +4,8 @@ from dataclasses import dataclass
 from . import ValidationResult
 
 @dataclass
-class StatisticResult(ValidationResult):
-    """Dataclass for storing statistic results in the database.
+class GenericResult(ValidationResult):
+    """Dataclass for storing generic results in the database.
     
     All attributes are inherited of the abstract ValidationResult.
     """

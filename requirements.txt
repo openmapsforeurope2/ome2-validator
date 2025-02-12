@@ -1,1 +1,3 @@
 pydapper[psycopg2]==0.10.0
+varname==0.13.1
+typing_extensions==4.12.2
