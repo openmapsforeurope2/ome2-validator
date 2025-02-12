@@ -445,7 +445,12 @@ T005p = port_area.MustBeWithinExtent(Epsg3035Bounds)
 T005q = port_point.MustBeWithinExtent(Epsg3035Bounds)
 
 
-T006n = runway_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+T006a = road_link.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+T006b = road.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+T006c = railway_link.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+T006d = railway_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+T006e = runway_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+T006f = ferry_crossing.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
 
 #endregion
 
