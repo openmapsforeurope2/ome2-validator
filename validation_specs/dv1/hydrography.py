@@ -379,6 +379,16 @@ H005q = drainage_basin.MustBeWithinExtent(Epsg3035Bounds)
 # H005t = shoreline_construction_line.MustBeWithinExtent(Epsg3035Bounds)
 # H005u = wetland.MustBeWithinExtent(Epsg3035Bounds)
 
+
+H006a = dam_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006b = falls_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006c = lock_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006d = shoreline.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006e = watercourse_link.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006f = watercourse.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006g = drainage_basin.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+# H006h = shoreline_construction_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+
 #endregion
 
 
