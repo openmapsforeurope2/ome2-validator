@@ -530,6 +530,11 @@ T023o = port_area.MustBeInsideMatchingArea(administrative_units.administrative_u
 T023p = port_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
 
 
+T025a = aerodrome_area.MustNotOverlapWithFeaturesOfSameType(['aerodrome_category', 'aerodrome_type'])
+T025b = railway_station_area.MustNotOverlapWithFeaturesOfSameType(['railway_use'])
+T025c = road_service_area.MustNotOverlapWithFeaturesOfSameType(['type'])
+T025d = runway_area.MustNotOverlapWithFeaturesOfSameType(['surface_composition'])
+
 #endregion
 
 #region Edge matching
