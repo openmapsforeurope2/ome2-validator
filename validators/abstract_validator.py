@@ -58,7 +58,9 @@ class AbstractValidator(ABC):
                 try:
                     cls.result_repository.add_list(validation_results)
                 except Exception:
-                    cls.logger.error(f'An exception occured while storing validation results of the {cls.__name__} for {validation_code}')
+                    cls.logger.error(f'An exception occured while storing validation results of the {cls.__name__} for {validation_code}:')
+                    for line in traceback.format_exc(limit=8).splitlines():
+                        cls.logger.error(line)
 
                 ValidationCheckStatusRepository.update_on_end(check_status)
 
