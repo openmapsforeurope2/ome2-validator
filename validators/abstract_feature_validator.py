@@ -29,6 +29,8 @@ class FeatureValidator(AbstractValidator, ABC):
         GENERATE_ID: int = None  # type: ignore
         DETECT_TYPE: str = None # type: ignore
 
+        no_geometry = feature is None or not feature.hasGeometry()
+
         return GeometryResult(
             result_id = GENERATE_ID,
             run_id = run_id,
@@ -37,6 +39,6 @@ class FeatureValidator(AbstractValidator, ABC):
             feature_class = feature_class.name(),
             message = message,
             objectid = '00000000-0000-0000-0000-000000000000' if feature is None else feature['objectid'],
-            geometry = None if feature is None else feature.geometry(),
+            geometry = None if no_geometry else feature.geometry(),
             geometry_type = DETECT_TYPE
         )

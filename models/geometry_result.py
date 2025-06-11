@@ -48,7 +48,9 @@ class GeometryResult(ValidationResult):
         
         # Convert WKB geometry from PostGIS to QgsGeometry
         qgs_geometry = QgsGeometry()
-        qgs_geometry.fromWkb(geometry.tobytes())       
+        if geometry is not None:
+            qgs_geometry.fromWkb(geometry.tobytes())       
+        
         return cls(result_id, run_id, validation_code, severity, feature_class, message, objectid, qgs_geometry, geometry_type)
     
 

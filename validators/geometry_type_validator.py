@@ -30,7 +30,7 @@ class GeometryTypeValidator(FeatureValidator):
             cls.logger.warning(log_message)
             return results
 
-        wkb_geom_type = getattr(QgsWkbTypes, expected_geometry_type)
+        wkb_geom_type: QgsWkbTypes.Type = getattr(QgsWkbTypes, expected_geometry_type)
 
         # Create a warning message if the geometry type of the layer is different than expected.
         if not feature_class.wkbType() == wkb_geom_type:
