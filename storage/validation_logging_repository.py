@@ -1,3 +1,4 @@
+import sys
 from typing import ClassVar
 import pydapper
 
@@ -38,6 +39,10 @@ class ValidationLoggingRepository():
         if cls.dsn is None:
             raise Exception('Data Source Name (dsn) has not been set')
                
+        if len(validation_logging.message) > 255:
+            validation_logging.message = validation_logging.message[:251] + "[..]"
+            print('*** WARNING: LOG MESSAGE TOO LONG', file=sys.stderr)
+
         validation_logging.run_id = cls.__current_run_id
         commands = pydapper.connect(cls.dsn)
         try:
