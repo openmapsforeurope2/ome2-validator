@@ -71,6 +71,24 @@ COMMENT ON TABLE geometry_result IS 'Table for storing the geometry results for 
 CREATE INDEX idx_geometry_result_id ON geometry_result(result_id);
 
 --
+-- Create view on geometry results
+-- 
+CREATE OR REPLACE VIEW geometry_result_null AS
+  SELECT 
+    result_id, 
+    run_id, 
+    validation_code, 
+    severity, 
+    feature_class, 
+    message, 
+    objectid,
+    ST_GeomFromText('POINT(0 0)')
+  FROM geometry_result
+  WHERE geometry IS NULL;
+
+COMMENT ON VIEW geometry_result_null IS 'Records from geometry_results with null geometry';
+
+--
 -- Create table for generic results
 -- 
 CREATE TABLE generic_result (
