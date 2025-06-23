@@ -20,7 +20,7 @@ If the image has been successfully built,
 running the command should show the tool's help message:
 
 ```sh
-docker run --rm eurogeographics/ome2-validator
+docker run --rm -it eurogeographics/ome2-validator
 ```
 
 ## Running the validator
@@ -28,18 +28,19 @@ docker run --rm eurogeographics/ome2-validator
 Once the Docker image has been built, the validator tool can be run with a command like the one below:
 
 ```sh
-docker run --rm --add-host host.docker.internal:host-gateway -v "$(pwd):/pwd" eurogeographics/ome2-validator /pwd/validation_parameters.json
+docker run --rm -it --add-host host.docker.internal:host-gateway -v "$(pwd):/pwd" eurogeographics/ome2-validator /pwd/validation_parameters.json
 ```
 
 This command consists of several parts:
 
 1. `docker run` to create a container from a Docker image.
 2. `--rm` to clean up and remove the container after the validator has run.
-3. `--add-host host.docker.internal:host-gateway` to expose the host machine running Docker as `host.docker.internal` to the validator tool within the container.
+3. `-it` instructs the Docker client to run the container interactively and attach it to your terminal.
+4. `--add-host host.docker.internal:host-gateway` to expose the host machine running Docker as `host.docker.internal` to the validator tool within the container.
    Note that within the container `127.0.0.1` *does not* refer to the host machine, but to the container itself.
-4. `-v "$(pwd):/pwd"` to mount the current working directory as `/pwd` within the container.
-5. The name of the Docker image: `eurogeographics/ome2-validator`.
-6. The path to the file `/pwd/validation_parameters.json` that contains the validation parameters for the validation run.
+5. `-v "$(pwd):/pwd"` to mount the current working directory as `/pwd` within the container.
+6. The name of the Docker image: `eurogeographics/ome2-validator`.
+7. The path to the file `/pwd/validation_parameters.json` that contains the validation parameters for the validation run.
    These parameters indicate, e.g., the location of the input data,
    which validation checks to perform and where to store the results.
 
