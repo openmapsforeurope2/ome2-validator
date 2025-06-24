@@ -35,6 +35,10 @@ class LogUtilities:
             logging.Logger.verbose = lambda inst, msg, *args, **kwargs: inst.log(logging.VERBOSE, msg, *args, **kwargs)
             logging.verbose = lambda msg, *args, **kwargs: logging.log(logging.VERBOSE, msg, *args, **kwargs)
 
+        # Disable dsnparse's logger
+        dsnparse_logger = logging.getLogger('dsnparse')
+        dsnparse_logger.disabled = True
+
         postgres_handler = PostgresHandler()
         postgres_handler.setLevel(logging.DEBUG)
         cls.__logger.addHandler(postgres_handler)
