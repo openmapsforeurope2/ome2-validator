@@ -1,4 +1,9 @@
 --
+-- Ensure postgis extension is enabled
+-- 
+CREATE EXTENSION IF NOT EXISTS postgis;
+
+--
 -- Create table for Validation task
 -- 
 CREATE TABLE validation_task (
