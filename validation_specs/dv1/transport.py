@@ -343,6 +343,9 @@ class port_point(feature):
 
 #endregion
 
+#region Derived featureclasses
+motorway = road_link.filtered('"form_of_way" = \'motorway\'')
+#endregion
 
 #endregion
 
