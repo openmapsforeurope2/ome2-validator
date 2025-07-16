@@ -58,11 +58,13 @@ class MustNotOverlapWithValidator(FeatureValidator):
                     continue
 
                 if ( g1.overlaps( g2 ) ):
+                    overlapping_feature = feature_class.getFeature(candidate_id)
+
                     # Create feature of the overlapping geometry
                     error_geom = g1.intersection( g2 )
                     error_feature = cls.create_error_feature(error_geom)
 
-                    message = f'{feature_class.name()} object with objectid {feature.attribute("objectid")} overlaps with {feature_class_2.name()} object with objectid {candidate_id}.'
+                    message = f'{feature_class.name()} object with objectid {feature.attribute("objectid")} overlaps with {feature_class_2.name()} object with objectid {overlapping_feature.attribute("objectid")}.'
                     result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
                     results.append(result)
 

@@ -45,7 +45,9 @@ class AbstractValidator(ABC):
             validation_results = cls.validate( run_id, validation_code, severity, feature_class, *args, **kwargs)
         except Exception:
             exception = True
-            cls.logger.error(f'An exception occured while running the {cls.__name__} for {validation_code}: {traceback.format_exc()}')
+            cls.logger.error(f'An exception occured while running the {cls.__name__} for {validation_code}:')
+            for line in traceback.format_exc(limit=8).splitlines():
+                cls.logger.error(line)
             check_status.success = False
             ValidationCheckStatusRepository.update_on_end(check_status)
         finally:
@@ -58,7 +60,9 @@ class AbstractValidator(ABC):
                 try:
                     cls.result_repository.add_list(validation_results)
                 except Exception:
-                    cls.logger.error(f'An exception occured while storing validation results of the {cls.__name__} for {validation_code}')
+                    cls.logger.error(f'An exception occured while storing validation results of the {cls.__name__} for {validation_code}:')
+                    for line in traceback.format_exc(limit=8).splitlines():
+                        cls.logger.error(line)
 
                 ValidationCheckStatusRepository.update_on_end(check_status)
 

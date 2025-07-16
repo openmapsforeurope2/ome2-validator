@@ -8,7 +8,7 @@ class MustNotOverlapValidator(FeatureValidator):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer) -> list[ValidationResult]:
+    def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, type_attributes: list[str] =[]) -> list[ValidationResult]:
         """Runs the class MustNotOverlapValidator.
 
         Topology validation for finding overlaps.
@@ -19,6 +19,8 @@ class MustNotOverlapValidator(FeatureValidator):
             validation_code (str): The validation code to use.
             severity (str): The severity to use (WARNING / ERROR / STATISTIC).
             feature_class (QgsVectorLayer): The feature class which should not have overlap. Must contain polygon-geometry.
+            type_attributes (list[str]): Optional list of attribute names that identify a subtype within the feature class.
+                If specified, only overlapping features of the same type are marked as an error.
 
         Returns:
             list[ValidationResult]: A list of results, containing the geometry of overlapping areas.
@@ -60,13 +62,21 @@ class MustNotOverlapValidator(FeatureValidator):
                 # Retrieve geometry via index
                 g2 = index.geometry(candidate_id)
                 if engine1.overlaps(g2.constGet()):
+                    overlapping_feature = feature_class.getFeature(candidate_id)
                     
-                    # Create feature of the overlapping geometry
-                    error_geom = g1.intersection(g2)
-                    error_feature = cls.create_error_feature(error_geom, feature['objectid'])
+                    same_type = True
+                    for attribute_name in type_attributes:
+                        if feature.attribute(attribute_name) != overlapping_feature.attribute(attribute_name):
+                            same_type = False
+                            break
                     
-                    message = f'{feature_class.name()} object with objectid {feature.attribute("objectid")} overlaps with object with objectid {candidate_id}.'
-                    result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
-                    results.append(result)
+                    if same_type:
+                        # Create feature of the overlapping geometry
+                        error_geom = g1.intersection(g2)
+                        error_feature = cls.create_error_feature(error_geom, feature['objectid'])
+                        
+                        message = f'{feature_class.name()} object with objectid {feature.attribute("objectid")} overlaps with object with objectid {overlapping_feature.attribute("objectid")}.'
+                        result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+                        results.append(result)
 
         return results

@@ -275,6 +275,16 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             {}
         )
     
+    @classmethod
+    def MustNotOverlapWithFeaturesOfSameType(cls, attributes: list[str]) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MustNotOverlapValidator,
+            cls,
+            (),
+            {
+                'type_attributes': attributes
+            }
+        )
 
     @classmethod
     def AdjacentFacesMustDiffer(cls, attributes: list[str]) -> ValidationRule:
