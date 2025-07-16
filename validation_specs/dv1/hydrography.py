@@ -379,6 +379,27 @@ H005q = drainage_basin.MustBeWithinExtent(Epsg3035Bounds)
 # H005t = shoreline_construction_line.MustBeWithinExtent(Epsg3035Bounds)
 # H005u = wetland.MustBeWithinExtent(Epsg3035Bounds)
 
+
+H006a = dam_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006b = falls_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006c = lock_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006d = shoreline.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006e = watercourse_link.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006f = watercourse.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+H006g = drainage_basin.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+# H006h = shoreline_construction_line.LengthMustBeAtLeast(100, check_multilines_per_linestring=False).TreatAsWarning()
+
+
+H007a = dam_area.AreaMustBeAtLeast(60000).TreatAsWarning()
+H007b = falls_area.AreaMustBeAtLeast(60000).TreatAsWarning()
+H007c = lock_area.AreaMustBeAtLeast(60000).TreatAsWarning()
+H007d = shore.AreaMustBeAtLeast(60000).TreatAsWarning()
+H007e = standing_water.AreaMustBeAtLeast(60000).TreatAsWarning()
+H007f = watercourse_area.AreaMustBeAtLeast(60000).TreatAsWarning()
+# H007g = glacier_snowfield.AreaMustBeAtLeast(60000).TreatAsWarning()
+# H007h = shoreline_construction_area.AreaMustBeAtLeast(60000).TreatAsWarning()
+# H007i = wetland.AreaMustBeAtLeast(60000).TreatAsWarning()
+
 #endregion
 
 
