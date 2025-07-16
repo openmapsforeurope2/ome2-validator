@@ -27,6 +27,8 @@ class FeatureclassAttributeProtocol(Protocol):
 class FeatureclassProtocol(Protocol):
     ATTRIBUTES: ClassVar[dict[str, 'FeatureclassAttribute']]
     THEME: ClassVar['vrailang.specs.ValidationTheme']
+
+    FILTER_QUERY: ClassVar[str | None]
     
 
 ArgLoader = Callable[[type['feature']], QgsVectorLayer] | Callable[[object], object]
