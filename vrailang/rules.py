@@ -255,6 +255,14 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             {}
         )
     
+    @classmethod
+    def MustNotHaveDangles(cls) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MustNotHaveDanglesValidator,
+            cls,
+            (),
+            {}
+        )
 
     @classmethod
     def MustNotHaveGaps(cls) -> ValidationRule:
