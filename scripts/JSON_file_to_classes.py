@@ -3,21 +3,21 @@ import json
 
 def get_dict(srid: str):
     return {'uuid': 'uuid[notnull]',
-                         'timestamp': 'timestamp',
-                         'character varying(8)': 'varchar[length(8)]',
-                         'character varying(255)': 'varchar[length(255)]',
-                         'character varying(80)': 'varchar[length(80)]',
-                         'integer': 'int4',
-                         'jsonb': 'jsonb',
-                         'geometry(LineStringZ,${srid})': f'LineStringZ[srid({srid})]',
-                         'geometry(LineString,${srid})': f'LineString[srid({srid})]',
-                         'geometry(MultiLineStringZ,${srid})': f'MultiLineStringZ[srid({srid})]',
-                         'geometry(MultiLineString,${srid})': f'MultiLineString[srid({srid})]',
-                         'geometry(PointZ,${srid})': f'PointZ[srid({srid})]',
-                         'geometry(Point,${srid})': f'Point[srid({srid})]',
-                         'geometry(MultiPolygonZ,${srid})': f'MultiPolygonZ[srid({srid})]',
-                         'geometry(MultiPolygon,${srid})': f'MultiPolygon[srid({srid})]',
-                         }
+            'timestamp': 'timestamp',
+            'character varying(8)': 'varchar[length(8)]',
+            'character varying(255)': 'varchar[length(255)]',
+            'character varying(80)': 'varchar[length(80)]',
+            'integer': 'int4',
+            'jsonb': 'jsonb',
+            'geometry(LineStringZ,${srid})': f'LineStringZ[srid({srid})]',
+            'geometry(LineString,${srid})': f'LineString[srid({srid})]',
+            'geometry(MultiLineStringZ,${srid})': f'MultiLineStringZ[srid({srid})]',
+            'geometry(MultiLineString,${srid})': f'MultiLineString[srid({srid})]',
+            'geometry(PointZ,${srid})': f'PointZ[srid({srid})]',
+            'geometry(Point,${srid})': f'Point[srid({srid})]',
+            'geometry(MultiPolygonZ,${srid})': f'MultiPolygonZ[srid({srid})]',
+            'geometry(MultiPolygon,${srid})': f'MultiPolygon[srid({srid})]',
+            }
 
 
 def main() -> None:
@@ -30,30 +30,28 @@ def main() -> None:
     common_part = []
 
     for x in data['common']:
-        for y in data['common'][x]:
-            attribute_name = y
-
-            attribute_type_text = data['common'][x][y]['sql_type'].split('DEFAULT')[0].split('without')[0].strip()
+        for attribute_name in data['common'][x]:
+            attribute_type_text = data['common'][x][attribute_name]['sql_type'].split('DEFAULT')[0].split('without')[
+                0].strip()
             attribute_type = dict_text_to_type[attribute_type_text]
 
             common_part.append(f"{attribute_name}: {attribute_type}")
 
     dict_theme_to_tables = {}
 
-    for x in data['themes']:
+    for theme in data['themes']:
         dict_table_to_class_attributes = {}
-
-        for y in data['themes'][x]['tables']:
+        for y in data['themes'][theme]['tables']:
             theme_part = []
-            for z in data['themes'][x]['tables'][y]['fields']:
-                attribute_name = z
+            for attribute_name in data['themes'][theme]['tables'][y]['fields']:
                 attribute_type_text = \
-                data['themes'][x]['tables'][y]['fields'][z]['sql_type'].split('DEFAULT')[0].split('without')[0].strip()
+                data['themes'][theme]['tables'][y]['fields'][attribute_name]['sql_type'].split('DEFAULT')[0].split(
+                    'without')[0].strip()
                 attribute_type = dict_text_to_type[attribute_type_text]
                 theme_part.append(f"{attribute_name}: {attribute_type}")
             dict_table_to_class_attributes[y] = common_part + theme_part
 
-        dict_theme_to_tables[x] = dict_table_to_class_attributes
+        dict_theme_to_tables[theme] = dict_table_to_class_attributes
 
     for theme in dict_theme_to_tables:
         print(f"{theme} \n")
