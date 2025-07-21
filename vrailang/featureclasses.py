@@ -88,8 +88,9 @@ class FeatureMetaclass(ABCMeta):
 
     def __new__(mcls, name: str, bases: Tuple[type], namespace: dict[str, Any], **kwargs: Any):
 
-        # If this is the Feature class itself being created, no custom logic is required:
-        if name == 'feature':
+        # If this is the Feature class itself being created, no custom logic is required;
+        # Likewise, if the class has been generated, the generating function can request to skip custom logic:
+        if name == 'feature' or namespace.get('__skip_metaclass_logic__'):
             return super().__new__(mcls, name, bases, namespace, **kwargs)
 
         # Otherwise, fetch the annotations and start building the class based on the annotations:
@@ -163,6 +164,31 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
 
     THEME: ClassVar[vrailang.specs.ValidationTheme]
     '''The `ValidationTheme` this featureclass belongs to.'''
+
+    FILTER_QUERY: ClassVar[str | None] = None
+    '''Optional filter query on the featureclass.'''
+
+    @classmethod
+    def filtered(cls, query: str) -> type[Self]:
+        """Creates a subselection of a featureclass.
+
+        Args:
+            query (str): The subselection filter query.
+
+        Returns:
+            type[Self]: The sub-featureclass specified by the given query.
+        """
+        
+        if cls.FILTER_QUERY is not None:
+            query = f'({cls.FILTER_QUERY}) AND ({query})'
+
+        class FilteredFeatureclass(cls):
+            FILTER_QUERY = query
+            __skip_metaclass_logic__ = True
+        
+        # Copy the name of the original featureclass
+        FilteredFeatureclass.__name__ = cls.__name__
+        return FilteredFeatureclass # type: ignore
 
     def __init__(self, **data):
         for k in self.ATTRIBUTES.keys():

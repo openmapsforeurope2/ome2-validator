@@ -343,6 +343,9 @@ class port_point(feature):
 
 #endregion
 
+#region Derived featureclasses
+motorway = road_link.filtered('"form_of_way" = \'motorway\'')
+#endregion
 
 #endregion
 
@@ -529,6 +532,7 @@ T023n = runway_line.MustBeInsideMatchingArea(administrative_units.administrative
 T023o = port_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
 T023p = port_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
 
+T024a = motorway.MustNotHaveDangles()
 
 T025a = aerodrome_area.MustNotOverlapWithFeaturesOfSameType(['aerodrome_category', 'aerodrome_type'])
 T025b = railway_station_area.MustNotOverlapWithFeaturesOfSameType(['railway_use'])
