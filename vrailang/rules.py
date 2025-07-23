@@ -181,6 +181,15 @@ class MixinAttributeRules(FeatureclassAttributeProtocol):
 class MixinFeatureclassRules(FeatureclassProtocol):
 
     @classmethod
+    def CreateDebugRule(cls) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.DebugFeatureValidator,
+            cls,
+            (),
+            {}
+        )
+
+    @classmethod
     def MustComplyWithDataschema(cls) -> ValidationRule:
 
         attr_dict = {}
