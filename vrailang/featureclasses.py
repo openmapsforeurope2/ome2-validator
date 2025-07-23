@@ -130,6 +130,7 @@ class FeatureMetaclass(ABCMeta):
             raise VraiSpecificationError('A featureclass must be defined between begin_theme() and end_theme()')
         
         # Create the class
+        namespace['TABLE_NAME'] = name
         new_featureclass = cast(type['feature'], 
             super().__new__(mcls, name, bases, namespace, **kwargs)
         )
@@ -159,6 +160,9 @@ class FeatureMetaclassWithProtocolSupport(type(Protocol), FeatureMetaclass): # t
 class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupport):
     """The base class for featureclasses."""
 
+    TABLE_NAME: ClassVar[str]
+    '''The table name of the featureclass. Default: the name of the class.'''
+
     ATTRIBUTES: ClassVar[dict[str, FeatureclassAttribute]]
     '''All declared attributes of the featureclass.'''
 
@@ -187,7 +191,7 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
             __skip_metaclass_logic__ = True
         
         # Copy the name of the original featureclass
-        FilteredFeatureclass.__name__ = cls.__name__
+        FilteredFeatureclass.__name__ = FilteredFeatureclass.TABLE_NAME = cls.__name__
         return FilteredFeatureclass # type: ignore
 
     def __init__(self, **data):
