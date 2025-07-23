@@ -488,13 +488,13 @@ H023n = standing_water.MustBeInsideMatchingArea(administrative_units.administrat
 H023o = shore.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
 H023p = drainage_basin.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
 
+H024a = watercourse_link.filtered('"fictitious" = \'true\'').MustNotHaveDangles()
+
 H025a = dam_area.MustNotHaveOverlaps()
 H025b = falls_area.MustNotHaveOverlaps()
 H025c = lock_area.MustNotHaveOverlaps()
 H025d = standing_water.MustNotHaveOverlaps()
 H025e = watercourse_area.MustNotHaveOverlaps()
-
-
 
 #endregion
 
