@@ -1,4 +1,13 @@
 import json
+import os
+
+theme_dict = {'tn': 'transport',
+              'au': 'administrative_units',
+              'hy': 'hydrography',
+              'ib': 'international_boundaries'}
+
+path_to_file = r"../validation_specs/dv1/"
+path_to_save_classes = r"../json/"
 
 
 def get_dict(srid: str):
@@ -18,6 +27,30 @@ def get_dict(srid: str):
             'geometry(MultiPolygonZ,${srid})': f'MultiPolygonZ[srid({srid})]',
             'geometry(MultiPolygon,${srid})': f'MultiPolygon[srid({srid})]',
             }
+
+
+def extract_class(filename, class_name):
+    if not os.path.exists(filename):
+        print(f"Bestand '{filename}' bestaat niet.")
+        return ""
+
+    with open(filename, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    class_lines = []
+    inside_class = False
+
+    for i, line in enumerate(lines):
+        if not inside_class:
+            if line.strip().startswith(f'class {class_name}(feature):'):
+                inside_class = True
+                class_lines.append(line)
+        else:
+            if line.strip() == '':
+                break
+            class_lines.append(line)
+
+    return ''.join(class_lines)
 
 
 def main() -> None:
@@ -54,13 +87,66 @@ def main() -> None:
         dict_theme_to_tables[theme] = dict_table_to_class_attributes
 
     for theme in dict_theme_to_tables:
-        print(f"{theme} \n")
+        theme_name = theme_dict[theme]
+        print(f"\n{theme_name}")
+        path_to_file_theme = os.path.join(path_to_file, f"{theme_name}.py")
+        path_to_save_classes_theme = os.path.join(path_to_save_classes, f"{theme_name}.txt")
+
+        with open(path_to_save_classes_theme, 'w', encoding='utf-8') as f:
+            f.write("")
+
         for table in dict_theme_to_tables[theme]:
+            print('\n' + table)
             string_for_table = f"class {table}(feature): \n"
+            class_from_file = extract_class(filename=path_to_file_theme, class_name=table)
+
             list_of_attributes = dict_theme_to_tables[theme][table]
             for attribute in list_of_attributes:
                 string_for_table += f"\t{attribute} \n"
-            print(string_for_table)
+
+            with open(path_to_save_classes_theme, 'a', encoding='utf-8') as f:
+                f.write(string_for_table + '\n')
+
+            #compare
+            if class_from_file == "":
+                print(f"No existing class for {table}")
+                continue
+
+            string_for_table_as_lines = string_for_table.splitlines()
+            class_from_file_as_lines = class_from_file.splitlines()
+
+            print(f"Aantal features in json {len(string_for_table_as_lines) - 1}")
+            print(f"Aantal features in current class {len(class_from_file_as_lines) - 1}")
+
+            number_of_found_matches = 0
+            for line_current in class_from_file_as_lines[1:]:
+                line_current_split = line_current.strip().split(':')
+                found_match = False
+                for line_new in string_for_table_as_lines[1:]:
+                    line_new_split = line_new.strip().split(':')
+                    if line_current_split[0] == line_new_split[0]:
+                        found_match = True
+                        if line_current_split[1] == line_new_split[1]:
+                            number_of_found_matches += 1
+                        else:
+                            number_of_found_matches += 1
+                            print(f"Different types for {line_current_split[0]}. Current type is {line_current_split[1].strip()} and new type: {line_new_split[1].strip()}.")
+                        continue
+                if not found_match:
+                    print(f"Feature {line_current.strip()} is not in json.")
+
+            if number_of_found_matches < len(string_for_table_as_lines) - 1:
+                for line_new in string_for_table_as_lines[1:]:
+                    line_new_split = line_new.strip().split(':')
+                    found_match = False
+                    for line_current in class_from_file_as_lines[1:]:
+                        line_current_split = line_current.strip().split(':')
+
+                        if line_current_split[0] == line_new_split[0]:
+                            found_match = True
+                            continue
+                    if not found_match:
+                        print(f"Feature {line_new.strip()} is not in current class.")
 
 
 if __name__ == "__main__":
