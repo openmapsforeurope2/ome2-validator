@@ -1,3 +1,4 @@
+import ast
 import json
 import os
 
@@ -29,28 +30,30 @@ def get_dict(srid: str):
             }
 
 
-def extract_class(filename, class_name):
-    if not os.path.exists(filename):
-        print(f"Bestand '{filename}' bestaat niet.")
+def extract_class(path, classname):
+    if not os.path.exists(path):
+        print(f"File '{path}' does not exist.")
         return ""
 
-    with open(filename, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
+    with open(path, 'r') as fh:
+        source = fh.read()
 
-    class_lines = []
-    inside_class = False
+    tree = ast.parse(source)
 
-    for i, line in enumerate(lines):
-        if not inside_class:
-            if line.strip().startswith(f'class {class_name}(feature):'):
-                inside_class = True
-                class_lines.append(line)
-        else:
-            if line.strip() == '':
-                break
-            class_lines.append(line)
+    for node in tree.body:
+        if isinstance(node, ast.ClassDef) and node.name == classname:
+            lines = source.splitlines()
+            start = node.lineno - 1
+            end = node.end_lineno
+            relevant_lines = [
+                line for line in lines[start:end]
+                if line.strip() and not line.lstrip().startswith('#')
+            ]
 
-    return ''.join(class_lines)
+            return '\n'.join(relevant_lines)
+
+    print(f"Class '{classname}' not found in file '{path}'.")
+    return ""
 
 
 def main() -> None:
@@ -98,7 +101,7 @@ def main() -> None:
         for table in dict_theme_to_tables[theme]:
             print('\n' + table)
             string_for_table = f"class {table}(feature): \n"
-            class_from_file = extract_class(filename=path_to_file_theme, class_name=table)
+            class_from_file = extract_class(path=path_to_file_theme, classname=table)
 
             list_of_attributes = dict_theme_to_tables[theme][table]
             for attribute in list_of_attributes:
