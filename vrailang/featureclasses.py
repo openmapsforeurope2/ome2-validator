@@ -212,7 +212,8 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
             __skip_metaclass_logic__ = True
         
         # Copy the name of the original featureclass
-        FilteredFeatureclass.__name__ = FilteredFeatureclass.TABLE_NAME = cls.__name__
+        FilteredFeatureclass.__name__ = cls.__name__
+        FilteredFeatureclass.TABLE_NAME = cls.TABLE_NAME
         return FilteredFeatureclass # type: ignore
 
     def __init__(self, **data):
