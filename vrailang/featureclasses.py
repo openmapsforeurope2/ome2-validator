@@ -178,6 +178,25 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
     '''Optional filter query on the featureclass.'''
 
     @classmethod
+    def with_alias(cls, new_alias: str) -> type[Self]:
+        """Creates a renamed copy of the featureclass.
+
+        Args:
+            new_alias (str): the alias to use for the renamed copy.
+
+        Returns:
+            type[Self]: The featureclass with a new alias.
+        """
+        class RenamedFeatureclass(cls):
+            ALIAS = new_alias
+            __skip_metaclass_logic__ = True
+        
+        # Copy the name of the original featureclass
+        RenamedFeatureclass.__name__ = cls.__name__
+        RenamedFeatureclass.TABLE_NAME = cls.TABLE_NAME
+        return RenamedFeatureclass # type: ignore
+
+    @classmethod
     def filtered(cls, query: str, alias: str | None = ...) -> type[Self]: # type: ignore
         """Creates a subselection of a featureclass.
 
