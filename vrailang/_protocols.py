@@ -29,6 +29,7 @@ class FeatureclassProtocol(Protocol):
     THEME: ClassVar['vrailang.specs.ValidationTheme']
 
     TABLE_NAME: ClassVar[str]
+    ALIAS: ClassVar[str | None]
     FILTER_QUERY: ClassVar[str | None]
     
 

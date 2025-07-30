@@ -24,6 +24,7 @@ from dataclasses import dataclass
 from typing import Annotated, Any, Callable, ClassVar, Optional, Protocol, Tuple, Type, TypeGuard, TypeVar, Union, cast, get_args, get_origin
 from typing_extensions import Self
 
+from vrailang._fastvarname import FastVarname
 from vrailang.dataconstraints import DataTypeAnnotation
 from vrailang.datatypes import DataType
 from vrailang.errors import VraiSpecificationError
@@ -131,6 +132,7 @@ class FeatureMetaclass(ABCMeta):
         
         # Create the class
         namespace['TABLE_NAME'] = name
+        namespace.setdefault('ALIAS', None)
         new_featureclass = cast(type['feature'], 
             super().__new__(mcls, name, bases, namespace, **kwargs)
         )
@@ -163,6 +165,9 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
     TABLE_NAME: ClassVar[str]
     '''The table name of the featureclass. Default: the name of the class.'''
 
+    ALIAS: ClassVar[str | None]
+    '''Optional alias for the featureclass that will be used for setting the layer name.'''
+
     ATTRIBUTES: ClassVar[dict[str, FeatureclassAttribute]]
     '''All declared attributes of the featureclass.'''
 
@@ -173,11 +178,20 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
     '''Optional filter query on the featureclass.'''
 
     @classmethod
-    def filtered(cls, query: str) -> type[Self]:
+    def filtered(cls, query: str, alias: str | None = ...) -> type[Self]: # type: ignore
         """Creates a subselection of a featureclass.
 
         Args:
             query (str): The subselection filter query.
+            alias (str): An alias for the subselection. Optional. 
+                         If no alias is given, an attempt will be made to derive the alias 
+                         based on the variable it is assigned to.
+                         
+                         Note that if `filtered` is used in an expression to create a validation check,
+                         the subselection's alias could be set to be the name of the validation check,
+                         like if the statement is of the form `Check_xxx = fc.filtered(...).MustAdhereToSomeRule()`.
+                         If this behavior is undesirable, the alias argument must be set explicitly, e.g.,
+                         `Check_xxx = fc.filtered(..., alias=None).MustAdhereToSomeRule()`.
 
         Returns:
             type[Self]: The sub-featureclass specified by the given query.
@@ -186,7 +200,14 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
         if cls.FILTER_QUERY is not None:
             query = f'({cls.FILTER_QUERY}) AND ({query})'
 
+        # Attempt to derive alias automatically
+        if alias is ...:
+            fv = FastVarname(depth=2)
+            if fv.varname is not None:
+                alias = fv.varname
+                
         class FilteredFeatureclass(cls):
+            ALIAS = alias
             FILTER_QUERY = query
             __skip_metaclass_logic__ = True
         
