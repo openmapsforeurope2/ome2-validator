@@ -38,18 +38,15 @@ class ValidationRule:
     kwargs: dict
 
     theme: 'ValidationTheme' = field(init=False)
-    
-    def __post_init__(self):
-        self.theme = None # type: ignore # Initialized by _create_rule_and_register
 
+    def __post_init__(self):
+        self.theme = None  # type: ignore # Initialized by _create_rule_and_register
 
     def TreatAsWarning(self) -> Self:
         return self._set_severity('WARNING')
-    
 
     def TreatAsStatistic(self) -> Self:
         return self._set_severity('STATISTIC')
-
 
     def _set_severity(self, severity: str) -> Self:
         self.severity = severity
@@ -58,7 +55,6 @@ class ValidationRule:
             _set_validation_code_via_assignment(self, frame=3)
 
         return self
-    
 
     def run(self, run_id: int, arg_loader: ArgLoader):
         # Convert vrailang.feature to QgsVectorLayer in featureclass, *args and **kwargs.
@@ -80,8 +76,7 @@ def _create_rule_and_register(
         feature_class: Union[Type['feature'], Type[FeatureclassProtocol]],
         args: tuple,
         kwargs: dict[str, Any]
-        ) -> ValidationRule:
-    
+) -> ValidationRule:
     feature_class = cast(Type['feature'], feature_class)
 
     # Create rule and set validation code, if possible
@@ -97,9 +92,10 @@ def _create_rule_and_register(
 
     return rule
 
+
 def _set_validation_code_via_assignment(obj, frame=3):
     if not hasattr(obj, 'var'):
-        fv = FastVarname(depth=frame+1)
+        fv = FastVarname(depth=frame + 1)
         name = fv.varname
         if name is not None:
             obj.validation_code = name
@@ -115,7 +111,6 @@ class MixinAttributeRules(Generic[_DataType], FeatureclassAttributeProtocol[_Dat
             {}
         )
 
-
     def MustNotBeEmpty(self) -> ValidationRule:
         return _create_rule_and_register(
             validators.AttributeNotEmptyValidator,
@@ -123,7 +118,6 @@ class MixinAttributeRules(Generic[_DataType], FeatureclassAttributeProtocol[_Dat
             (self.name,),
             {}
         )
-    
 
     def MustNotBeUnknown(self) -> ValidationRule:
         return _create_rule_and_register(
@@ -132,20 +126,19 @@ class MixinAttributeRules(Generic[_DataType], FeatureclassAttributeProtocol[_Dat
             (self.name,),
             {}
         )
-    
-    
+
     def MustHaveCorrectCRS(self) -> ValidationRule:
         srid_constraint = self.get_constraint(srid)
         if srid_constraint is None:
             raise VraiSpecificationError('MustHaveCorrectCRS can only be used on attributes with an srid constraint.')
-        
+
         return _create_rule_and_register(
             validators.CrsValidator,
             self.featureclass,
             (srid_constraint.id, self.featureclass.THEME.schema),
             {}
         )
-    
+
     def MustHaveCorrectGeometryType(self) -> ValidationRule:
         return _create_rule_and_register(
             validators.GeometryTypeValidator,
@@ -154,15 +147,15 @@ class MixinAttributeRules(Generic[_DataType], FeatureclassAttributeProtocol[_Dat
             {}
 
         )
-    
-    def MustBeOfValues(self, value_domain: Type['BaseValueDomain']) -> ValidationRule: # TODO separator
+
+    def MustBeOfValues(self, value_domain: Type['BaseValueDomain']) -> ValidationRule:  # TODO separator
         return _create_rule_and_register(
             validators.AllowedAttributeValidator,
             self.featureclass,
             (self.name, value_domain.to_list()),
             {}
         )
-    
+
     def DetermineCompletionRate(self) -> ValidationRule:
         return _create_rule_and_register(
             validators.CompletionRateValidator,
@@ -170,7 +163,7 @@ class MixinAttributeRules(Generic[_DataType], FeatureclassAttributeProtocol[_Dat
             ([self.name],),
             {}
         )
-    
+
     def MustBeUnique(self) -> ValidationRule:
         return _create_rule_and_register(
             validators.UniqueFieldValidator,
@@ -193,7 +186,6 @@ class MixinFeatureclassRules(FeatureclassProtocol):
 
     @classmethod
     def MustComplyWithDataschema(cls) -> ValidationRule:
-
         attr_dict = {}
         for key, value in cls.ATTRIBUTES.items():
             length_constraint = value.get_constraint(length)
@@ -215,7 +207,6 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             (),
             {}
         )
-    
 
     @classmethod
     def MustBeWithinExtent(cls, extent: 'BaseExtent') -> ValidationRule:
@@ -225,8 +216,7 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             (extent,),
             {}
         )
-    
-    
+
     @classmethod
     def LengthMustBeAtLeast(cls, minimum_length, check_multilines_per_linestring=False) -> ValidationRule:
         return _create_rule_and_register(
@@ -235,7 +225,6 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             (minimum_length,),
             {}
         )
-    
 
     @classmethod
     def MustBeInsideMatchingArea(cls, area_feature_class: Type['feature'], id_field: str) -> ValidationRule:
@@ -245,7 +234,6 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             (area_feature_class, id_field),
             {}
         )
-    
 
     @classmethod
     def AreaMustBeAtLeast(cls, minimum_area: Union[int, float]) -> ValidationRule:
@@ -256,7 +244,6 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             {}
         )
 
-    
     @classmethod
     def VerticesDistanceMustBeAtLeast(cls, minimum_distance: Union[int, float]) -> ValidationRule:
         return _create_rule_and_register(
@@ -265,7 +252,7 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             (minimum_distance,),
             {}
         )
-    
+
     @classmethod
     def MustNotHaveDangles(cls) -> ValidationRule:
         return _create_rule_and_register(
@@ -283,7 +270,6 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             (),
             {}
         )
-    
 
     @classmethod
     def MustNotHaveOverlaps(cls) -> ValidationRule:
@@ -293,7 +279,7 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             (),
             {}
         )
-    
+
     @classmethod
     def MustNotOverlapWithFeaturesOfSameType(cls, attributes: list[str]) -> ValidationRule:
         return _create_rule_and_register(
@@ -306,6 +292,15 @@ class MixinFeatureclassRules(FeatureclassProtocol):
         )
 
     @classmethod
+    def MustOverlapWith(cls, feature_class_to_compare: Type['feature']) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MustOverlapWithValidator,
+            cls,
+            (feature_class_to_compare,),
+            {}
+        )
+
+    @classmethod
     def AdjacentFacesMustDiffer(cls, attributes: list[str]) -> ValidationRule:
         return _create_rule_and_register(
             validators.NoAdjacentFacesSameAttributeValidator,
@@ -314,9 +309,9 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             {}
         )
 
-
     @classmethod
-    def DetermineFeatureCount(cls, group_by_field_1: str | None = None, group_by_field_2: str | None = None, minimum_record_count: int=-1) -> ValidationRule:
+    def DetermineFeatureCount(cls, group_by_field_1: str | None = None, group_by_field_2: str | None = None,
+                              minimum_record_count: int = -1) -> ValidationRule:
         return _create_rule_and_register(
             validators.FeatureCountValidator,
             cls,
@@ -324,9 +319,9 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             {}
         )
 
-
     @classmethod
-    def MustBeConsistentAcrossBorder(cls, border_feature_class: Type['feature'], consistent_attributes: list[str]) -> ValidationRule:
+    def MustBeConsistentAcrossBorder(cls, border_feature_class: Type['feature'],
+                                     consistent_attributes: list[str]) -> ValidationRule:
         return _create_rule_and_register(
             validators.AttributeAcrossBorderConsistencyValidator,
             cls,
@@ -335,7 +330,8 @@ class MixinFeatureclassRules(FeatureclassProtocol):
         )
 
     @classmethod
-    def MustTouchCorrespondingBoundaryOf(cls, area_feature_class: Type['feature'], corresponding_attributes: list[str]) -> ValidationRule:
+    def MustTouchCorrespondingBoundaryOf(cls, area_feature_class: Type['feature'],
+                                         corresponding_attributes: list[str]) -> ValidationRule:
         return _create_rule_and_register(
             validators.MustTouchCorrespondingBoundaryValidator,
             cls,
