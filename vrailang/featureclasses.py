@@ -21,13 +21,13 @@ Example usage:
 from abc import ABCMeta
 from collections import OrderedDict
 from dataclasses import dataclass
-from typing import Annotated, Any, Callable, ClassVar, Optional, Protocol, Tuple, Type, TypeGuard, TypeVar, Union, cast, get_args, get_origin
+from typing import Annotated, Any, Callable, ClassVar, Generic, Optional, Protocol, Tuple, Type, TypeGuard, TypeVar, Union, cast, get_args, get_origin
 from typing_extensions import Self
 
 from vrailang._fastvarname import FastVarname
 from vrailang.dataconstraints import DataTypeAnnotation
 import vrailang.dataconstraints
-from vrailang.datatypes import DataType
+from vrailang.datatypes import DataType, GeometryType
 from vrailang.errors import VraiSpecificationError
 from vrailang.rules import MixinAttributeRules, MixinFeatureclassRules
 import vrailang.specs
@@ -52,8 +52,9 @@ def __dataclass_transform__(
 
 
 _C = TypeVar("_C", bound=DataTypeAnnotation)
+_DataType = TypeVar('_DataType', bound=DataType)
 @dataclass
-class FeatureclassAttribute(MixinAttributeRules):
+class FeatureclassAttribute(Generic[_DataType], MixinAttributeRules[_DataType]):
     """The type used for describing a featureclass's fields.
     Instances of this class are added to a featureclass's class as class variables.
     """
@@ -64,7 +65,7 @@ class FeatureclassAttribute(MixinAttributeRules):
     featureclass: Type['feature']
     '''To which featureclass this field belongs'''
 
-    datatype: Type[DataType]
+    datatype: Type[_DataType]
     '''The field's datatype'''
     
     constraints: Tuple[DataTypeAnnotation]
@@ -185,13 +186,13 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
     ALIAS: ClassVar[str | None]
     '''Optional alias for the featureclass that will be used for setting the layer name.'''
 
-    ATTRIBUTES: ClassVar[dict[str, FeatureclassAttribute]]
+    ATTRIBUTES: ClassVar[dict[str, FeatureclassAttribute[DataType]]]
     '''All declared attributes of the featureclass.'''
 
-    PRIMARY_KEY: ClassVar[FeatureclassAttribute | None]
+    PRIMARY_KEY: ClassVar[FeatureclassAttribute[DataType] | None]
     '''The featureclass's attribute that functions as its primary key.'''
 
-    GEOMETRY_ATTRIBUTE: ClassVar[FeatureclassAttribute]
+    GEOMETRY_ATTRIBUTE: ClassVar[FeatureclassAttribute[GeometryType]]
     '''The featureclass's geometry attribute.'''
 
     THEME: ClassVar[vrailang.specs.ValidationTheme]

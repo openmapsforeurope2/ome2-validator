@@ -5,7 +5,7 @@ and in `MixinFeatureclassRules` for rules pertaining to a featureclass itself.
 '''
 
 from dataclasses import dataclass, field
-from typing import Any, Type, TYPE_CHECKING, Union, cast
+from typing import Any, Generic, Type, TYPE_CHECKING, TypeVar, Union, cast
 from typing_extensions import Self
 from validators.abstract_validator import AbstractValidator
 import validators
@@ -17,7 +17,8 @@ from vrailang.dataconstraints import srid, length
 from models import BaseExtent, BaseValueDomain
 
 if TYPE_CHECKING:
-    from vrailang.featureclasses import feature, FeatureclassAttribute
+    from vrailang.featureclasses import feature
+    from vrailang.datatypes import DataType
     from vrailang.specs import ValidationTheme
 
 NO_VALIDATION_CODE = 'VALIDATION_CODE_NOT_SET'
@@ -104,7 +105,8 @@ def _set_validation_code_via_assignment(obj, frame=3):
             obj.validation_code = name
 
 
-class MixinAttributeRules(FeatureclassAttributeProtocol):
+_DataType = TypeVar('_DataType', bound='DataType')
+class MixinAttributeRules(Generic[_DataType], FeatureclassAttributeProtocol[_DataType]):
     def MustNotBeNull(self) -> ValidationRule:
         return _create_rule_and_register(
             validators.AttributeNotNullValidator,
