@@ -11,7 +11,7 @@ begin_theme('HYDRO', 'hy')
 #region Hydrographic network
 
 class watercourse_link(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -34,7 +34,7 @@ class watercourse_link(feature):
 
 
 class watercourse(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -45,7 +45,7 @@ class watercourse(feature):
 
 
 class hydro_node(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -60,7 +60,7 @@ class hydro_node(feature):
 #region Other hydrographic features 
 
 class dam_area(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -71,7 +71,7 @@ class dam_area(feature):
 
 
 class dam_line(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -82,7 +82,7 @@ class dam_line(feature):
 
 
 class dam_point(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -93,7 +93,7 @@ class dam_point(feature):
 
 
 class falls_area(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -103,7 +103,7 @@ class falls_area(feature):
 
 
 class falls_line(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -113,7 +113,7 @@ class falls_line(feature):
 
 
 class falls_point(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -123,7 +123,7 @@ class falls_point(feature):
 
 
 class lock_area(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -134,7 +134,7 @@ class lock_area(feature):
 
 
 class lock_line(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -145,7 +145,7 @@ class lock_line(feature):
 
 
 class lock_point(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -156,7 +156,7 @@ class lock_point(feature):
 
 
 class watercourse_area(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -170,7 +170,7 @@ class watercourse_area(feature):
 
 
 class standing_water(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -184,7 +184,7 @@ class standing_water(feature):
 
 
 class shoreline(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -194,7 +194,7 @@ class shoreline(feature):
 
 
 class shore(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -203,7 +203,7 @@ class shore(feature):
 
 
 class drainage_basin(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -215,7 +215,7 @@ class drainage_basin(feature):
 
 
 # class glacier_snowfield(feature):
-#     objectid: uuid[notnull]
+#     objectid: uuid[primary_key, notnull]
 #     country: varchar[length(8)]
 #     begin_lifespan_version: timestamp
 #     end_lifespan_version: timestamp
@@ -226,7 +226,7 @@ class drainage_basin(feature):
 
 
 # class shoreline_construction_area(feature):
-#     objectid: uuid[notnull]
+#     objectid: uuid[primary_key, notnull]
 #     country: varchar[length(8)]
 #     begin_lifespan_version: timestamp
 #     end_lifespan_version: timestamp
@@ -237,7 +237,7 @@ class drainage_basin(feature):
 
 
 # class shoreline_construction_line(feature):
-#     objectid: uuid[notnull]
+#     objectid: uuid[primary_key, notnull]
 #     country: varchar[length(8)]
 #     begin_lifespan_version: timestamp
 #     end_lifespan_version: timestamp
@@ -248,7 +248,7 @@ class drainage_basin(feature):
 
 
 # class wetland(feature):
-#     objectid: uuid[notnull]
+#     objectid: uuid[primary_key, notnull]
 #     country: varchar[length(8)]
 #     begin_lifespan_version: timestamp
 #     end_lifespan_version: timestamp

@@ -11,7 +11,7 @@ begin_theme('TRANS', 'tn')
 #region Road network
 
 class road_link(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -44,7 +44,7 @@ class road_link(feature):
 
 
 class road(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -62,7 +62,7 @@ class road(feature):
 
 
 class road_node(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -77,7 +77,7 @@ class road_node(feature):
     w_release: int4
 
 class road_service_area(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -93,7 +93,7 @@ class road_service_area(feature):
     w_release: int4
 
 class road_service_point(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -109,7 +109,7 @@ class road_service_point(feature):
     w_release: int4
 
 class marker_post(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -132,7 +132,7 @@ class marker_post(feature):
 #region Railway network
 
 class railway_link(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -155,7 +155,7 @@ class railway_link(feature):
     w_release: int4
 
 class railway_line(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -172,7 +172,7 @@ class railway_line(feature):
 
 
 class railway_station_area(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -190,7 +190,7 @@ class railway_station_area(feature):
 
 
 class railway_station_point(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -212,7 +212,7 @@ class railway_station_point(feature):
 #region Air transport
 
 class aerodrome_area(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -233,7 +233,7 @@ class aerodrome_area(feature):
     w_release: int4
 
 class aerodrome_point(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -255,7 +255,7 @@ class aerodrome_point(feature):
 
 
 class runway_area(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -270,7 +270,7 @@ class runway_area(feature):
 
 
 class runway_line(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -289,7 +289,7 @@ class runway_line(feature):
 #region Water transport
 
 class ferry_crossing(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -307,7 +307,7 @@ class ferry_crossing(feature):
 
 
 class port_area(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -324,7 +324,7 @@ class port_area(feature):
     w_release: int4
 
 class port_point(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
