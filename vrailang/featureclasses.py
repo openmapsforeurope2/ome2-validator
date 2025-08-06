@@ -103,6 +103,7 @@ class FeatureMetaclass(ABCMeta):
         PATCH_IN_LATER: type[feature] = None # type: ignore # Featureclass is patched in later once created
 
         primary_key: FeatureclassAttribute | None = None
+        geom_attr: FeatureclassAttribute[GeometryType] | None = None
         for field_name, annotation in annotations.items():
             origin = get_origin(annotation)
 
@@ -116,7 +117,7 @@ class FeatureMetaclass(ABCMeta):
             
             if not vrailang.is_datatype(field_type):
                 raise VraiSpecificationError(f'Attribute {field_name} in featureclass {name} has unsupported datatype: {field_type}')
-
+            
             if not vrailang.are_dataconstraints(field_constraints):
                 raise VraiSpecificationError(f'Constraints for {field_name} in featureclass {name} are not supported: {field_constraints}')
 
@@ -129,8 +130,15 @@ class FeatureMetaclass(ABCMeta):
                     primary_key = namespace[field_name]
                 else:
                     raise VraiSpecificationError(f'Attribute {field_name} in featureclass {name} is marked as primary key, but conflicts with primary key {primary_key.name}')
-        
+            
+            if geom_attr is None and issubclass(field_type, GeometryType):
+                geom_attr = namespace[field_name]
+
+        if geom_attr is None:
+            raise VraiSpecificationError(f'Featureclass {name} is missing a geometry attribute')
+
         namespace['PRIMARY_KEY'] = primary_key
+        namespace['GEOMETRY_ATTRIBUTE'] = geom_attr
         namespace['ATTRIBUTES'] = featureclass_attrs
         
         # Set the theme
@@ -182,6 +190,9 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
 
     PRIMARY_KEY: ClassVar[FeatureclassAttribute | None]
     '''The featureclass's attribute that functions as its primary key.'''
+
+    GEOMETRY_ATTRIBUTE: ClassVar[FeatureclassAttribute]
+    '''The featureclass's geometry attribute.'''
 
     THEME: ClassVar[vrailang.specs.ValidationTheme]
     '''The `ValidationTheme` this featureclass belongs to.'''

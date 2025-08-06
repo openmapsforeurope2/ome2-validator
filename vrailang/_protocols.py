@@ -27,6 +27,7 @@ class FeatureclassAttributeProtocol(Protocol):
 class FeatureclassProtocol(Protocol):
     ATTRIBUTES: ClassVar[dict[str, 'FeatureclassAttribute']]
     PRIMARY_KEY: ClassVar['FeatureclassAttribute | None']
+    GEOMETRY_ATTRIBUTE: ClassVar['FeatureclassAttribute']
     THEME: ClassVar['vrailang.specs.ValidationTheme']
 
     TABLE_NAME: ClassVar[str]
