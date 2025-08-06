@@ -12,6 +12,7 @@ __all__ = [
     'precision', 'scale',
     'length',
     'notnull',
+    'primary_key',
     'srid'
 ]
 
@@ -39,6 +40,7 @@ class boolean_flag(DataTypeAnnotation):
         return self.name
 
 notnull = boolean_flag('notnull')
+primary_key = boolean_flag('primary_key')
 
 @dataclass
 class srid(DataTypeAnnotation):

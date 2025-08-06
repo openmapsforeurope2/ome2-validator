@@ -26,6 +26,7 @@ from typing_extensions import Self
 
 from vrailang._fastvarname import FastVarname
 from vrailang.dataconstraints import DataTypeAnnotation
+import vrailang.dataconstraints
 from vrailang.datatypes import DataType
 from vrailang.errors import VraiSpecificationError
 from vrailang.rules import MixinAttributeRules, MixinFeatureclassRules
@@ -101,6 +102,7 @@ class FeatureMetaclass(ABCMeta):
 
         PATCH_IN_LATER: type[feature] = None # type: ignore # Featureclass is patched in later once created
 
+        primary_key: FeatureclassAttribute | None = None
         for field_name, annotation in annotations.items():
             origin = get_origin(annotation)
 
@@ -121,6 +123,12 @@ class FeatureMetaclass(ABCMeta):
             namespace[field_name] = featureclass_attrs[field_name] = FeatureclassAttribute(
                 field_name, PATCH_IN_LATER, field_type, field_constraints
             )
+
+            if vrailang.dataconstraints.primary_key in field_constraints:
+                if primary_key is None:
+                    namespace['PRIMARY_KEY'] = primary_key = namespace[field_name]
+                else:
+                    raise VraiSpecificationError(f'Attribute {field_name} in featureclass {name} is marked as primary key, but conflicts with primary key {primary_key.name}')
         
         namespace['ATTRIBUTES'] = featureclass_attrs
         
@@ -170,6 +178,9 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
 
     ATTRIBUTES: ClassVar[dict[str, FeatureclassAttribute]]
     '''All declared attributes of the featureclass.'''
+
+    PRIMARY_KEY: ClassVar[FeatureclassAttribute | None]
+    '''The featureclass's attribute that functions as its primary key.'''
 
     THEME: ClassVar[vrailang.specs.ValidationTheme]
     '''The `ValidationTheme` this featureclass belongs to.'''
