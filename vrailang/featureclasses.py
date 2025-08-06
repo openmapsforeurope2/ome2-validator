@@ -126,10 +126,11 @@ class FeatureMetaclass(ABCMeta):
 
             if vrailang.dataconstraints.primary_key in field_constraints:
                 if primary_key is None:
-                    namespace['PRIMARY_KEY'] = primary_key = namespace[field_name]
+                    primary_key = namespace[field_name]
                 else:
                     raise VraiSpecificationError(f'Attribute {field_name} in featureclass {name} is marked as primary key, but conflicts with primary key {primary_key.name}')
         
+        namespace['PRIMARY_KEY'] = primary_key
         namespace['ATTRIBUTES'] = featureclass_attrs
         
         # Set the theme
