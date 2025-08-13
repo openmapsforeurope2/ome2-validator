@@ -146,10 +146,15 @@ def arg_loader(arg: object) -> object:
     if vrailang.is_featureclass(arg):
         layer_name = arg.TABLE_NAME
         if arg.ALIAS is not None:
-            layer_name = f'{arg.ALIAS} [from {arg.TABLE_NAME}]'
+            from_str = f' [from {arg.TABLE_NAME}]' if arg.TABLE_NAME.isidentifier() else ''
+            layer_name = f'{arg.ALIAS}{from_str}'
 
-        return QgisUtilities.create_postgres_vector_layer(arg.THEME.schema, arg.TABLE_NAME, "geom",
+        # If the table name has any non-identifier symbols, assume TABLE_NAME is a SQL query -> set schema to None
+        schema = arg.THEME.schema if arg.TABLE_NAME.isidentifier() else None
+
+        return QgisUtilities.create_postgres_vector_layer(schema, arg.TABLE_NAME, "geom",
                                                           arg.FILTER_QUERY or '',
+                                                          key_column=arg.PRIMARY_KEY.name if arg.PRIMARY_KEY else '',
                                                           layer_name=layer_name)
     return arg
 
