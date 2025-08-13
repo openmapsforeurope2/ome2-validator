@@ -28,6 +28,7 @@ class QgisUtilities:
 
     qgs = QgsApplication([], GUIenabled=False)
     uri = QgsDataSourceUri()
+    _connection_info: tuple[str, str, str, str, str, QgsDataSourceUri.SslMode]
     
     @classmethod
     def initialize_qgis(cls):
@@ -72,8 +73,9 @@ class QgisUtilities:
             database (str): The database name.
             username (str): The username.
             password (str): The password.
-        """        
+        """
         cls.uri.setConnection(host, str(port), database, username, password, QgsDataSourceUri.SslPrefer)
+        cls._connection_info = (host, str(port), database, username, password, QgsDataSourceUri.SslPrefer)
 
 
     @classmethod
