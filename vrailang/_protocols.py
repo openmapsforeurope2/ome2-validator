@@ -28,6 +28,8 @@ class FeatureclassProtocol(Protocol):
     ATTRIBUTES: ClassVar[dict[str, 'FeatureclassAttribute']]
     THEME: ClassVar['vrailang.specs.ValidationTheme']
 
+    TABLE_NAME: ClassVar[str]
+    ALIAS: ClassVar[str | None]
     FILTER_QUERY: ClassVar[str | None]
     
 
