@@ -258,6 +258,10 @@ class drainage_basin(feature):
 
 #endregion
 
+#region Derived featureclasses
+fictitious_axis = watercourse_link.filtered('"fictitious" = \'true\'')
+#endregion
+
 #endregion
 
 
@@ -488,7 +492,7 @@ H023n = standing_water.MustBeInsideMatchingArea(administrative_units.administrat
 H023o = shore.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
 H023p = drainage_basin.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
 
-H024a = watercourse_link.filtered('"fictitious" = \'true\'').MustNotHaveDangles()
+H024a = fictitious_axis.MustNotHaveDangles()
 
 H025a = dam_area.MustNotHaveOverlaps()
 H025b = falls_area.MustNotHaveOverlaps()
