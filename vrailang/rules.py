@@ -292,11 +292,11 @@ class MixinFeatureclassRules(FeatureclassProtocol):
         )
 
     @classmethod
-    def MustOverlapWith(cls, feature_class_to_compare: Type['feature']) -> ValidationRule:
+    def MustOverlapWith(cls, feature_class: Type['feature']) -> ValidationRule:
         return _create_rule_and_register(
             validators.MustOverlapWithValidator,
             cls,
-            (feature_class_to_compare,),
+            (feature_class,),
             {}
         )
 
