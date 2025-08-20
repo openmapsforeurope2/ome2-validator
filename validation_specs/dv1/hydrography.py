@@ -500,6 +500,7 @@ H025c = lock_area.MustNotHaveOverlaps()
 H025d = standing_water.MustNotHaveOverlaps()
 H025e = watercourse_area.MustNotHaveOverlaps()
 
+H027a = watercourse_area.MustOverlapWith(fictitious_axis)
 
 #endregion
 
