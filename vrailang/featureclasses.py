@@ -236,7 +236,6 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
         
         # Copy the name of the original featureclass
         RenamedFeatureclass.__name__ = cls.__name__
-        RenamedFeatureclass.TABLE_NAME = cls.TABLE_NAME
         return RenamedFeatureclass # type: ignore
 
     @classmethod
@@ -275,7 +274,6 @@ class feature(MixinFeatureclassRules, metaclass=FeatureMetaclassWithProtocolSupp
         
         # Copy the name of the original featureclass
         FilteredFeatureclass.__name__ = cls.__name__
-        FilteredFeatureclass.TABLE_NAME = cls.TABLE_NAME
         return FilteredFeatureclass # type: ignore
 
     @classmethod
