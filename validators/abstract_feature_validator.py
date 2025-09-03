@@ -8,7 +8,7 @@ class FeatureValidator(AbstractValidator, ABC):
     result_repository = GeometryResultRepository
 
     @classmethod
-    def create_result(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, feature: QgsFeature, message: str) -> GeometryResult:
+    def create_result(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, feature: QgsFeature, message: str, country: str | None = None) -> GeometryResult:
         """Creates a geometry result.
 
         Creates a GeometryResult which can be stored in the GeometryResultRepository.
@@ -20,6 +20,7 @@ class FeatureValidator(AbstractValidator, ABC):
             feature_class (QgsVectorLayer): The feature class.
             feature (QgsFeature): The result feature containing the geometry and objectid
             message (str): A description of the geometry result.
+            country (str | None): Country code of the feature (optional).
 
         Returns:
             GeometryResult: A geometry result ready for database insertion.
@@ -40,5 +41,6 @@ class FeatureValidator(AbstractValidator, ABC):
             message = message,
             objectid = '00000000-0000-0000-0000-000000000000' if feature is None else feature['objectid'],
             geometry = None if no_geometry else feature.geometry(),
-            geometry_type = DETECT_TYPE
+            geometry_type = DETECT_TYPE,
+            country = country
         )

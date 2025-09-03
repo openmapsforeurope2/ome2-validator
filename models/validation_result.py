@@ -19,3 +19,4 @@ class ValidationResult(AbstractModel):
     severity: str
     feature_class: str
     message: str
+    country: str | None

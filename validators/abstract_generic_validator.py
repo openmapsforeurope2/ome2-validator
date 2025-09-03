@@ -8,7 +8,7 @@ class GenericValidator(AbstractValidator, ABC):
     result_repository = GenericResultRepository
     
     @classmethod
-    def create_result(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, message: str) -> GenericResult:
+    def create_result(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, message: str, country: str | None = None) -> GenericResult:
         """Creates a GenericResult.
 
         Creates a GenericResult which can be stored in the GenericResultRepository.
@@ -19,6 +19,7 @@ class GenericValidator(AbstractValidator, ABC):
             severity (str): The severity to use (WARNING / ERROR / STATISTIC).
             feature_class (QgsVectorLayer): The feature class.
             message (str): A description of the generic result.
+            country (str | None): Country code of the feature (optional).
 
         Returns:
             GenericResult: A generic result ready for database insertion.
@@ -33,5 +34,6 @@ class GenericValidator(AbstractValidator, ABC):
             validation_code = validation_code,
             severity  = severity,
             feature_class = feature_class.name(),
-            message = message
+            message = message,
+            country = country
         )
