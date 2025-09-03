@@ -28,6 +28,7 @@ class QgisUtilities:
 
     qgs = QgsApplication([], GUIenabled=False)
     uri = QgsDataSourceUri()
+    _connection_info: tuple[str, str, str, str, str, QgsDataSourceUri.SslMode]
     
     @classmethod
     def initialize_qgis(cls):
@@ -72,18 +73,19 @@ class QgisUtilities:
             database (str): The database name.
             username (str): The username.
             password (str): The password.
-        """        
+        """
         cls.uri.setConnection(host, str(port), database, username, password, QgsDataSourceUri.SslPrefer)
+        cls._connection_info = (host, str(port), database, username, password, QgsDataSourceUri.SslPrefer)
 
 
     @classmethod
-    def create_postgres_vector_layer(cls, schema: str, table_name: str, geometry_column: str, sql: str = '', key_column: str = '', layer_name: str | None = None) -> QgsVectorLayer:
+    def create_postgres_vector_layer(cls, schema: str | None, table_name: str, geometry_column: str, sql: str = '', key_column: str = '', layer_name: str | None = None) -> QgsVectorLayer:
         """Creates a vectorlayer based on a PostGIS table.
 
         TODO Test using 'objectid' as key_column for OME2 data. This may enable using feature.id() in stead of feature['objectid']?
 
         Args:
-            schema (str): The schema.
+            schema (str | None): The schema.
             table_name (str): The table.
             geometry_column (str): The column containing the geometry.
             sql (str, optional): Optional where-clause to limit the selection of objects. Defaults to ''.
@@ -94,9 +96,11 @@ class QgisUtilities:
             QgsVectorLayer: The created vector layer.
         """        
         layer_name =  table_name if layer_name is None else layer_name
-        cls.uri.setDataSource(schema, table_name, geometry_column, sql, key_column)
+        uri = QgsDataSourceUri()
+        uri.setConnection(*cls._connection_info)
+        uri.setDataSource(schema or '', table_name, geometry_column, sql, key_column)
         
-        vector_layer = QgsVectorLayer(cls.uri.uri(False), layer_name, "postgres")
+        vector_layer = QgsVectorLayer(uri.uri(False), layer_name, "postgres")
         if not vector_layer.isValid():
             cls.logger.warning(f"Could not create PostGreSQL layer based on table: {table_name}.")
 

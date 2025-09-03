@@ -4,28 +4,31 @@ for type hints purposes.
 '''
 
 from qgis.core import QgsVectorLayer
-from typing import TYPE_CHECKING, Callable, ClassVar, Optional, Protocol, Self, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, ClassVar, Generic, Optional, Protocol, Self, Type, TypeVar
 
 if TYPE_CHECKING:
     from vrailang.dataconstraints import DataTypeAnnotation
-    from vrailang.datatypes import DataType
+    from vrailang.datatypes import DataType, GeometryType
     from vrailang.featureclasses import feature, FeatureclassAttribute
     import vrailang.specs
 
 
 
 _C = TypeVar("_C", bound='DataTypeAnnotation')
-class FeatureclassAttributeProtocol(Protocol):
+_DataType = TypeVar('_DataType', bound='DataType')
+class FeatureclassAttributeProtocol(Generic[_DataType], Protocol):
     name: str
     featureclass: Type['feature']
-    datatype: Type['DataType']
+    datatype: Type[_DataType]
 
     def get_constraint(self: Self, constraint_type: Type[_C]) -> Optional[_C]: ...
 
 
 
 class FeatureclassProtocol(Protocol):
-    ATTRIBUTES: ClassVar[dict[str, 'FeatureclassAttribute']]
+    ATTRIBUTES: ClassVar[dict[str, 'FeatureclassAttribute[DataType]']]
+    PRIMARY_KEY: ClassVar['FeatureclassAttribute[DataType] | None']
+    GEOMETRY_ATTRIBUTE: ClassVar['FeatureclassAttribute[GeometryType]']
     THEME: ClassVar['vrailang.specs.ValidationTheme']
 
     TABLE_NAME: ClassVar[str]

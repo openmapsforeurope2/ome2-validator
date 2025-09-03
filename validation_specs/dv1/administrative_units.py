@@ -9,7 +9,7 @@ begin_theme('ADMIN', 'au')
 #region Administrative units
 
 class administrative_unit_area_1(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -31,7 +31,7 @@ class administrative_unit_area_1(feature):
     w_release: int4
 
 class administrative_unit_area_2(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -53,7 +53,7 @@ class administrative_unit_area_2(feature):
     w_release: int4
 
 class administrative_unit_area_3(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -75,7 +75,7 @@ class administrative_unit_area_3(feature):
     w_release: int4
 
 class administrative_unit_area_4(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -97,7 +97,7 @@ class administrative_unit_area_4(feature):
     w_release: int4
 
 class administrative_unit_area_5(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -119,7 +119,7 @@ class administrative_unit_area_5(feature):
     w_release: int4
 
 class administrative_unit_area_6(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -146,7 +146,7 @@ class administrative_unit_area_6(feature):
 #region Residence of authority
 
 class residence_of_authority(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
@@ -166,7 +166,7 @@ class residence_of_authority(feature):
 #region Maritime Units
 
 class maritime_zone(feature):
-    objectid: uuid[notnull]
+    objectid: uuid[primary_key, notnull]
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
