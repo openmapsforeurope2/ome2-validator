@@ -3,9 +3,11 @@ from .must_not_have_gaps_validator import *
 from .must_not_have_duplicates_validator import *
 from .must_not_have_dangles_validator import *
 from .must_not_have_pseudos_validator import *
+from .must_overlap_with_validator import *
 from .must_be_covered_by_validator import *
 from .must_not_overlap_with_validator import *
 from .must_be_covered_by_endpoints_of_validator import *
 from .end_points_must_be_covered_by_validator import *
 from .must_be_inside_validator import *
 from .must_contain_validator import *
+from .must_overlap_with_validator import *
