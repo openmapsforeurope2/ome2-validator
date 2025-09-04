@@ -29,7 +29,7 @@ class MustBeInsideValidator(FeatureValidator):
         # QGIS TopologyChecker only supports Point in Polygon, but this validator could be more generic
 
         # Check geometry type
-        if feature_class.geometryType() != QgsWkbTypes.GeometryType.PointGeometry:
+        if feature_class.geometryType() != QgsWkbTypes.GeometryType.PointGeometry and feature_class.geometryType() != QgsWkbTypes.GeometryType.LineGeometry:
             log_message = cls.get_invalid_geometry_type_message(feature_class, [QgsWkbTypes.GeometryType.PointGeometry])
             cls.logger.warning(log_message)     
             return results
