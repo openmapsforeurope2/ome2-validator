@@ -30,6 +30,25 @@ def get_dict(srid: str):
             }
 
 
+def get_dict_with_primary_key(srid):
+    return {'uuid': 'uuid[primary_key, notnull]',
+            'timestamp': 'timestamp[primary_key]',
+            'character varying(8)': 'varchar[length(8), primary_key]',
+            'character varying(255)': 'varchar[length(255), primary_key]',
+            'character varying(80)': 'varchar[length(80), primary_key]',
+            'integer': 'int4[primary_key]',
+            'jsonb': 'jsonb[primary_key]',
+            'geometry(LineStringZ,${srid})': f'LineStringZ[srid({srid}), primary_key]',
+            'geometry(LineString,${srid})': f'LineString[srid({srid}), primary_key]',
+            'geometry(MultiLineStringZ,${srid})': f'MultiLineStringZ[srid({srid}), primary_key]',
+            'geometry(MultiLineString,${srid})': f'MultiLineString[srid({srid}), primary_key]',
+            'geometry(PointZ,${srid})': f'PointZ[srid({srid}), primary_key]',
+            'geometry(Point,${srid})': f'Point[srid({srid}), primary_key]',
+            'geometry(MultiPolygonZ,${srid})': f'MultiPolygonZ[srid({srid}), primary_key]',
+            'geometry(MultiPolygon,${srid})': f'MultiPolygon[srid({srid}), primary_key]',
+            }
+
+
 def extract_class(path, classname):
     if not os.path.exists(path):
         print(f"File '{path}' does not exist.")
@@ -62,6 +81,7 @@ def main() -> None:
 
     srid = data['srid']
     dict_text_to_type = get_dict(srid=srid)
+    dict_text_to_type_with_primary_key = get_dict_with_primary_key(srid=srid)
 
     common_part = []
 
@@ -69,7 +89,11 @@ def main() -> None:
         for attribute_name in data['common'][x]:
             attribute_type_text = data['common'][x][attribute_name]['sql_type'].split('DEFAULT')[0].split('without')[
                 0].strip()
-            attribute_type = dict_text_to_type[attribute_type_text]
+
+            if data['common'][x][attribute_name].get('pkey') is True:
+                attribute_type = dict_text_to_type_with_primary_key[attribute_type_text]
+            else:
+                attribute_type = dict_text_to_type[attribute_type_text]
 
             common_part.append(f"{attribute_name}: {attribute_type}")
 
@@ -83,7 +107,12 @@ def main() -> None:
                 attribute_type_text = \
                 data['themes'][theme]['tables'][y]['fields'][attribute_name]['sql_type'].split('DEFAULT')[0].split(
                     'without')[0].strip()
-                attribute_type = dict_text_to_type[attribute_type_text]
+
+                if data['themes'][theme]['tables'][y]['fields'][attribute_name].get('pkey') is True:
+                    attribute_type = dict_text_to_type_with_primary_key[attribute_type_text]
+                else:
+                    attribute_type = dict_text_to_type[attribute_type_text]
+
                 theme_part.append(f"{attribute_name}: {attribute_type}")
             dict_table_to_class_attributes[y] = common_part + theme_part
 
