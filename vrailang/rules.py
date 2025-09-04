@@ -310,6 +310,15 @@ class MixinFeatureclassRules(FeatureclassProtocol):
         )
 
     @classmethod
+    def MustBeInProximity(cls, feature_class: Type['feature'], distance: Union[int, float]) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.ProximityValidator,
+            cls,
+            (feature_class, distance,),
+            {}
+        )
+
+    @classmethod
     def AdjacentFacesMustDiffer(cls, attributes: list[str]) -> ValidationRule:
         return _create_rule_and_register(
             validators.NoAdjacentFacesSameAttributeValidator,
