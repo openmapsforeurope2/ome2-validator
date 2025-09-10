@@ -11,18 +11,18 @@ class MustBeInsideValidator(FeatureValidator):
     def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, feature_class_2: QgsVectorLayer) -> list[ValidationResult]:
         """Runs the class MustBeInsideValidator.
 
-        Topology validation for checking if points are inside polygon.
+        Topology validation for checking if points or lines are inside polygon.
         Based on: https://github.com/qgis/QGIS/blob/master/src/plugins/topology/topolTest.cpp#L1108
 
         Args:
             run_id (int): The id of the current run.
             validation_code (str): The validation code to use.
             severity (str): The severity to use (WARNING / ERROR / STATISTIC).
-            feature_class (QgsVectorLayer): The feature class which should be inside. Must contain point-geometry.
+            feature_class (QgsVectorLayer): The feature class which should be inside. Must contain point-geometry or line-geometry.
             feature_class_2 (QgsVectorLayer): The feature class which is used for comparison. Must contain polygon-geometry.
 
         Returns:
-            list[ValidationResult]: A list of results, containing the points of the point-featureclass which are not inside any polygon.
+            list[ValidationResult]: A list of results, containing the geometries of the featureclass which are not inside any polygon.
         """
         results = []
 
