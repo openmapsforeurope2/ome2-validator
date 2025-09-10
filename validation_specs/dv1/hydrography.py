@@ -506,9 +506,9 @@ H027a = watercourse_area.MustOverlapWith(fictitious_axis)
 H028a = fictitious_axis.MustBeInside(watercourse_area_or_standing_water)
 
 proximity_distance = 5  # proximity distance not yet defined
-H029a = dam_area.MustBeInProximity(watercourse_area_or_standing_water, distance=proximity_distance)
-H029b = dam_line.MustBeInProximity(watercourse_area_or_standing_water, distance=proximity_distance)
-H029c = dam_point.MustBeInProximity(watercourse_area_or_standing_water, distance=proximity_distance)
+H029a = dam_area.MustBeInProximityOf(watercourse_area_or_standing_water, distance=proximity_distance)
+H029b = dam_line.MustBeInProximityOf(watercourse_area_or_standing_water, distance=proximity_distance)
+H029c = dam_point.MustBeInProximityOf(watercourse_area_or_standing_water, distance=proximity_distance)
 
 #endregion
 
