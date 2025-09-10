@@ -301,6 +301,15 @@ class MixinFeatureclassRules(FeatureclassProtocol):
         )
 
     @classmethod
+    def MustBeInside(cls, feature_class: Type['feature']) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MustBeInsideValidator,
+            cls,
+            (feature_class,),
+            {}
+        )
+
+    @classmethod
     def AdjacentFacesMustDiffer(cls, attributes: list[str]) -> ValidationRule:
         return _create_rule_and_register(
             validators.NoAdjacentFacesSameAttributeValidator,
