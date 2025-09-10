@@ -1,5 +1,6 @@
 
 
+from typing import Any, TypeAlias
 from qgis import processing
 from qgis.core import QgsVectorLayer, QgsPoint, QgsWkbTypes
 from models import ValidationResult
@@ -9,6 +10,9 @@ from utilities import QgisUtilities
 from qgis.PyQt.QtCore import QMetaType
 
 from itertools import combinations
+
+PointKey: TypeAlias = tuple[float, float]
+AttributeValue: TypeAlias = Any
 
 class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
     logger = logging.getLogger(__name__)
@@ -79,7 +83,7 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
         buffer = processing.run("native:selectbylocation", parameters)
 
         # Store line endpoints including attribute values in dictionary
-        border_point_dict = {}
+        border_point_dict: dict[PointKey, list[tuple[AttributeValue, ...]]] = {}
         for feature in prepared_feature_class.selectedFeatures():
 
             # Get endpoints
@@ -88,7 +92,7 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
             end_point = QgsPoint(geom[-1])
             
             # Get attribute values
-            attr_values = []
+            attr_values: list[AttributeValue] = []  # [objectid, country, attributes_to_check_for_consistency...]
             oid = feature['objectid']
             country = feature['country']
             attr_values.append(oid)
@@ -97,7 +101,7 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
                 attr_values.append(feature[attr])
 
             for point in [start_point, end_point]:
-                point_key = (point.x(), point.y())
+                point_key: PointKey = (point.x(), point.y())
                 if point_key in border_point_dict:
                     border_point_dict[point_key].append(tuple(attr_values))
                 else:
@@ -118,9 +122,11 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
             combis = combinations(value, 2)
             for pair in combis:
                 obj1, obj2 = pair
-                
+                country1 = obj1[1]
+                country2 = obj2[1]
+
                 # Skip combinations of the same country, we only check across the border
-                if obj1[1] == obj2[1]:
+                if country1 == country2:
                     continue
 
                 # Compare the attributes that should be consistent
