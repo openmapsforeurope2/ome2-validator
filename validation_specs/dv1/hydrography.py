@@ -260,7 +260,7 @@ class drainage_basin(feature):
 
 #region Derived featureclasses
 fictitious_axis = watercourse_link.filtered('"fictitious" = \'true\'')
-watercourse_area_or_standing_water = (watercourse_area + standing_water).with_alias('watercourse_area_and_standing_water')
+watercourse_area_or_standing_water = (watercourse_area + standing_water).with_alias('watercourse_area_or_standing_water')
 #endregion
 
 #endregion
