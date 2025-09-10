@@ -30,7 +30,7 @@ class MustBeInsideValidator(FeatureValidator):
 
         # Check geometry type
         if feature_class.geometryType() != QgsWkbTypes.GeometryType.PointGeometry and feature_class.geometryType() != QgsWkbTypes.GeometryType.LineGeometry:
-            log_message = cls.get_invalid_geometry_type_message(feature_class, [QgsWkbTypes.GeometryType.PointGeometry])
+            log_message = cls.get_invalid_geometry_type_message(feature_class, [QgsWkbTypes.GeometryType.PointGeometry, QgsWkbTypes.GeometryType.LineGeometry])
             cls.logger.warning(log_message)     
             return results
     
