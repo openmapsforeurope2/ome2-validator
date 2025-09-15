@@ -55,6 +55,8 @@ class AbstractValidator(ABC):
                 cls.logger.info(f'Finished running the {cls.__name__} for {validation_code}')
                 check_status.success = True
                 check_status.number_of_results = len(validation_results)
+                for i in range(check_status.number_of_results):
+                    cls.logger.info(validation_results[i].message)
                 cls.logger.info(f'Number of results for {validation_code}: {check_status.number_of_results}')
 
                 try:
