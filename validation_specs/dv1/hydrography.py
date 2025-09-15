@@ -510,6 +510,9 @@ H029a = dam_area.MustBeInProximityOf(watercourse_area_or_standing_water, distanc
 H029b = dam_line.MustBeInProximityOf(watercourse_area_or_standing_water, distance=proximity_distance)
 H029c = dam_point.MustBeInProximityOf(watercourse_area_or_standing_water, distance=proximity_distance)
 
+H030a = lock_point.MustBeInside(watercourse_area_or_standing_water)
+H030b = lock_line.MustBeInside(watercourse_area_or_standing_water)
+
 #endregion
 
 
