@@ -83,7 +83,15 @@ class ProximityValidator(FeatureValidator):
             if not intersects:
                 # Create results
                 message = f"{feature_class_2.name()} feature with objectid '{feature['objectid']}' is not within {distance} meters of {feature_class_1.name()}."
-                result = cls.create_result(run_id, validation_code, severity, feature_class_2, feature, message)
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    feature_class_2,
+                    feature,
+                    message,
+                    cls.get_attribute(feature, 'country') 
+                )
                 results.append(result)
 
         return results

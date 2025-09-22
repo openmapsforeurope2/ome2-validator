@@ -66,7 +66,15 @@ class FeatureCountValidator(GenericValidator):
             
             if feature_count < minimum_record_count or minimum_record_count == -1:
                 message = cls.create_featurecount_message(feature_class, feature_count, exp)
-                result = cls.create_result(run_id, validation_code, severity, feature_class, message)
+                country = None # TODO: Implement per country statistics?
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    feature_class,
+                    message,
+                    country
+                )
                 results.append(result)
             
         return results

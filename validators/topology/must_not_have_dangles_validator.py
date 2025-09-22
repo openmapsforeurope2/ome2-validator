@@ -61,7 +61,16 @@ class MustNotHaveDanglesValidator(FeatureValidator):
                 feature = feature_class.getFeature(feature_ids[0])
                 error_feature = cls.create_error_feature(error_geom, feature.attribute('objectid'))
                 message = f'{feature_class.name()} object with objectid {feature.id()} has dangles.'
-                result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+                country = cls.get_attribute(feature, 'country')
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    feature_class,
+                    error_feature,
+                    message,
+                    country
+                )
                 results.append(result)
 
         return results

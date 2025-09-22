@@ -39,7 +39,15 @@ class AttributeNotNullValidator(FeatureValidator):
 
         for feature in feature_class.getFeatures(QgsFeatureRequest().setFilterExpression(is_null_expression)):
             message = f'{feature_class.name()} object with objectid {feature.attribute("objectid")} has a NULL value for field {field_name}.'
-            result = cls.create_result(run_id, validation_code, severity, feature_class, feature, message)
+            result = cls.create_result(
+                run_id,
+                validation_code,
+                severity,
+                feature_class,
+                feature,
+                message,
+                cls.get_attribute(feature, 'country')
+            )
             results.append(result)
 
         return results

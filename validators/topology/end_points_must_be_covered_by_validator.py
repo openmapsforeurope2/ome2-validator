@@ -79,7 +79,16 @@ class EndPointsMustBeCoveredByValidator(FeatureValidator):
                     # Create feature of the non covered geometry
                     error_feature = cls.create_error_feature(endpoint, feature.attribute('objectid'))
                     message = f'{feature_class.name()} object with objectid {feature.id()} has an endpoint which is not covered by {feature_class_2.name()}.'
-                    result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+                    country = cls.get_attribute(feature, 'country')
+                    result = cls.create_result(
+                        run_id,
+                        validation_code,
+                        severity,
+                        feature_class,
+                        error_feature,
+                        message,
+                        country
+                    )
                     results.append(result)
 
         return results

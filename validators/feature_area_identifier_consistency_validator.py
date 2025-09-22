@@ -60,13 +60,29 @@ class FeatureAreaIdentifierConsistencyValidator(FeatureValidator):
             # Feature is not contained by Area
             if area_id_value is None:
                 message = f"{check_feature_class.name()} feature with objectid \'{feature_objectid}\' and {id_field} = \'{feature_id_value}\' is not within any {area_feature_class.name()} feature."
-                result = cls.create_result(run_id, validation_code, severity, check_feature_class, feature, message)
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    check_feature_class,
+                    feature,
+                    message,
+                    cls.get_attribute(feature, 'country')
+                )
                 results.append(result)
 
             # Feature is in Area but the id_field's do not match
             elif feature_id_value != area_id_value:
                 message = f"{check_feature_class.name()} feature with objectid \'{feature_objectid}\' and {id_field} = \'{feature_id_value}\' mismatches {area_feature_class.name()} feature with objectid \'{area_objectid}\' and {id_field} = \'{area_id_value}\'."
-                result = cls.create_result(run_id, validation_code, severity, check_feature_class, feature, message)
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    check_feature_class,
+                    feature,
+                    message,
+                    cls.get_attribute(feature, 'country')
+                )
                 results.append(result)
 
         return results

@@ -27,7 +27,15 @@ class MustBeSinglePartValidator(FeatureValidator):
         for feature in feature_class.getFeatures():
             if feature.geometry().isMultipart():
                 message = f'{feature_class.name()} feature with objectid {(feature["objectid"])} is not a single part'
-                result = cls.create_result(run_id, validation_code, severity, feature_class, feature, message)
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    feature_class,
+                    feature,
+                    message,
+                    cls.get_attribute(feature, 'country')
+                )
                 results.append(result)
 
         return results

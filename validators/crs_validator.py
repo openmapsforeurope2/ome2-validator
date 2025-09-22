@@ -29,14 +29,15 @@ class CrsValidator(FeatureValidator):
         objectid: str
         srid: int
         geometry: QgsGeometry
+        country: str | None
 
 
         @classmethod
-        def from_query_row(cls, objectid: str, srid: int, geometry: memoryview) -> CrsValidator.CrsQueryRecord:
+        def from_query_row(cls, objectid: str, srid: int, geometry: memoryview, country: str | None) -> CrsValidator.CrsQueryRecord:
             # Convert WKB geometry from PostGIS to QgsGeometry
             qgs_geometry = QgsGeometry()
             qgs_geometry.fromWkb(geometry.tobytes())     
-            return cls(objectid, srid, qgs_geometry)
+            return cls(objectid, srid, qgs_geometry, country)
 
 
     @classmethod
@@ -55,6 +56,13 @@ class CrsValidator(FeatureValidator):
             log_message = f"Featureclass '{feature_class.name()}' has CRS '{feature_class.crs().authid()}' but should have CRS '{crs_string}' according to the dataschema."
             cls.logger.warning(log_message)
 
+        select_country_column = (
+            'NULL AS country' 
+            if feature_class.fields().indexOf('country') == -1
+            else
+            'country'
+        )
+        
         query_records = None
         commands = pydapper.connect(cls.dsn)
         try:
@@ -62,7 +70,8 @@ class CrsValidator(FeatureValidator):
                 query_records = commands.query(
                     f"SELECT objectid, \
                         ST_SRID(geom) as srid, \
-                        ST_AsBinary(geom) as geometry \
+                        ST_AsBinary(geom) as geometry, \
+                        {select_country_column} \
                         FROM {schema}.{feature_class.name()} \
                         WHERE ST_SRID(geom) <> {epsg_code}",
                 model = cls.CrsQueryRecord.from_query_row
@@ -74,7 +83,15 @@ class CrsValidator(FeatureValidator):
         for record in query_records:
             error_feature = cls.create_error_feature(record.geometry, record.objectid)
             message = f"'{feature_class.name()}' object with objectid '{record.objectid}' has geometry in CRS 'EPSG:{record.srid}' while it was expected to be in CRS '{crs_string}'."
-            result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+            result = cls.create_result(
+                run_id,
+                validation_code,
+                severity,
+                feature_class,
+                error_feature,
+                message,
+                record.country
+            )
             results.append(result)
 
         return results

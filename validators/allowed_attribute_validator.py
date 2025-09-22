@@ -50,17 +50,26 @@ class AllowedAttributeValidator(FeatureValidator):
                 if len(not_allowed) > 0:
                     # Create error message for invalid values combined by a separator
                     message = cls.create_invalid_value_message(feature_class, feature, field_name)
-                    result = cls.create_result(run_id, validation_code, severity, feature_class, feature, message)
+                    result = cls.create_result(
+                        run_id, validation_code, severity, feature_class, feature, message,
+                        cls.get_attribute(feature, 'country')
+                    )
                     results.append(result)
                 else:
                     # Create warning message for valid values combined by a separator
                     message = cls.create_valid_but_separator_message(feature_class, feature, field_name, separator)
-                    result = cls.create_result(run_id, validation_code, "WARNING", feature_class, feature, message)
+                    result = cls.create_result(
+                        run_id, validation_code, "WARNING", feature_class, feature, message,
+                        cls.get_attribute(feature, 'country')
+                    )
                     results.append(result)
             else:
                 # Create error message for invalid values without separator
                 message = cls.create_invalid_value_message(feature_class, feature, field_name)
-                result = cls.create_result(run_id, validation_code, severity, feature_class, feature, message)
+                result = cls.create_result(
+                    run_id, validation_code, severity, feature_class, feature, message,
+                    cls.get_attribute(feature, 'country')
+                )
                 results.append(result)
 
         return results

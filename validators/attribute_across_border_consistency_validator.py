@@ -114,6 +114,7 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
         for key, value in border_point_dict.items():
             x, y = key
             inconsistent_values = set()
+            countries: set[str] = set()
 
             # Default severity is set to WARNING, in case of comparing to a VOID value
             severity = "WARNING"
@@ -144,9 +145,12 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
                         val_list.sort()
                         concatenated_values = "|".join(val_list)
                         inconsistent_values.add((field_name, concatenated_values))
+                        countries.add(country1)
+                        countries.add(country2)
 
             if len(inconsistent_values) > 0:
                 error_feature = cls.create_error_feature(QgsPoint(x, y))
+                combined_countries = '#'.join(sorted(countries))
                 
                 # Create error message
                 message_list = []
@@ -159,7 +163,12 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
                 plural = "" if len(inconsistent_values) == 1 else "s"
 
                 message = f'{feature_class.name()} has inconsistent attribute{plural} across the border, {messages}.'
-                result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+                result = cls.create_result(
+                    run_id, validation_code, severity, feature_class, 
+                    error_feature, 
+                    message,
+                    combined_countries
+                )
                 results.append(result)
 
         return results

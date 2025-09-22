@@ -55,7 +55,15 @@ class MinimumAreaValidator(FeatureValidator):
                 feature_area = d.measureArea(feature.geometry())
                 if  feature_area < minimum_area:
                     message = f"Feature with objectid '{feature['objectid']}' has an area of {round(feature_area, 1)}m2 which is smaller than the minimum area of {minimum_area}m2."
-                    result = cls.create_result(run_id, validation_code, severity, feature_class, feature, message)
+                    result = cls.create_result(
+                        run_id,
+                        validation_code,
+                        severity,
+                        feature_class,
+                        feature,
+                        message,
+                        cls.get_attribute(feature, 'country')
+                    )
                     results.append(result)
         
         return results

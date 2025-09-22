@@ -42,7 +42,15 @@ class GeometryTypeValidator(FeatureValidator):
             feature_geom_type = feature.geometry().wkbType()
             if not feature_geom_type == wkb_geom_type:
                 message = f"Feature with objectid '{feature['objectid']}' has geometrytype {QgsWkbTypes.displayString(feature_geom_type)} but is expected to be of type {QgsWkbTypes.displayString(wkb_geom_type)}."
-                result = cls.create_result(run_id, validation_code, severity, feature_class, feature, message)
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    feature_class,
+                    feature,
+                    message,
+                    cls.get_attribute(feature, 'country')
+                )
                 results.append(result)
 
         return results
