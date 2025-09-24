@@ -1,0 +1,1544 @@
+{
+    "srid": "3035",
+    "common": {
+        "id_field": {
+            "objectid": {
+                "sql_type": "uuid DEFAULT gen_random_uuid()",
+                "index": "default",
+                "pkey": true
+            }
+        },
+        "fields": {
+            "country": {
+                "sql_type": "character varying(8)",
+                "index": "default",
+                "rank": 1
+            },
+            "begin_lifespan_version": {
+                "sql_type": "timestamp without time zone DEFAULT CURRENT_TIMESTAMP",
+                "rank": 2
+            },
+            "end_lifespan_version": {
+                "sql_type": "timestamp without time zone",
+                "rank": 3
+            }
+        },
+        "working_fields": {
+            "w_national_identifier": {
+                "sql_type": "character varying(255)",
+                "rank": 1
+            },
+            "xy_source": {
+                "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                "index": "default",
+                "rank": 3
+            },
+            "z_source": {
+                "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                "index": "default",
+                "rank": 4
+            },
+            "w_scale": {
+                "sql_type": "character varying(80) DEFAULT 'void_unk'",
+                "index": "default",
+                "rank": 5
+            },
+            "w_release": {
+                "sql_type": "integer DEFAULT 1",
+                "index": "default",
+                "rank": 6
+            }
+        }
+    },
+    "work":{
+        "working_fields": {
+            "w_tag": {
+                "sql_type": "character varying(255)",
+                "rank": 1
+            }
+        } 
+    },
+    "working_ids": {
+        "id_field": {
+            "objectid": {
+                "sql_type": "uuid"
+            }
+        }
+    },
+    "themes": {
+        "tn": {
+            "tables": {
+                "road_link": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(LineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "form_of_way": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "functional_road_class": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "number_of_lanes": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 4
+                        },
+                        "vertical_position": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "vertical_level": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 6
+                        },
+                        "tent_network": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        },
+                        "street_name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 8
+                        },
+                        "street_label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 9
+                        },
+                        "road_surface_category": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 10
+                        },
+                        "traffic_flow_direction": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 11
+                        },
+                        "access_restriction": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 12
+                        },
+                        "restriction_for_vehicles": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 13
+                        },                       
+                        "speed_limit": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 14
+                        },
+                        "condition_of_facility": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 15
+                        },                     
+                        "link_to_road": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 16
+                        },
+                        "road_national_road_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 17
+                        },
+                        "road_european_route_number": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 18
+                        },
+                        "road_name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 19
+                        },
+                        "road_label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 20
+                        }
+                    }
+                },
+                "road": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiLineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "national_road_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "european_route_number": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "road_name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 4
+                        },
+                        "road_label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        }
+                    }
+                },
+                "road_node": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "local_name": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "form_of_road_node":{
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        }
+                    }
+                },               
+                "road_service_area": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "type":{
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "road_service_point": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "type":{
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "marker_post": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "link_to_road": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "distance": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 4
+                        },
+                        "w_link_to_national_road": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        }
+                    }
+                },
+                "railway_link": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(LineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "type":{
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "number_of_tracks": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 3
+                        },
+                        "vertical_position": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "vertical_level": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 5
+                        },
+                        "tent_network": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 6
+                        },
+                        "electrified": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 7
+                        },
+                        "condition_of_facility": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 8
+                        },     
+                        "railway_line_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 9
+                        },
+                        "railway_line_name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 10
+                        },
+                        "railway_line_label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 11
+                        },
+                        "min_max_track": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 12
+                        },
+                        "nominal_track_gauge": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 13
+                        },
+                        "track_gauge_category": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 14
+                        },
+                        "speed_class": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 15
+                        },
+                        "railway_use": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 16
+                        },
+                        "access_restriction": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 17
+                        }
+                    }
+                },
+                "railway_line": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiLineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "railway_line_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "railway_line_name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "railway_line_label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "railway_station_area": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "station_code":{
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "railway_use": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "form_of_railway_station": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 6
+                        }
+                    }
+                },
+                "railway_station_point": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "station_code":{
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "railway_use": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "form_of_railway_station": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 6
+                        }
+                    }
+                },         
+                "aerodrome_point": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "designator_iata": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "location_indicator_icao": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "un_locode": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 5
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 6
+                        },
+                        "aerodrome_category": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        },
+                        "aerodrome_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 8
+                        },
+                        "use_restriction": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 9
+                        },
+                        "condition_of_facility": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 10
+                        }
+                    }
+                },
+                "aerodrome_area": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "designator_iata": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "location_indicator_icao": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "un_locode": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 5
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 6
+                        },
+                        "aerodrome_category": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        },
+                        "aerodrome_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 8
+                        },
+                        "use_restriction": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 9
+                        },
+                        "condition_of_facility": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 10
+                        }
+                    }
+                },
+                "runway_area": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "surface_composition": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        }    
+                    }
+                },
+                "runway_line": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiLineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "surface_composition": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        }    
+                    }
+                },
+                "ferry_crossing": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiLineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "ferry_use": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "tent_network": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "access_restriction": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 6
+                        }
+                    }
+                },               
+                "port_area": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "un_locode": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "tent_network": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        }
+                    }
+                },
+                "port_point": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "un_locode": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "tent_network": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        }
+                    }
+                }                            
+            }
+        },
+        "ib": {
+            "tables": {
+                "international_boundary_line": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(LineString,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "boundary_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "legal_status": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "technical_status": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "boundary_source": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        }
+                    }
+                },
+                "international_boundary_node": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(Point,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "legal_status": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "technical_status": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        }
+                    }
+                },
+                "landmask": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygon,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        }
+                    }
+                }
+            }
+        },
+        "au": {
+            "tables": {
+                "administrative_boundary": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(LineString,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "national_level": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "legal_status": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "technical_status": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "administrative_unit_area_1": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygon,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "national_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "shn": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 4
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "national_level_code": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 6
+                        },
+                        "link_to_residence_of_authority": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        },
+                        "land_cover_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 8
+                        },
+                        "valid_from":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 9
+                        },
+                        "valid_to":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 10
+                        }
+                    }
+                },
+                "administrative_unit_area_2": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygon,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "national_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "shn": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 4
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "national_level_code": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 6
+                        },
+                        "link_to_residence_of_authority": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        },
+                        "land_cover_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 8
+                        },
+                        "valid_from":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 9
+                        },
+                        "valid_to":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 10
+                        }
+                    }
+                },
+                "administrative_unit_area_3": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygon,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "national_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "shn": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 4
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "national_level_code": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 6
+                        },
+                        "link_to_residence_of_authority": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        },
+                        "land_cover_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 8
+                        },
+                        "valid_from":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 9
+                        },
+                        "valid_to":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 10
+                        }
+                    }
+                },
+                "administrative_unit_area_4": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygon,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "national_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "shn": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 4
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "national_level_code": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 6
+                        },
+                        "link_to_residence_of_authority": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        },
+                        "land_cover_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 8
+                        },
+                        "valid_from":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 9
+                        },
+                        "valid_to":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 10
+                        }
+                    }
+                },
+                "administrative_unit_area_5": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygon,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "national_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "shn": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 4
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "national_level_code": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 6
+                        },
+                        "link_to_residence_of_authority": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        },
+                        "land_cover_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 8
+                        },
+                        "valid_from":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 9
+                        },
+                        "valid_to":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 10
+                        }
+                    }
+                },
+                "administrative_unit_area_6": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygon,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "national_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "shn": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 4
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "national_level_code": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 6
+                        },
+                        "link_to_residence_of_authority": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        },
+                        "land_cover_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 8
+                        },
+                        "valid_from":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 9
+                        },
+                        "valid_to":{
+                            "sql_type": "timestamp without time zone",
+                            "rank": 10
+                        }
+                    }
+                },
+                "administrative_hierarchy": {
+                    "fields": {
+                        "national_level": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 1
+                        },
+                        "national_level_name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "national_level_label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "national_level_code": { 
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 4
+                        },
+                        "shn_digit": {
+                            "sql_type": "integer DEFAULT -32768",
+                            "rank": 5
+                        }
+                    }
+                },
+                "maritime_zone": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygon,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "national_code": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "shn": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 4
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "national_level_code": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 6
+                        },
+                        "zone_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        }
+                    }
+                },
+                "residence_of_authority": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        }
+                    }
+                }
+            }
+        },
+        "hy": {
+            "tables": {
+                "watercourse_link": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(LineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "level": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "persistence": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "tidal": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "flow_direction": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "stream_order": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 6
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 8
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 9
+                        },
+                        "origin": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 10
+                        },
+                        "fictitious": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 11
+                        },
+                        "tent_network": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 12
+                        },
+                        "cemt_class": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 13
+                        },
+                        "navigable": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 14
+                        },
+                        "width_lower_range": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 15
+                        },
+                        "width_upper_range": {
+                            "sql_type": "character varying(255) DEFAULT '-32768'",
+                            "rank": 16
+                        }
+                    }
+                },
+                "watercourse": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiLineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "hydro_node": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "hydro_node_category":{
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "watercourse_area": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "persistence": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "tidal": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "origin": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 6
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        }
+                    }
+                },
+                "standing_water": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "persistence": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "tidal": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        },
+                        "origin": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 6
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 7
+                        }
+                    }
+                },
+                "drainage_basin": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygon,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        },
+                        "basin_order": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 5
+                        }
+                    }
+                },
+                "shoreline": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(LineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "water_level":{
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "origin": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        }
+                    }
+                },
+                "shore": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "composition": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "dam_area": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "dam_line": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiLineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "dam_point": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "lock_area": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "lock_line": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiLineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "lock_point": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "hydro_identifier": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "falls_area": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        }
+                    }
+                },
+                "falls_line": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiLineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        }
+                    }
+                },
+                "falls_point": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(PointZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 2
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        }
+                    }
+                },
+                "glacier_snowfield": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "ice_area_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "wetland": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "local_name": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "tidal": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 3
+                        }
+                    }
+                },
+                "shoreline_construction_area": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(MultiPolygonZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "shoreline_construction_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                },
+                "shoreline_construction_line": {
+                    "fields": {
+                        "geom": {
+                            "sql_type": "geometry(LineStringZ,${srid})",
+                            "index": "gist",
+                            "rank": 1
+                        },
+                        "shoreline_construction_type": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 2
+                        },
+                        "name": {
+                            "sql_type": "jsonb DEFAULT '{}'::json",
+                            "rank": 3
+                        },
+                        "label": {
+                            "sql_type": "character varying(255) DEFAULT 'void_unk'",
+                            "rank": 4
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+    
