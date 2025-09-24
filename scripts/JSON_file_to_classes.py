@@ -166,8 +166,8 @@ def main() -> None:
             string_for_table_as_lines = string_for_table.splitlines()
             class_from_file_as_lines = class_from_file.splitlines()
 
-            print(f"Aantal features in json {len(string_for_table_as_lines) - 1}")
-            print(f"Aantal features in current class {len(class_from_file_as_lines) - 1}")
+            print(f"#Features in json {len(string_for_table_as_lines) - 1}")
+            print(f"#Features in current class {len(class_from_file_as_lines) - 1}")
 
             number_of_found_matches = 0
             for line_current in class_from_file_as_lines[1:]:
