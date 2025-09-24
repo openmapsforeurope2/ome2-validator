@@ -13,9 +13,9 @@ theme_dict = {'tn': 'transport',
 
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--input', required=True, metavar='SCHEMA', dest='input', help='Path to the schema file')
-    parser.add_argument('-s', '--specs', required=True, metavar='SPECS', dest='specs', help='Directory containing the validation specifications')
-    parser.add_argument('-o', '--output', required=True, metavar='DIR', dest='output', help='Output directory for storing generated classes')
+    parser.add_argument('--input', required=True, metavar='SCHEMA', dest='input', help='Path to the schema file')
+    parser.add_argument('--specs', required=True, metavar='SPECS', dest='specs', help='Directory containing the validation specifications')
+    parser.add_argument('--output', required=True, metavar='DIR', dest='output', help='Output directory for storing generated classes')
     return parser
 
 def get_dict(srid: str):
