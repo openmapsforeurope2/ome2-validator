@@ -19,7 +19,11 @@
             "request": "launch",
             "cwd": "${workspaceFolder}/scripts",
             "module": "JSON_file_to_classes",
-            "args": []
+            "args": [
+                "--input", "../json/mcd.json",
+                "--output", "../json/generated/",
+                "--specs", "../validation_specs/dv1/"
+            ]
         }
     ]
 }

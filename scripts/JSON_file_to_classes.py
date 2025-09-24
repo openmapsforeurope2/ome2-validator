@@ -1,3 +1,4 @@
+import argparse
 import ast
 import json
 import os
@@ -7,9 +8,12 @@ theme_dict = {'tn': 'transport',
               'hy': 'hydrography',
               'ib': 'international_boundaries'}
 
-path_to_file = r"../validation_specs/dv1/"
-path_to_save_classes = r"../json/"
-
+def get_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input', required=True, metavar='SCHEMA', dest='input', help='Path to the schema file')
+    parser.add_argument('-s', '--specs', required=True, metavar='SPECS', dest='specs', help='Directory containing the validation specifications')
+    parser.add_argument('-o', '--output', required=True, metavar='DIR', dest='output', help='Output directory for storing generated classes')
+    return parser
 
 def get_dict(srid: str):
     return {'uuid': 'uuid[notnull]',
@@ -76,7 +80,22 @@ def extract_class(path, classname):
 
 
 def main() -> None:
-    with open(r'../json/example.json', 'r') as file:
+    parser = get_parser()
+    try:
+        args = parser.parse_args()
+    except SystemExit:
+        print()
+        parser.print_help()
+        return
+
+    path_to_file = args.specs
+    path_to_save_classes = args.output
+    path_to_schema = args.input
+
+    if not os.path.exists(path_to_save_classes):
+        os.makedirs(path_to_save_classes)
+
+    with open(path_to_schema, 'r') as file:
         data = json.load(file)
 
     srid = data['srid']
