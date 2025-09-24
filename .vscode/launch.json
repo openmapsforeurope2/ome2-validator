@@ -12,6 +12,14 @@
             "args": [
                 "validation_parameters.json"
             ]
+        },
+        {
+            "name": "Generate featureclasses from JSON",
+            "type": "debugpy",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/scripts",
+            "module": "JSON_file_to_classes",
+            "args": []
         }
     ]
 }
