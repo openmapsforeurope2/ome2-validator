@@ -43,6 +43,7 @@ class AllowedAttributeValidator(FeatureValidator):
             field_value = feature.attribute(field_name)
 
             # Split values by separator when applicable
+            country = cls.get_attribute(feature, 'country')
             if separator is not None and separator in field_value:
                 split_values = field_value.split(separator)
                 not_allowed = [val for val in split_values if val not in allowed_attributes]
@@ -52,7 +53,7 @@ class AllowedAttributeValidator(FeatureValidator):
                     message = cls.create_invalid_value_message(feature_class, feature, field_name)
                     result = cls.create_result(
                         run_id, validation_code, severity, feature_class, feature, message,
-                        cls.get_attribute(feature, 'country')
+                        country
                     )
                     results.append(result)
                 else:
@@ -60,7 +61,7 @@ class AllowedAttributeValidator(FeatureValidator):
                     message = cls.create_valid_but_separator_message(feature_class, feature, field_name, separator)
                     result = cls.create_result(
                         run_id, validation_code, "WARNING", feature_class, feature, message,
-                        cls.get_attribute(feature, 'country')
+                        country
                     )
                     results.append(result)
             else:
@@ -68,7 +69,7 @@ class AllowedAttributeValidator(FeatureValidator):
                 message = cls.create_invalid_value_message(feature_class, feature, field_name)
                 result = cls.create_result(
                     run_id, validation_code, severity, feature_class, feature, message,
-                    cls.get_attribute(feature, 'country')
+                    country
                 )
                 results.append(result)
 

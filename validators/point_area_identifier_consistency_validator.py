@@ -53,6 +53,7 @@ class PointAreaIdentifierConsistencyValidator(FeatureValidator):
             # Point is not contained by Area
             if area_id_value is None:
                 message = f"{point_feature_class.name()} feature with objectid {point_objectid} and {id_field} = {point_id_value} is not within any {area_feature_class.name()} feature."
+                country = cls.get_attribute(feature, 'country')
                 result = cls.create_result(
                     run_id,
                     validation_code,
@@ -60,13 +61,14 @@ class PointAreaIdentifierConsistencyValidator(FeatureValidator):
                     point_feature_class,
                     feature,
                     message,
-                    cls.get_attribute(feature, 'country')
+                    country
                 )
                 results.append(result)
 
             # Point is in Area but the id_field's do not match
             elif point_id_value != area_id_value:
                 message = f"{point_feature_class.name()} feature with objectid {point_objectid} and {id_field} = {point_id_value} mismatches {area_feature_class.name()} feature with objectid {area_objectid} and {id_field} = {area_id_value}"
+                country = cls.get_attribute(feature, 'country')
                 result = cls.create_result(
                     run_id,
                     validation_code,
@@ -74,7 +76,7 @@ class PointAreaIdentifierConsistencyValidator(FeatureValidator):
                     point_feature_class,
                     feature,
                     message,
-                    cls.get_attribute(feature, 'country')
+                    country
                 )
                 results.append(result)
 

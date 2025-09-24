@@ -55,6 +55,7 @@ class MinimumVertexDistanceValidator(FeatureValidator):
             for feature_result in feature_results:
                 current_vertice, next_vertice = feature_result
                 message = f'MinimumVertexDistance result for minimum distance: {minimum_distance}, between {current_vertice.asWkt()} and {next_vertice.asWkt()}'
+                country = cls.get_attribute(feature, 'country')
                 result = cls.create_result(
                     run_id,
                     validation_code,
@@ -62,7 +63,7 @@ class MinimumVertexDistanceValidator(FeatureValidator):
                     feature_class,
                     feature,
                     message,
-                    cls.get_attribute(feature, 'country')
+                    country
                 )
                 results.append(result)
 

@@ -27,6 +27,7 @@ class QueryValidator(FeatureValidator):
 
         for feature in feature_class.getFeatures(QgsFeatureRequest().setFilterExpression(where_clause)):
             message = f'QueryValidator result for query: {where_clause}'
+            country = cls.get_attribute(feature, 'country')
             result = cls.create_result(
                 run_id,
                 validation_code,
@@ -34,7 +35,7 @@ class QueryValidator(FeatureValidator):
                 feature_class,
                 feature,
                 message,
-                cls.get_attribute(feature, 'country') 
+                country
             )
             results.append(result)
 

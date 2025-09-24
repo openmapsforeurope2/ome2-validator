@@ -41,6 +41,7 @@ class AttributeNotUnknownValidator(FeatureValidator):
 
         for feature in feature_class.getFeatures(QgsFeatureRequest().setFilterExpression(is_unknown_expression)):
             message = f'{feature_class.name()} object with objectid {feature.attribute("objectid")} has value \'{unknown_value}\'for field {field_name}.'
+            country = cls.get_attribute(feature, 'country')
             result = cls.create_result(
                 run_id,
                 validation_code,
@@ -48,7 +49,7 @@ class AttributeNotUnknownValidator(FeatureValidator):
                 feature_class,
                 feature,
                 message,
-                cls.get_attribute(feature, 'country')
+                country
             )
             results.append(result)
 

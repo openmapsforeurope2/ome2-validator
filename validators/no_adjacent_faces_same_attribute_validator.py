@@ -87,6 +87,7 @@ class NoAdjacentFacesSameAttributeValidator(FeatureValidator):
 
                     if len(attributes) == equal_attributes:
                         message = f"Features with objectid '{feature['objectid']}' and objectid '{feature2['objectid']}' are adjacent and share the same value{plural} {all_values} for field{plural} {all_fields}."
+                        country = cls.get_attribute(feature, 'country')
                         result = cls.create_result(
                             run_id,
                             validation_code,
@@ -94,7 +95,7 @@ class NoAdjacentFacesSameAttributeValidator(FeatureValidator):
                             feature_class,
                             feature,
                             message,
-                            cls.get_attribute(feature, 'country')
+                            country
                         )
                         results.append(result)
 

@@ -44,6 +44,7 @@ class RegexValidator(FeatureValidator):
 
             if pattern.match(value) is None:
                 message = f'RegexValidator result for regex: {regex}'
+                country = cls.get_attribute(feature, 'country')
                 result = cls.create_result(
                     run_id,
                     validation_code,
@@ -51,7 +52,7 @@ class RegexValidator(FeatureValidator):
                     feature_class,
                     feature,
                     message,
-                    cls.get_attribute(feature, 'country') 
+                    country
                 )
                 results.append(result)
 
