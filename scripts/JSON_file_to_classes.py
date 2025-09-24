@@ -146,7 +146,7 @@ def main() -> None:
 
     for theme in dict_theme_to_tables:
         theme_name = theme_dict[theme]
-        print(f"\n{theme_name}")
+        print(f"\n{Style.BRIGHT}{Back.GREEN}{Fore.CYAN}{theme_name}")
         path_to_file_theme = os.path.join(path_to_file, f"{theme_name}.py")
         path_to_save_classes_theme = os.path.join(path_to_save_classes, f"{theme_name}.txt")
 
@@ -154,7 +154,7 @@ def main() -> None:
             f.write("")
 
         for table in dict_theme_to_tables[theme]:
-            print('\n' + table)
+            print(f'\n{Style.BRIGHT}{Fore.GREEN}{table}')
             string_for_table = f"class {table}(feature): \n"
             class_from_file = extract_class(path=path_to_file_theme, classname=table)
 
@@ -167,7 +167,7 @@ def main() -> None:
 
             #compare
             if class_from_file == "":
-                print(f"No existing class for {table}")
+                print(f"{Fore.YELLOW}No existing class for {table}")
                 continue
 
             string_for_table_as_lines = string_for_table.splitlines()
@@ -188,10 +188,10 @@ def main() -> None:
                             number_of_found_matches += 1
                         else:
                             number_of_found_matches += 1
-                            print(f"Different types for {line_current_split[0]}. Current type is {line_current_split[1].strip()} and new type: {line_new_split[1].strip()}.")
+                            print(f"{Style.BRIGHT}{Fore.RED}Different types for {line_current_split[0]}. Current type is {line_current_split[1].strip()} and new type: {line_new_split[1].strip()}.")
                         continue
                 if not found_match:
-                    print(f"Feature {line_current.strip()} is not in json.")
+                    print(f"{Fore.RED}Feature {line_current.strip()} is not in json.")
 
             if number_of_found_matches < len(string_for_table_as_lines) - 1:
                 for line_new in string_for_table_as_lines[1:]:
@@ -204,7 +204,7 @@ def main() -> None:
                             found_match = True
                             continue
                     if not found_match:
-                        print(f"Feature {line_new.strip()} is not in current class.")
+                        print(f"{Fore.RED}Feature {line_new.strip()} is not in current class.")
 
 
 if __name__ == "__main__":
