@@ -1,5 +1,6 @@
 
 
+from typing import Any, TypeAlias
 from qgis import processing
 from qgis.core import QgsVectorLayer, QgsPoint, QgsWkbTypes
 from models import ValidationResult
@@ -9,6 +10,9 @@ from utilities import QgisUtilities
 from qgis.PyQt.QtCore import QMetaType
 
 from itertools import combinations
+
+PointKey: TypeAlias = tuple[float, float]
+AttributeValue: TypeAlias = Any
 
 class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
     logger = logging.getLogger(__name__)
@@ -79,7 +83,7 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
         buffer = processing.run("native:selectbylocation", parameters)
 
         # Store line endpoints including attribute values in dictionary
-        border_point_dict = {}
+        border_point_dict: dict[PointKey, list[tuple[AttributeValue, ...]]] = {}
         for feature in prepared_feature_class.selectedFeatures():
 
             # Get endpoints
@@ -88,7 +92,7 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
             end_point = QgsPoint(geom[-1])
             
             # Get attribute values
-            attr_values = []
+            attr_values: list[AttributeValue] = []  # [objectid, country, attributes_to_check_for_consistency...]
             oid = feature['objectid']
             country = feature['country']
             attr_values.append(oid)
@@ -97,7 +101,7 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
                 attr_values.append(feature[attr])
 
             for point in [start_point, end_point]:
-                point_key = (point.x(), point.y())
+                point_key: PointKey = (point.x(), point.y())
                 if point_key in border_point_dict:
                     border_point_dict[point_key].append(tuple(attr_values))
                 else:
@@ -110,6 +114,7 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
         for key, value in border_point_dict.items():
             x, y = key
             inconsistent_values = set()
+            countries: set[str] = set()
 
             # Default severity is set to WARNING, in case of comparing to a VOID value
             severity = "WARNING"
@@ -118,9 +123,11 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
             combis = combinations(value, 2)
             for pair in combis:
                 obj1, obj2 = pair
-                
+                country1 = obj1[1]
+                country2 = obj2[1]
+
                 # Skip combinations of the same country, we only check across the border
-                if obj1[1] == obj2[1]:
+                if country1 == country2:
                     continue
 
                 # Compare the attributes that should be consistent
@@ -138,9 +145,12 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
                         val_list.sort()
                         concatenated_values = "|".join(val_list)
                         inconsistent_values.add((field_name, concatenated_values))
+                        countries.add(country1)
+                        countries.add(country2)
 
             if len(inconsistent_values) > 0:
                 error_feature = cls.create_error_feature(QgsPoint(x, y))
+                combined_countries = '#'.join(sorted(countries))
                 
                 # Create error message
                 message_list = []
@@ -153,7 +163,12 @@ class AttributeAcrossBorderConsistencyValidator(FeatureValidator):
                 plural = "" if len(inconsistent_values) == 1 else "s"
 
                 message = f'{feature_class.name()} has inconsistent attribute{plural} across the border, {messages}.'
-                result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+                result = cls.create_result(
+                    run_id, validation_code, severity, feature_class, 
+                    error_feature, 
+                    message,
+                    combined_countries
+                )
                 results.append(result)
 
         return results

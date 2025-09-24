@@ -71,7 +71,11 @@ class MinimumLengthValidator(FeatureValidator):
 
                 for error_feature in error_features:
                     message = f"Feature with objectid '{error_feature['objectid']}' has a length of {round(error_feature.geometry().length(), 1)}m which is shorter than the minimum length of {minimum_length}m."
-                    result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+                    country = cls.get_attribute(feature, 'country')
+                    result = cls.create_result(
+                        run_id, validation_code, severity, feature_class, error_feature, message,
+                        country
+                    )
                     results.append(result)
 
         return results

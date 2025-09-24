@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import ClassVar
+from typing import Any, ClassVar
 from models import ValidationCheckStatus, ValidationResult
 from storage import ValidationCheckStatusRepository
 from qgis.core import QgsGeometry, QgsFeature, QgsFields, QgsField, QgsVectorLayer, QgsWkbTypes
@@ -105,6 +105,20 @@ class AbstractValidator(ABC):
         error_feature.setAttribute(0, objectid)
         error_feature.setGeometry(geometry)
         return error_feature
+    
+    @classmethod
+    def get_attribute(cls, feature: QgsFeature, attribute_name: str, default: Any = None):
+        """Gets an attribute from a feature, if it exists, otherwise returns a default value.
+
+        Args:
+            feature (QgsFeature): The feature to get an attribute from.
+            attribute_name (str): The name of the attribute to retrieve.
+            default (Any, optional): The default value if the attribute does not exist. Defaults to None.
+
+        Returns:
+            Any: The attribute if it exists, otherwise a default value.
+        """
+        return feature.attribute(attribute_name) if attribute_name in feature.fields().names() else default
     
 
     @classmethod

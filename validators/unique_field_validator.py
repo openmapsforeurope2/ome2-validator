@@ -76,7 +76,15 @@ class UniqueFieldValidator(GenericValidator):
 
         for record in non_unique_count_records:
             message = f"Featureclass '{feature_class.name()}' contains {record.count} features with value '{record.value}' for unique field '{fieldname}'."
-            result = cls.create_result(run_id, validation_code, severity, feature_class, message)
+            country = None # TODO: Implement per country statistics?
+            result = cls.create_result(
+                run_id,
+                validation_code,
+                severity,
+                feature_class,
+                message,
+                country
+            )
             results.append(result)
 
         return results

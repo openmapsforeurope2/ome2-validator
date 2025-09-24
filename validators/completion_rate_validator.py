@@ -74,7 +74,15 @@ class CompletionRateValidator(GenericValidator):
                 perc = round(records * 100.0 / total_records, 1)
                 
                 message = f"Featureclass '{feature_class.name()}' field '{field_name}' has {perc}% {name} values ({records} out of {total_records})"
-                result = cls.create_result(run_id, validation_code, severity, feature_class, message)
+                country = None # TODO: Implement per country statistics?
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    feature_class,
+                    message,
+                    country
+                )
                 results.append(result)
 
         return results

@@ -37,7 +37,16 @@ class ExtentValidator(FeatureValidator):
         for feature in feature_class.getFeatures():
             if not extent_rectangle.contains(feature.geometry()):
                 message = f'ExtentValidator result for extent: ({extent.x_min}, {extent.y_min}, {extent.x_max}, {extent.y_max})'
-                result = cls.create_result(run_id, validation_code, severity, feature_class, feature, message)
+                country = cls.get_attribute(feature, 'country')
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    feature_class,
+                    feature,
+                    message,
+                    country
+                )
                 results.append(result)
 
         return results

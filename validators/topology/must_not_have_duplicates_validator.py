@@ -72,7 +72,16 @@ class MustNotHaveDuplicatesValidator(FeatureValidator):
             orig_geom = feature_class.getFeature(duplicate_id)
             error_feature = cls.create_error_feature(error_geom, orig_geom.attribute('objectid'))
             message = f'{feature_class.name()} object with objectid {duplicate_id} is a duplicate geometry.'
-            result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+            country = cls.get_attribute(orig_geom, 'country')
+            result = cls.create_result(
+                run_id,
+                validation_code,
+                severity,
+                feature_class,
+                error_feature,
+                message,
+                country
+            )
             results.append(result)
 
         return results

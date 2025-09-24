@@ -28,7 +28,7 @@ class GeometryResult(ValidationResult):
     geometry_type: str
 
     @classmethod
-    def from_query_row(cls, result_id: int, run_id: int, validation_code: str, severity: str, feature_class: str, message: str, objectid: str, geometry: memoryview, geometry_type: str) -> GeometryResult:
+    def from_query_row(cls, result_id: int, run_id: int, validation_code: str, severity: str, feature_class: str, message: str, objectid: str, geometry: memoryview, geometry_type: str, country: str | None) -> GeometryResult:
         """Parses a geometry result record from the database into a GeometryResult object.
 
         Args:
@@ -41,6 +41,7 @@ class GeometryResult(ValidationResult):
             objectid (str): Objectid of the corresponding source feature.
             geometry (memoryview): The actual geometry in WKB, which is about to be converted to a QgsGeometry.
             geometry_type (str): The geometry type as determined by PostGIS.
+            country (str | None): The country.
 
         Returns:
             GeometryResult: the GeometryResult object
@@ -51,7 +52,7 @@ class GeometryResult(ValidationResult):
         if geometry is not None:
             qgs_geometry.fromWkb(geometry.tobytes())       
         
-        return cls(result_id, run_id, validation_code, severity, feature_class, message, objectid, qgs_geometry, geometry_type)
+        return cls(result_id, run_id, validation_code, severity, feature_class, message, country, objectid, qgs_geometry, geometry_type)
     
 
     def to_qgs_feature(self) -> QgsFeature:
@@ -162,6 +163,7 @@ class GeometryResult(ValidationResult):
         new_fields.append(QgsField("message", QVariant.String))
         new_fields.append(QgsField("objectid", QVariant.String))
         new_fields.append(QgsField("geometry_type", QVariant.String))
+        new_fields.append(QgsField("country", QVariant.String))
         return new_fields
     
     
@@ -181,5 +183,6 @@ class GeometryResult(ValidationResult):
             self.feature_class,
             self.message,
             self.objectid,
-            self.geometry_type
+            self.geometry_type,
+            self.country
             ]

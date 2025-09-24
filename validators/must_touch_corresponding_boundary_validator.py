@@ -89,8 +89,17 @@ class MustTouchCorrespondingBoundaryValidator(FeatureValidator):
             if touching_id is None:
                 error_geom = g1
                 error_feature = cls.create_error_feature(error_geom, feature.attribute('objectid'))
+                country = cls.get_attribute(feature, 'country')
                 message = f'{feature_class.name()} object with objectid {feature.attribute("objectid")} and {attribute_name_1} {attribute_1} does not touch a corresponding feature from {area_feature_class.name()}'
-                result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    feature_class,
+                    error_feature,
+                    message,
+                    country
+                )
                 results.append(result)
 
         return results

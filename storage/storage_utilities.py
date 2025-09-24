@@ -8,7 +8,7 @@ from storage import ValidationTaskRepository, ValidationRunRepository, GeometryR
 
 class StorageUtilities:
     logger = logging.getLogger(__name__)
-    current_version = '0.1'
+    current_version = '0.2'
     dsn: ClassVar[str | None] = None
 
     SETTINGS_TABLE_NOT_FOUND = 'SETTINGS_TABLE_NOT_FOUND'
@@ -105,7 +105,6 @@ class StorageUtilities:
         finally:
             commands.connection.close()
 
-
     @classmethod
     def setup_repositories(cls, dsn: str):
         """Sets up the repositories and underlying database structure.
@@ -115,7 +114,7 @@ class StorageUtilities:
         If the settings table could not be found, we fully initialize the database structure by running 'init_db.sql'.
         If the settings table exists but the database version could not be determined, an error is raised.
         
-        Future versions may contain incremental SQL-scripts, i.e. when going from version 0.1 to 0.2.
+        Future versions may contain incremental SQL-scripts, e.g., when going from version 0.1 to 0.2.
         Once we are sure that the database structure is up to date, then we set the DSN on all repositories.
 
         Args:
@@ -127,17 +126,30 @@ class StorageUtilities:
         """        
         cls.dsn = dsn
         database_version = cls.get_database_version()
+        database_up_to_date: bool = False
 
-        database_up_to_date = False
+        # Initialization
         if database_version == cls.current_version:
             database_up_to_date = True
         elif database_version == cls.SETTINGS_TABLE_NOT_FOUND:
             cls.execute_sql_file('init_db.sql')
-            database_up_to_date = True
+            database_version = '0.1'
         elif database_version == cls.SETTING_NOT_FOUND:
             # This should never happen, the settings table is present but doesn't have a version value
             raise RuntimeError("Could not determine database version.")
         
+        # Migration
+        if not database_up_to_date:
+            # convert version to tuple
+            db_version_int = tuple(map(int, database_version.split('.')))
+
+            if db_version_int < (0,2):
+                cls.execute_sql_file('update_to_0.2.sql')
+            if db_version_int < (0,3): 
+                ... # cls.execute_sql_file('update_to_0.3.sql')
+            
+            database_up_to_date = True
+
         # Check for intermediate versions and run corresponding update-scripts here in future versions
         if (database_up_to_date):
             ValidationLoggingRepository.set_dsn(dsn)

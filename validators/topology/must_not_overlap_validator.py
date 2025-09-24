@@ -76,7 +76,16 @@ class MustNotOverlapValidator(FeatureValidator):
                         error_feature = cls.create_error_feature(error_geom, feature['objectid'])
                         
                         message = f'{feature_class.name()} object with objectid {feature.attribute("objectid")} overlaps with object with objectid {overlapping_feature.attribute("objectid")}.'
-                        result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+                        country = cls.get_attribute(feature, 'country')
+                        result = cls.create_result(
+                            run_id,
+                            validation_code,
+                            severity,
+                            feature_class,
+                            error_feature,
+                            message,
+                            country
+                        )
                         results.append(result)
 
         return results

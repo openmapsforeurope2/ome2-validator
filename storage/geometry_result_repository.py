@@ -93,7 +93,8 @@ class GeometryResultRepository(ResultRepositoryProtocol[GeometryResult]):
 					"		message, " +
 					"		objectid, " +
 					"		ST_AsBinary(geometry) as geometry, " + # Converted to QgsGeometry in GeometryResult.from_query_row()
-					"		geometry_type " +
+					"		geometry_type, " +
+					"		country " +
                     "FROM geometry_result " + 
                     "WHERE run_id = ?run_id? " + 
                     "ORDER BY result_id ASC",

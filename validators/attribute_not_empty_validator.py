@@ -39,7 +39,16 @@ class AttributeNotEmptyValidator(FeatureValidator):
 
         for feature in feature_class.getFeatures(QgsFeatureRequest().setFilterExpression(is_empty_expression)):
             message = f'{feature_class.name()} object with objectid {feature.attribute("objectid")} has an empty value for field {field_name}.'
-            result = cls.create_result(run_id, validation_code, severity, feature_class, feature, message)
+            country = cls.get_attribute(feature, 'country')
+            result = cls.create_result(
+                run_id,
+                validation_code,
+                severity,
+                feature_class,
+                feature,
+                message,
+                country
+            )
             results.append(result)
 
         return results

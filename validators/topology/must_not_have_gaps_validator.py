@@ -42,7 +42,16 @@ class MustNotHaveGapsValidator(FeatureValidator):
             error_geom = QgisUtilities.polygon_to_geometry(gap)
             error_feature = cls.create_error_feature(error_geom)
             message = f'{feature_class.name()} should not have this gap.'
-            result = cls.create_result(run_id, validation_code, severity, feature_class, error_feature, message)
+            country = None # Cannot easily determine country
+            result = cls.create_result(
+                run_id,
+                validation_code,
+                severity,
+                feature_class,
+                error_feature,
+                message,
+                country
+            )
             results.append(result)
 
         return results

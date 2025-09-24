@@ -65,7 +65,16 @@ class MustOverlapWithValidator(FeatureValidator):
 
             if not has_overlap:
                 message = f'{feature_class.name()} object with objectid {feature.attribute("objectid")} has no overlap with object from {feature_class_2.name()}.'
-                result = cls.create_result(run_id, validation_code, severity, feature_class, g1, message)
+                country = cls.get_attribute(feature, 'country')
+                result = cls.create_result(
+                    run_id,
+                    validation_code,
+                    severity,
+                    feature_class,
+                    g1,
+                    message,
+                    country
+                )
                 results.append(result)
 
         return results
