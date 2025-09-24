@@ -134,7 +134,6 @@ class StorageUtilities:
         elif database_version == cls.SETTINGS_TABLE_NOT_FOUND:
             cls.execute_sql_file('init_db.sql')
             database_version = '0.1'
-            database_up_to_date = database_version == cls.current_version
         elif database_version == cls.SETTING_NOT_FOUND:
             # This should never happen, the settings table is present but doesn't have a version value
             raise RuntimeError("Could not determine database version.")
