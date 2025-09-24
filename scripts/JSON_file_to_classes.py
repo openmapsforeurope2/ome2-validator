@@ -3,6 +3,9 @@ import ast
 import json
 import os
 
+import colorama
+from colorama import Fore, Back, Style  # noqa: F401
+
 theme_dict = {'tn': 'transport',
               'au': 'administrative_units',
               'hy': 'hydrography',
@@ -81,12 +84,16 @@ def extract_class(path, classname):
 
 def main() -> None:
     parser = get_parser()
+    print(Style.BRIGHT + Fore.RED, end='')
     try:
         args = parser.parse_args()
     except SystemExit:
-        print()
+        print(Style.NORMAL + Fore.GREEN)
         parser.print_help()
+        print(Style.RESET_ALL)
         return
+    
+    colorama.init(autoreset=True)
 
     path_to_file = args.specs
     path_to_save_classes = args.output
