@@ -42,31 +42,44 @@ class FeatureCountValidator(GenericValidator):
             return results
 
         # Create and collect all expressions
-        expressions = []
+        expressions: list[str | None] = []
+        expression2country: dict[str, str] = {}
         if not group_by_field_1 and not group_by_field_2:
             expressions.append(None)
         else:
             for val_1 in cls.get_unique_values(feature_class, group_by_field_1):
+                field1_is_country = group_by_field_1 == 'country'
+                field2_is_country = group_by_field_2 == 'country' 
+
                 exp1 = cls.get_equals_expression(group_by_field_1, val_1)
                 if not group_by_field_2:
                     expressions.append(exp1)
+                    if field1_is_country:
+                        expression2country[exp1] = val_1
                 else:
                     for val_2 in cls.get_unique_values(feature_class, group_by_field_2):
                         exp2 = cls.get_equals_expression(group_by_field_2, val_2)
-                        expressions.append(f'{exp1} AND {exp2}')
+                        combined_exp = f'{exp1} AND {exp2}'
+                        expressions.append(combined_exp)
+                        if field1_is_country:
+                            expression2country[combined_exp] = val_1
+                        elif field2_is_country:
+                            expression2country[combined_exp] = val_2
         
         # Peform feature counts and create results
         for exp in expressions:
             feature_count = None
+            country = None
+
             if exp is None:
                 feature_count = feature_class.featureCount()
             else:
                 feature_class.selectByExpression(exp)
                 feature_count = feature_class.selectedFeatureCount()
+                country = expression2country.get(exp, None)
             
             if feature_count < minimum_record_count or minimum_record_count == -1:
                 message = cls.create_featurecount_message(feature_class, feature_count, exp)
-                country = None # TODO: Implement per country statistics?
                 result = cls.create_result(
                     run_id,
                     validation_code,
