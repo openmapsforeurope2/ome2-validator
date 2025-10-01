@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 from models import ValidationCheckStatus, ValidationResult
 from storage import ValidationCheckStatusRepository
 from qgis.core import QgsGeometry, QgsFeature, QgsFields, QgsField, QgsVectorLayer, QgsWkbTypes
@@ -9,10 +9,11 @@ import logging
 import traceback
 
 from storage.result_repository_protocol import ResultRepositoryProtocol
+from utilities.log_utilities import VerboseLogger
 
 class AbstractValidator(ABC):
     result_repository: ClassVar[type[ResultRepositoryProtocol]]
-    logger = logging.getLogger(__name__)
+    logger = cast(VerboseLogger, logging.getLogger(__name__))
 
     @classmethod
     def run(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, *args, **kwargs):
@@ -55,8 +56,8 @@ class AbstractValidator(ABC):
                 cls.logger.info(f'Finished running the {cls.__name__} for {validation_code}')
                 check_status.success = True
                 check_status.number_of_results = len(validation_results)
-                for i in range(check_status.number_of_results):
-                    cls.logger.info(validation_results[i].message)
+                for validation_result in validation_results:
+                    cls.logger.verbose(validation_result.message)
                 cls.logger.info(f'Number of results for {validation_code}: {check_status.number_of_results}')
 
                 try:
