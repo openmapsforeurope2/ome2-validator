@@ -4,6 +4,14 @@
 import logging
 from .log_handlers import PostgresHandler
 
+class VerboseLogger(logging.Logger):
+    """A dummy class that can be used for satisfying the type-checker.
+
+    Example:
+        logger = cast(VerboseLogger, logging.getLogger(__name__))
+    """
+    def verbose(self, msg: str, *args, **kwargs) -> None: ...
+
 class LogUtilities:
 
     __logger = None
