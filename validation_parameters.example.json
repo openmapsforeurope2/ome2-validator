@@ -1,0 +1,27 @@
+{
+    "specification": "DV1",
+    "task_name": "Validation on OME2 data",
+    "input_database": {
+        "host": "my-postgis-db.postgres.database.azure.com",
+        "port": 5432,
+        "name": "ome2_db",
+        "username": "USERNAME_HERE",
+        "password": "PASSWORD_HERE"
+    },
+    "output_database": {
+        "host": "host.docker.internal",
+        "port": 5432,
+        "name": "ome2_validation_results",
+        "username": "postgres",
+        "password": "postgres"
+    },
+    "themes": [
+        "ADMINSTRATIVE_UNITS"
+    ],
+    "checks": [],
+    "groups": [],
+    "countries": [
+        "NL"
+    ],
+    "min_required_only": false
+}

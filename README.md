@@ -43,6 +43,13 @@ This command consists of several parts:
 7. The path to the file `/pwd/validation_parameters.json` that contains the validation parameters for the validation run.
    These parameters indicate, e.g., the location of the input data,
    which validation checks to perform and where to store the results.
+   *Note that this file **does not** come with the project by default.*
+
+### Validation parameters
+
+The project comes with a `validation_parameters.example.json` example file
+that can be used to create a `validation_parameters.json` file.
+
 
 ## Development
 
