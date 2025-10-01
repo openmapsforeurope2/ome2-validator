@@ -43,8 +43,8 @@ class GenericResultRepository(ResultRepositoryProtocol[GenericResult]):
                 for validation_result in generic_results:
                     _ = commands.execute(
                         "INSERT INTO generic_result " +
-                        "(run_id, validation_code, severity, feature_class, message) " +
-                        "VALUES (?run_id?, ?validation_code?, ?severity?, ?feature_class?, ?message?)",
+                        "(run_id, validation_code, severity, feature_class, message, country) " +
+                        "VALUES (?run_id?, ?validation_code?, ?severity?, ?feature_class?, ?message?, ?country?)",
                         param = validation_result.as_param_dict()
                     )
         finally:
