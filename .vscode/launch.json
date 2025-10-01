@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "main",
             "args": [
-                "validation_parameters.json"
+                "validation_parameters.jsonc"
             ]
         },
         {

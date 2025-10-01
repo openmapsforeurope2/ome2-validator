@@ -1,6 +1,10 @@
 {
+    // Specify which set of validation checks to run:
     "specification": "DV1",
+    // Name to use under which to store the results in the output database:
     "task_name": "Validation on OME2 data",
+
+    // Input database and credentials:
     "input_database": {
         "host": "my-postgis-db.postgres.database.azure.com",
         "port": 5432,
@@ -8,6 +12,8 @@
         "username": "USERNAME_HERE",
         "password": "PASSWORD_HERE"
     },
+
+    // Output database and credentials:
     "output_database": {
         "host": "host.docker.internal",
         "port": 5432,
@@ -15,13 +21,19 @@
         "username": "postgres",
         "password": "postgres"
     },
+
+    // Which themes to check:
     "themes": [
         "ADMINSTRATIVE_UNITS"
     ],
+    // If non-empty, which checks to run (e.g., ["A001", "A002b"]):
     "checks": [],
+    // Specify which groups to check (currently unused):
     "groups": [],
+    // Specify which countries to check (currently unused):
     "countries": [
         "NL"
     ],
+    // Whether to run only the required set of checks (currently unused):
     "min_required_only": false
 }

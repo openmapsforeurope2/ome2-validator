@@ -39,7 +39,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description='Runs the OME2 Validator tool')
     
     parser.add_argument('input', metavar='INPUT', type=str,
-                        help='the input parameters for the validation tool (.json)')
+                        help='the input parameters for the validation tool (.json;.jsonc)')
 
     parser.add_argument('--help-input-file', action=show_example_input_file, nargs=0,
                         help='show an example JSON file that can be used as input')

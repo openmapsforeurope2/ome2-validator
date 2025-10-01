@@ -28,7 +28,7 @@ docker run --rm -it eurogeographics/ome2-validator
 Once the Docker image has been built, the validator tool can be run with a command like the one below:
 
 ```sh
-docker run --rm -it --add-host host.docker.internal:host-gateway -v "$(pwd):/pwd" eurogeographics/ome2-validator /pwd/validation_parameters.json
+docker run --rm -it --add-host host.docker.internal:host-gateway -v "$(pwd):/pwd" eurogeographics/ome2-validator /pwd/validation_parameters.jsonc
 ```
 
 This command consists of several parts:
@@ -40,15 +40,15 @@ This command consists of several parts:
    Note that within the container `127.0.0.1` *does not* refer to the host machine, but to the container itself.
 5. `-v "$(pwd):/pwd"` to mount the current working directory as `/pwd` within the container.
 6. The name of the Docker image: `eurogeographics/ome2-validator`.
-7. The path to the file `/pwd/validation_parameters.json` that contains the validation parameters for the validation run.
+7. The path to the file `/pwd/validation_parameters.jsonc` that contains the validation parameters for the validation run.
    These parameters indicate, e.g., the location of the input data,
    which validation checks to perform and where to store the results.
    *Note that this file **does not** come with the project by default.*
 
 ### Validation parameters
 
-The project comes with a `validation_parameters.example.json` example file
-that can be used to create a `validation_parameters.json` file.
+The project comes with a `validation_parameters.example.jsonc` example file
+that can be used to create a `validation_parameters.jsonc` file.
 
 
 ## Development

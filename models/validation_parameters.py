@@ -4,6 +4,7 @@ from collections import OrderedDict
 import os
 import json
 from json import JSONEncoder
+import pyjson5
 
 class ValidationParameters:
     """Class for parsing and serializing validation parameters from and to JSON.
@@ -89,7 +90,7 @@ class ValidationParameters:
         path = os.path.join(os.path.dirname(curr_dir), json_filename)
         
         with open(path, "r", encoding="utf8") as json_params_text:
-            json_params = json.load(json_params_text)
+            json_params = pyjson5.decode_io(json_params_text, maxdepth=None, some=False) # type: ignore
             
             params = ValidationParameters()
             params.specification = json_params.get("specification")

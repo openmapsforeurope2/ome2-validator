@@ -5,3 +5,4 @@ settings.json
 .env
 json/generated/
 validation_parameters.json
+validation_parameters.jsonc
