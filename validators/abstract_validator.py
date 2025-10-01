@@ -15,6 +15,8 @@ class AbstractValidator(ABC):
     result_repository: ClassVar[type[ResultRepositoryProtocol]]
     logger = cast(VerboseLogger, logging.getLogger(__name__))
 
+    MAX_VERBOSE_RESULTS = 50
+
     @classmethod
     def run(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, *args, **kwargs):
         """A wrapper method to start the validation of a validator.
@@ -56,7 +58,10 @@ class AbstractValidator(ABC):
                 cls.logger.info(f'Finished running the {cls.__name__} for {validation_code}')
                 check_status.success = True
                 check_status.number_of_results = len(validation_results)
-                for validation_result in validation_results:
+                for i, validation_result in enumerate(validation_results):
+                    if i >= cls.MAX_VERBOSE_RESULTS:
+                        cls.logger.verbose(f"({check_status.number_of_results - i} messages omitted)")
+                        break
                     cls.logger.verbose(validation_result.message)
                 cls.logger.info(f'Number of results for {validation_code}: {check_status.number_of_results}')
 
