@@ -54,8 +54,12 @@ def main():
     args = parser.parse_args()
     validation_params_json_filename = args.input
     
-    params = ValidationParameters.from_json(validation_params_json_filename)
-    if not params.are_complete():
+    env_vars_failed_to_expand: set[str] = set()
+    params = ValidationParameters.from_json(validation_params_json_filename, env_vars_failed_to_expand)
+    if env_vars_failed_to_expand:
+        raise ValueError(f"Validation parameters are not complete. Check the parameters in {validation_params_json_filename}."
+                         + f" Could not expand environment variables: {', '.join(sorted(env_vars_failed_to_expand))}")
+    elif not params.are_complete():
         raise ValueError(f"Validation parameters are not complete. Check the parameters in {validation_params_json_filename}.")
     
     # Set srid

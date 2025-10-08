@@ -4,6 +4,7 @@ from collections import OrderedDict
 import os
 import json
 from json import JSONEncoder
+from typing import Any
 import pyjson5
 
 class ValidationParameters:
@@ -76,12 +77,47 @@ class ValidationParameters:
         )
         
 
+    @staticmethod
+    def _expand_env(value: str | int, type: type[str] | type[int] = str, missing_vars: set[str] | None = None) -> Any:
+        """Expands environment variables in a string.
+
+        Restrictions: The value must start with '${', followed by a valid variable in uppercase and end with '}'
+        in order for variable expansion to take place.
+
+        Args:
+            value (str | int): The value to expand, if it contains a environment variable.
+            type (type[str] | type[int], optional): The result type. Defaults to str.
+            missing_vars (set[str] | None, optional): If the environment variable does not exist, it gets added to the set of `missing_vars`. Defaults to None.
+
+        Returns:
+            Any: The value unchanged if it does not contain an environment variable,
+                 otherwise the contents of the environment variable.
+                 If the environment variable does not exist or the value cannot be converted to the result type,
+                 None is returned instead.
+        """
+        if isinstance(value, str) and value.startswith('${') and value.endswith('}'):
+            env_var = value[2:-1]
+            if env_var.isidentifier() and env_var.isupper():
+                env_value = os.environ.get(env_var)
+                if env_value is None and missing_vars is not None:
+                    missing_vars.add(f'${{{env_var}}}')
+                
+                try:
+                    return type(env_value) if env_value is not None else None
+                except Exception:
+                    return None
+        
+        else:
+            return type(value)
+        
+
     @classmethod
-    def from_json(cls, json_filename: str) -> ValidationParameters:
+    def from_json(cls, json_filename: str, missing_vars: set[str] | None = None) -> ValidationParameters:
         """Parses info from a JSON file into a ValidationParameters object.
 
         Args:
             json_filename (str): The name of the JSON-file which contains the validation parameters.
+            missing_vars (set[str] | None, optional): A set for collecting non-existing environment variables that are referenced in the JSON file.
 
         Returns:
             ValidationParameters: the validation parameters parsed into the model.
@@ -93,17 +129,17 @@ class ValidationParameters:
             json_params = pyjson5.decode_io(json_params_text, maxdepth=None, some=False) # type: ignore
             
             params = ValidationParameters()
-            params.specification = json_params.get("specification")
-            params.task_name = json_params.get("task_name")
+            params.specification = ValidationParameters._expand_env(json_params.get("specification"), str, missing_vars)
+            params.task_name = ValidationParameters._expand_env(json_params.get("task_name"), str, missing_vars)
 
             for db_prop, db_json_key in [(params.input_db_params, "input_database"), (params.output_db_params, "output_database")]:
                 db_params = json_params.get(db_json_key)
                 if db_params:
-                    db_prop.host = db_params.get('host')
-                    db_prop.port = db_params.get('port')
-                    db_prop.name = db_params.get('name')
-                    db_prop.username = db_params.get('username')
-                    db_prop.password = db_params.get('password')
+                    db_prop.host = ValidationParameters._expand_env(db_params.get('host'), str, missing_vars)
+                    db_prop.port = ValidationParameters._expand_env(db_params.get('port'), int, missing_vars)
+                    db_prop.name = ValidationParameters._expand_env(db_params.get('name'), str, missing_vars)
+                    db_prop.username = ValidationParameters._expand_env(db_params.get('username'), str, missing_vars)
+                    db_prop.password = ValidationParameters._expand_env(db_params.get('password'), str, missing_vars)
 
             params.themes = json_params["themes"]
             params.checks = json_params["checks"]
