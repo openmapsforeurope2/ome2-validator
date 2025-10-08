@@ -47,9 +47,8 @@ This command consists of several parts:
 
 ### Validation parameters
 
-The project comes with a `validation_parameters.example.jsonc` example file
+The project comes with a [`validation_parameters.example.jsonc`](validation_parameters.example.jsonc) example file
 that can be used to create a `validation_parameters.jsonc` file.
-
 
 ## Development
 
@@ -59,3 +58,14 @@ Visual Studio Code will recognize the existence of a dev container definition
 and will prompt whether it should load the project in a dev container.
 The advantage of a dev container is that it provisions an environment with all the required software and dependencies installed.
 The developer only needs to have Docker and Visual Studio Code on its machine.
+
+### Dev container environment variables
+
+[The dev container's compose file](./.devcontainer/docker-compose.yml) is configured
+to load environment variables defined in [the `devcontainer.env` file](./.devcontainer/devcontainer.env).
+
+*Please do not commit changes to the environment file.*
+It is recommended to have `git` ignore changes to the file
+via the `git update-index --skip-worktree` command
+or to build the dev container at least once in Visual Studio Code,
+which will mark the file with `--skip-worktree` as well.
