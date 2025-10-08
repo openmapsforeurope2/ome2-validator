@@ -49,6 +49,37 @@ This command consists of several parts:
 
 The project comes with a [`validation_parameters.example.jsonc`](validation_parameters.example.jsonc) example file
 that can be used to create a `validation_parameters.jsonc` file.
+This file can then be passed as an argument to the validator tool
+in order to configure and perform a validation run.
+
+The validation parameters file supports the use of environment variables for the following settings:
+
+- `specification`
+- `task_name`
+- For `input_database` and `outut_database`:
+  - `host`
+  - `port`
+  - `name`
+  - `password`
+
+To refer to an environment variable, the value in the parameters file must be of the form `${VARIABLE_NAME}`.
+It must start with a dollar sign and opening brace,
+followed by the name of the environment variable
+and end with a closing brace.
+
+An example snippet is shown below:
+
+```jsonc
+   // ...
+   "input_database": {
+      "host": "${DB_HOST}",
+      "port" : "${DB_PORT}",
+      "name": "${DB_NAME}",
+      "username": "${DB_USER}",
+      "password": "${DB_PASS}"
+   },
+    // ...
+```
 
 ## Development
 
