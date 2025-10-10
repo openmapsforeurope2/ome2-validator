@@ -29,8 +29,8 @@ class watercourse_link(feature):
     tent_network: varchar[length(255)]
     cemt_class: varchar[length(255)]
     navigable: varchar[length(255)]
-    width_lower_range: int4
-    width_upper_range: int4
+    width_lower_range: varchar[length(255)]
+    width_upper_range: varchar[length(255)]
 
 
 class watercourse(feature):
@@ -75,7 +75,7 @@ class dam_line(feature):
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
-    geom: LineStringZ[srid(3035)]
+    geom: MultiLineStringZ[srid(3035)]
     hydro_identifier: varchar[length(255)]
     name: jsonb
     label: varchar[length(255)]
@@ -107,7 +107,7 @@ class falls_line(feature):
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
-    geom: LineStringZ[srid(3035)]
+    geom: MultiLineStringZ[srid(3035)]
     name: jsonb
     label: varchar[length(255)]
 
@@ -138,7 +138,7 @@ class lock_line(feature):
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
-    geom: LineStringZ[srid(3035)]
+    geom: MultiLineStringZ[srid(3035)]
     hydro_identifier: varchar[length(255)]
     name: jsonb
     label: varchar[length(255)]
@@ -207,7 +207,7 @@ class drainage_basin(feature):
     country: varchar[length(8)]
     begin_lifespan_version: timestamp
     end_lifespan_version: timestamp
-    geom: LineStringZ[srid(3035)]
+    geom: MultiPolygon[srid(3035)]
     hydro_identifier: varchar[length(255)]
     name: jsonb
     label: varchar[length(255)]
