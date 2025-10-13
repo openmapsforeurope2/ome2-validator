@@ -4,6 +4,8 @@ from validation_specs.dv1 import hydrography
 
 begin_theme('HYDRO', 'hy')
 
+fictitious_axis = hydrography.watercourse_link.filtered('"fictitious" = \'true\'')
+
 #region Validation checks
 
 H001a = hydrography.watercourse_link.DetermineFeatureCount().TreatAsStatistic()
@@ -41,5 +43,7 @@ H002n = hydrography.standing_water.DetermineFeatureCount(group_by_field_1='count
 H002o = hydrography.shoreline.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
 H002p = hydrography.shore.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
 H002q = hydrography.drainage_basin.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+
+H003a = hydrography.fictitious_axis.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
 
 end_theme()
