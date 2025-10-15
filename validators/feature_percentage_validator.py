@@ -1,7 +1,4 @@
-from typing import Any
-
 from qgis.core import QgsVectorLayer
-from qgis.PyQt.QtCore import QVariant
 from models import ValidationResult
 from . import GenericValidator
 from utilities import QgisUtilities
@@ -77,7 +74,7 @@ class FeaturePercentageValidator(GenericValidator):
 
     @classmethod
     def _validate_two_fields(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer, group_by_field_1: str, value: str,
-                 group_by_field_2: str | None) -> list[ValidationResult]:
+                 group_by_field_2: str) -> list[ValidationResult]:
         
         results = []
         
@@ -103,18 +100,3 @@ class FeaturePercentageValidator(GenericValidator):
             results.append(result)
 
         return results
-
-    @classmethod
-    def create_field_doesnt_exist_message(cls, feature_class, group_by_field) -> str:
-        return f"Skipping {cls.__name__} on '{feature_class.name()}' for field {group_by_field} because the field does not exist."
-
-    @classmethod
-    def get_equals_expression(cls, field, value) -> str:
-        if type(value) is QVariant and value.isNull():
-            return f'"{field}" is {value}'
-        return f'"{field}" = \'{value}\''
-
-    @classmethod
-    def get_unique_values(cls, feature_class, field_name) -> list[str]:
-        field_index = feature_class.fields().indexFromName(field_name)
-        return sorted(feature_class.uniqueValues(field_index))

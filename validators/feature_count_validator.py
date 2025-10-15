@@ -1,7 +1,7 @@
 from qgis.core import QgsVectorLayer
-from qgis.PyQt.QtCore import QVariant
 from models import ValidationResult
 from . import GenericValidator
+from typing import cast
 from utilities import QgisUtilities
 import logging
 
@@ -47,6 +47,9 @@ class FeatureCountValidator(GenericValidator):
         if not group_by_field_1 and not group_by_field_2:
             expressions.append(None)
         else:
+            group_by_field_1 = cast(str, group_by_field_1)
+            group_by_field_2 = cast(str, group_by_field_2)
+            
             for val_1 in cls.get_unique_values(feature_class, group_by_field_1):
                 field1_is_country = group_by_field_1 == 'country'
                 field2_is_country = group_by_field_2 == 'country' 
@@ -93,20 +96,7 @@ class FeatureCountValidator(GenericValidator):
         return results
     
 
-                
-
-    @classmethod
-    def create_field_doesnt_exist_message(cls, feature_class, group_by_field) -> str:
-        return f"Skipping {cls.__name__} on '{feature_class.name()}' for field {group_by_field} because the field does not exist."
-
-
-    @classmethod
-    def get_equals_expression(cls, field, value) -> str:
-        if type(value) is QVariant and value.isNull():
-            return f'"{field}" is {value}'
-        return f'"{field}" = \'{value}\''
-
-
+    
     @classmethod
     def create_featurecount_message(cls, feature_class, feature_count, expression) -> str:
         expression_part = ""
@@ -115,8 +105,3 @@ class FeatureCountValidator(GenericValidator):
         plural = "" if feature_count == 1 else "s"
         return f"Featureclass '{feature_class.name()}' has {feature_count} record{plural}{expression_part}."
     
-
-    @classmethod
-    def get_unique_values(cls, feature_class, field_name) -> list[str]:
-        field_index = feature_class.fields().indexFromName(field_name) 
-        return sorted(feature_class.uniqueValues(field_index))
