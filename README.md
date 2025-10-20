@@ -28,7 +28,7 @@ docker run --rm -it eurogeographics/ome2-validator
 Once the Docker image has been built, the validator tool can be run with a command like the one below:
 
 ```sh
-docker run --rm -it --add-host host.docker.internal:host-gateway -v "$(pwd):/pwd" eurogeographics/ome2-validator /pwd/validation_parameters.json
+docker run --rm -it --add-host host.docker.internal:host-gateway -v "$(pwd):/pwd" eurogeographics/ome2-validator /pwd/validation_parameters.jsonc
 ```
 
 This command consists of several parts:
@@ -40,9 +40,46 @@ This command consists of several parts:
    Note that within the container `127.0.0.1` *does not* refer to the host machine, but to the container itself.
 5. `-v "$(pwd):/pwd"` to mount the current working directory as `/pwd` within the container.
 6. The name of the Docker image: `eurogeographics/ome2-validator`.
-7. The path to the file `/pwd/validation_parameters.json` that contains the validation parameters for the validation run.
+7. The path to the file `/pwd/validation_parameters.jsonc` that contains the validation parameters for the validation run.
    These parameters indicate, e.g., the location of the input data,
    which validation checks to perform and where to store the results.
+   *Note that this file **does not** come with the project by default.*
+
+### Validation parameters
+
+The project comes with a [`validation_parameters.example.jsonc`](validation_parameters.example.jsonc) example file
+that can be used to create a `validation_parameters.jsonc` file.
+This file can then be passed as an argument to the validator tool
+in order to configure and perform a validation run.
+
+The validation parameters file supports the use of environment variables for the following settings:
+
+- `specification`
+- `task_name`
+- For `input_database` and `outut_database`:
+  - `host`
+  - `port`
+  - `name`
+  - `password`
+
+To refer to an environment variable, the value in the parameters file must be of the form `${VARIABLE_NAME}`.
+It must start with a dollar sign and opening brace,
+followed by the name of the environment variable
+and end with a closing brace.
+
+An example snippet is shown below:
+
+```jsonc
+   // ...
+   "input_database": {
+      "host": "${DB_HOST}",
+      "port" : "${DB_PORT}",
+      "name": "${DB_NAME}",
+      "username": "${DB_USER}",
+      "password": "${DB_PASS}"
+   },
+    // ...
+```
 
 ## Development
 
@@ -52,3 +89,14 @@ Visual Studio Code will recognize the existence of a dev container definition
 and will prompt whether it should load the project in a dev container.
 The advantage of a dev container is that it provisions an environment with all the required software and dependencies installed.
 The developer only needs to have Docker and Visual Studio Code on its machine.
+
+### Dev container environment variables
+
+[The dev container's compose file](./.devcontainer/docker-compose.yml) is configured
+to load environment variables defined in [the `devcontainer.env` file](./.devcontainer/devcontainer.env).
+
+*Please do not commit changes to the environment file.*
+It is recommended to have `git` ignore changes to the file
+via the `git update-index --skip-worktree` command
+or to build the dev container at least once in Visual Studio Code,
+which will mark the file with `--skip-worktree` as well.

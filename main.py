@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import argparse
 import os
 import sys
@@ -38,7 +39,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description='Runs the OME2 Validator tool')
     
     parser.add_argument('input', metavar='INPUT', type=str,
-                        help='the input parameters for the validation tool (.json)')
+                        help='the input parameters for the validation tool (.json;.jsonc)')
 
     parser.add_argument('--help-input-file', action=show_example_input_file, nargs=0,
                         help='show an example JSON file that can be used as input')
@@ -53,8 +54,12 @@ def main():
     args = parser.parse_args()
     validation_params_json_filename = args.input
     
-    params = ValidationParameters.from_json(validation_params_json_filename)
-    if not params.are_complete():
+    env_vars_failed_to_expand: set[str] = set()
+    params = ValidationParameters.from_json(validation_params_json_filename, env_vars_failed_to_expand)
+    if env_vars_failed_to_expand:
+        raise ValueError(f"Validation parameters are not complete. Check the parameters in {validation_params_json_filename}."
+                         + f" Could not expand environment variables: {', '.join(sorted(env_vars_failed_to_expand))}")
+    elif not params.are_complete():
         raise ValueError(f"Validation parameters are not complete. Check the parameters in {validation_params_json_filename}.")
     
     # Set srid

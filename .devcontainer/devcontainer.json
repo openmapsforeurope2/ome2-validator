@@ -9,7 +9,7 @@
 
     "overrideCommand": true, // Because the default command exits immediately
 
-    "postCreateCommand": "bash .devcontainer/install-tools.sh",
+    "postCreateCommand": "git update-index --skip-worktree .devcontainer/devcontainer.env && bash .devcontainer/install-tools.sh",
 
     "customizations": {
         "vscode": {
