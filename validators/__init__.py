@@ -26,6 +26,7 @@ from .data_schema_validator import *
 from .crs_validator import *
 from .unique_field_validator import *
 from .attribute_across_border_consistency_validator import *
+from .feature_percentage_validator import *
 
 from .debug_feature_validator import *
 

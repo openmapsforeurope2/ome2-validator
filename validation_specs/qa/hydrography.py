@@ -43,7 +43,8 @@ H002n = hydrography.standing_water.DetermineFeatureCount(group_by_field_1='count
 H002o = hydrography.shoreline.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
 H002p = hydrography.shore.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
 H002q = hydrography.drainage_basin.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+H002r = hydrography.fictitious_axis.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
 
-H003a = hydrography.fictitious_axis.DetermineFeatureCount(group_by_field_1='country').TreatAsStatistic()
+H003a = hydrography.watercourse_link.DeterminePercentage(group_by_field_1='fictitious', group_by_field_2='country', value='true').TreatAsStatistic()
 
 end_theme()

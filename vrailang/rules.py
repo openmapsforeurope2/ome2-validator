@@ -338,6 +338,15 @@ class MixinFeatureclassRules(FeatureclassProtocol):
         )
 
     @classmethod
+    def DeterminePercentage(cls, group_by_field_1: str, value: Any, group_by_field_2: str | None = None) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.FeaturePercentageValidator,
+            cls,
+            (group_by_field_1, value, group_by_field_2),
+            {}
+        )
+
+    @classmethod
     def MustBeConsistentAcrossBorder(cls, border_feature_class: Type['feature'],
                                      consistent_attributes: list[str]) -> ValidationRule:
         return _create_rule_and_register(
