@@ -27,7 +27,7 @@ class AllowedAttributeValidator(FeatureValidator):
             list[ValidationResult]: A list of results, containing the features of which the specified field does not have an allowed value.
 
         # TODO Support wildcard values such as 'void_*'
-        """        
+        """
         results = []
 
         if not QgisUtilities.layer_has_field(feature_class, field_name):
@@ -75,6 +75,29 @@ class AllowedAttributeValidator(FeatureValidator):
 
         return results
     
+
+    @classmethod
+    def get_allowed_values_and_patterns(cls, allowed_attributes: list[str]) -> tuple[list[str], list[str]]:
+        """Partitions a list of allowed attributes into two lists:
+        one containing literal values and one containing wildcard patterns.
+
+        Args:
+            allowed_attributes (list[str]): the list of allowed attributes.
+
+        Returns:
+            tuple[list[str],list[str]]: a list of literal allowed attribute values and a list of allowed wildcard patterns.
+        """
+        attributes: list[str] = []
+        patterns: list[str] = []
+
+        for value in allowed_attributes:
+            if '*' in value:
+                patterns.append(value)
+            else:
+                attributes.append(value)
+
+        return attributes, patterns
+        
 
     @classmethod
     def create_invalid_value_message(cls, feature_class: QgsVectorLayer, feature: QgsFeature, field_name: str) -> str:
