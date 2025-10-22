@@ -78,7 +78,7 @@ class AllowedAttributeValidator(FeatureValidator):
 
     @classmethod
     def create_invalid_value_message(cls, feature_class: QgsVectorLayer, feature: QgsFeature, field_name: str) -> str:
-        """_summary_
+        """Creates a validation message for a feature containing an invalid attribute value.
 
         Args:
             feature_class (QgsVectorLayer): The feature class.
@@ -93,7 +93,7 @@ class AllowedAttributeValidator(FeatureValidator):
 
     @classmethod
     def create_valid_but_separator_message(cls,  feature_class: QgsVectorLayer, feature: QgsFeature, field_name: str, separator: str) -> str:
-        """_summary_
+        """Creates a validation message for a feature containing a valid attribute value, but uses an incorrect separator.
 
         Args:
             feature_class (QgsVectorLayer): The feature class.
