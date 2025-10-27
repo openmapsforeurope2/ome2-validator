@@ -42,7 +42,7 @@ class AllowedAttributeValidator(FeatureValidator):
         
         if allowed_patterns:
             like_expressions = (
-                f'"{field_name}" not like {pat}'
+                f'"{field_name}" not like {cls.quote_pattern(pat)}'
                 for pat in allowed_patterns
             )
             filter_expression = (
