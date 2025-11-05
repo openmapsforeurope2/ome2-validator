@@ -11,5 +11,6 @@ The VRAI language module is used for writing validation specs.
 from vrailang.datatypes import *
 from vrailang.dataconstraints import *
 from vrailang.featureclasses import *
+from vrailang.mappings import *
 
 from vrailang.specs import *

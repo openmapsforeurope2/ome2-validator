@@ -515,22 +515,54 @@ T015z = port_area.tent_network.MustBeOfValues(TENTNetworkValue)
 
 #region Topology
 
-T023a = road_link.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023b = road.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023c = road_node.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023d = road_service_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023e = road_service_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023f = marker_post.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023g = railway_link.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023h = railway_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023i = railway_station_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023j = railway_station_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023k = aerodrome_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023l = aerodrome_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023m = runway_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023n = runway_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023o = port_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-T023p = port_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+T023a = road_link.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country', 
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023b = road.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023c = road_node.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023d = road_service_area.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023e = road_service_point.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023f = marker_post.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023g = railway_link.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023h = railway_line.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023i = railway_station_area.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023j = railway_station_point.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023k = aerodrome_area.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023l = aerodrome_point.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023m = runway_area.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023n = runway_line.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023o = port_area.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
+T023p = port_point.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries)
 
 T024a = motorway.MustNotHaveDangles()
 
