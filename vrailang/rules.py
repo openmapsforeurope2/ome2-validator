@@ -227,12 +227,12 @@ class MixinFeatureclassRules(FeatureclassProtocol):
         )
 
     @classmethod
-    def MustBeInsideMatchingArea(cls, area_feature_class: Type['feature'], id_field: str) -> ValidationRule:
+    def MustBeInsideMatchingArea(cls, area_feature_class: Type['feature'], id_field: str, attribute_mapping: dict[Any, Any] | None = None) -> ValidationRule:
         return _create_rule_and_register(
             validators.FeatureAreaIdentifierConsistencyValidator,
             cls,
             (area_feature_class, id_field),
-            {}
+            {'attribute_mapping': attribute_mapping}
         )
 
     @classmethod
