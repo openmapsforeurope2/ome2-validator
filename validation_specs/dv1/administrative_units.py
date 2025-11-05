@@ -4,6 +4,23 @@ from validation_specs.extents import Epsg3035Bounds
 
 begin_theme('ADMIN', 'au')
 
+#region Mappings
+
+# Mapping of corresponding countries
+au2_to_au1_countries = MapValues(
+    'bl',
+    'mf',
+    'mq',
+    'gf',
+    'gp',
+    'pm',
+    're',
+    'yt',
+).Onto('fr')
+
+#endregion
+
+
 #region Featuretypes
 
 #region Administrative units
@@ -344,7 +361,7 @@ A022d = administrative_unit_area_4.MustNotHaveOverlaps()
 A022e = administrative_unit_area_5.MustNotHaveOverlaps()
 A022f = administrative_unit_area_6.MustNotHaveOverlaps()
 
-A023a = administrative_unit_area_2.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
+A023a = administrative_unit_area_2.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country', attribute_mapping=au2_to_au1_countries)
 A023b = administrative_unit_area_3.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
 A023c = administrative_unit_area_4.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
 A023d = administrative_unit_area_5.MustBeInsideMatchingArea(administrative_unit_area_1, id_field='country')
