@@ -56,7 +56,7 @@ class ConditionOfFacilityValue(BaseValueDomain):
 
 
 class FunctionalRoadClass(BaseValueDomain):
-    MAIN_ROAD = 'main-road'
+    MAIN_ROAD = 'main_road'
     FIRST_CLASS = 'first_class'
     SECOND_CLASS = 'second_class'
     THIRD_CLASS = 'third_class'
@@ -132,6 +132,8 @@ class RailwayTypeValue(BaseValueDomain):
     MONORAIL = 'monorail'
     TRAIN = 'train'
     TRAMWAY = 'tramway'
+    MAIN_LINE_TRAIN = 'main_line_train'
+    BRANCH_TRAIN_LINE = 'branch_train_line'
     VOID_UNK = 'void_unk'
     VOID_WILDCARD = 'void_*'
 
