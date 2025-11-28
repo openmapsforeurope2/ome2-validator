@@ -597,6 +597,9 @@ T031h = railway_link.MustBeConsistentAcrossBorder(administrative_units.administr
 
 #endregion
 
+T032a = aerodrome_area.AdjacentFacesMustDiffer(['country'])
+T032b = port_area.AdjacentFacesMustDiffer(['country'])
+
 #endregion
 
 end_theme()
