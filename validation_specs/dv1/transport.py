@@ -515,54 +515,72 @@ T015z = port_area.tent_network.MustBeOfValues(TENTNetworkValue, separator='#')
 
 #region Topology
 
+T023_BUFFER = 10 # meter
+T023_SIMPLIFY = 10 # meter
 T023a = road_link.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country', 
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023b = road.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023c = road_node.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023d = road_service_area.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023e = road_service_point.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023f = marker_post.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023g = railway_link.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023h = railway_line.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023i = railway_station_area.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023j = railway_station_point.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023k = aerodrome_area.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023l = aerodrome_point.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023m = runway_area.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023n = runway_line.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023o = port_area.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 T023p = port_point.MustBeInsideMatchingArea(
                             administrative_units.administrative_unit_area_1, id_field='country',
-                            attribute_mapping=administrative_units.au2_to_au1_countries)
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=T023_BUFFER, simplify = T023_SIMPLIFY)
 
 T024a = motorway.MustNotHaveDangles()
 
