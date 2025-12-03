@@ -16,7 +16,8 @@ class FeatureAreaIdentifierConsistencyValidator(FeatureValidator):
 
     @classmethod
     def validate(cls, run_id: int, validation_code: str, severity: str, check_feature_class: QgsVectorLayer, area_feature_class: QgsVectorLayer, id_field: str,
-                 attribute_mapping: dict[Any,Any] | None = None) -> list[ValidationResult]:
+                 attribute_mapping: dict[Any,Any] | None = None,
+                 buffer: int = 0, simplify: int = 0) -> list[ValidationResult]:
         """Runs the FeatureAreaIdentifierConsistencyValidator.
         
         Checks if every feature from the check-featureclass is inside an area of the area-featureclass while also having matching values for the id field.
@@ -30,6 +31,8 @@ class FeatureAreaIdentifierConsistencyValidator(FeatureValidator):
             id_field (str): The corresponding ID field linking the check and area featureclasses.
             attribute_mapping (dict[Any,Any] | None): Optional mapping that 
                 translates values of the ID field in check_feature_class to values that are used in area_feature_class.
+            buffer (int): Buffer (in meters) to apply to area_feature_class when performing the check.
+            simplify (int): Simplification (tolerance in meters) to apply to area_feature_class prior to applying the buffer.
 
         Returns:
             list[ValidationResult]: A list of results, containing the check features which are either not inside an area or do not having a matching id field value.
@@ -38,8 +41,39 @@ class FeatureAreaIdentifierConsistencyValidator(FeatureValidator):
 
         # Remove fields of type jsonb to enable processing with QGIS algorithms
         prepared_check_feature_class = QgisUtilities.create_memory_layer(check_feature_class, skip_field_types = [QMetaType.QVariantMap])
-        prepared_area_feature_class = QgisUtilities.create_memory_layer(area_feature_class, skip_field_types = [QMetaType.QVariantMap])
+        
+        if buffer == 0:
+            prepared_area_feature_class = QgisUtilities.create_memory_layer(area_feature_class, skip_field_types = [QMetaType.QVariantMap])
+        else:
+            area_feature_class_without_maps = QgisUtilities.create_memory_layer(area_feature_class, skip_field_types = [QMetaType.QVariantMap])
+            if simplify != 0:
+                input_for_buffer: QgsVectorLayer = processing.run("native:simplifygeometries", 
+                    {
+                        'INPUT': area_feature_class_without_maps,
+                        'METHOD': 0, # Distance (Douglas-Peucker)
+                        'TOLERANCE': simplify,
+                        'OUTPUT': 'memory:'
+                    })['OUTPUT']
+            else:
+                input_for_buffer = area_feature_class_without_maps
 
+            buffer_base_params = {
+                'DISTANCE': buffer,
+                'SEGMENTS': 5, # Number of line segments used for approximating quarter circles (rounded offsets)
+                'END_CAP_STYLE': 0, # Round
+                'JOIN_STYLE': 0, # Round
+                'MITER_LIMIT': 2, # Unused since join style is round?
+                'DISSOLVE': False,
+                'SEPARATE_DISJOINT': True,
+                'OUTPUT': 'memory:',
+            }
+            buffered_result = processing.run(
+                    'native:buffer',
+                    { 'INPUT': input_for_buffer } | buffer_base_params
+                )
+            
+            prepared_area_feature_class: QgsVectorLayer = buffered_result['OUTPUT']
+        
         join_layer = "memory:join_layer"
         parameters = {
         'INPUT':prepared_check_feature_class,
