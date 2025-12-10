@@ -476,22 +476,57 @@ H015p = watercourse_area.origin.MustBeOfValues(OriginValue)
 
 #region Topology
 
-H023a = watercourse_link.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023b = watercourse.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023c = hydro_node.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023d = dam_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023e = dam_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023f = dam_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023g = falls_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023h = falls_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023i = falls_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023j = lock_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023k = lock_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023l = lock_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023m = watercourse_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023n = standing_water.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023o = shore.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
-H023p = drainage_basin.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country')
+H023_BUFFER = 10 # meter
+H023_SIMPLIFY = 10 # meter
+H023a = watercourse_link.MustBeInsideMatchingArea(
+                            administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023b = watercourse.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023c = hydro_node.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023d = dam_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023e = dam_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023f = dam_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023g = falls_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023h = falls_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023i = falls_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023j = lock_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023k = lock_line.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023l = lock_point.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023m = watercourse_area.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023n = standing_water.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023o = shore.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
+H023p = drainage_basin.MustBeInsideMatchingArea(administrative_units.administrative_unit_area_1, id_field='country',
+                            attribute_mapping=administrative_units.au2_to_au1_countries,
+                            buffer=H023_BUFFER, simplify = H023_SIMPLIFY)
 
 H024a = fictitious_axis.MustNotHaveDangles()
 
