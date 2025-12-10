@@ -1,3 +1,4 @@
+import sys
 from typing import ClassVar
 import pydapper
 
@@ -50,6 +51,7 @@ class GeometryResultRepository(ResultRepositoryProtocol[GeometryResult]):
         if cls.__srid is None:
             raise Exception('SRID has not been set')
 
+        
         commands = pydapper.connect(cls.dsn)
         insert_query_base = "INSERT INTO geometry_result " + \
                         "(run_id, validation_code, severity, feature_class, message, objectid, geometry, geometry_type) "
@@ -60,6 +62,10 @@ class GeometryResultRepository(ResultRepositoryProtocol[GeometryResult]):
         try:
             with commands:
                 for geometry_result in validation_results:
+                    if len(geometry_result.message) > 255:
+                        geometry_result.message = geometry_result.message[:251] + "[..]"
+                        print('*** WARNING: LOG MESSAGE TOO LONG', file=sys.stderr)
+
                     _ = commands.execute(
                         insert_no_geom_query if geometry_result.geometry is None else insert_query,
                         param = geometry_result.as_param_dict(cls.__srid)
