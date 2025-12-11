@@ -31,14 +31,10 @@ class MustBeSinglePartValidator(FeatureValidator):
 
         for feature in feature_class.getFeatures():
             geometry: QgsGeometry = feature.geometry()
-
             is_multipart = False
             number_of_parts = 1
 
-            if not QgsWkbTypes.isMultiType(geometry.wkbType()):
-                continue  
-
-            elif geometry.type() == QgsWkbTypes.PolygonGeometry:
+            if geometry.type() == QgsWkbTypes.PolygonGeometry:
                 parts = geometry.asMultiPolygon()
                 is_multipart = len(parts) > 1
                 number_of_parts = len(parts)
