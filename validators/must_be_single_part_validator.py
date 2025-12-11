@@ -1,4 +1,4 @@
-from qgis.core import QgsVectorLayer
+from qgis.core import QgsGeometry, QgsVectorLayer, QgsWkbTypes
 from models import ValidationResult
 from . import FeatureValidator
 import logging
@@ -24,9 +24,37 @@ class MustBeSinglePartValidator(FeatureValidator):
         """        
         results = []
 
+        layer_type = feature_class.wkbType()
+
+        if not QgsWkbTypes.isMultiType(layer_type):
+            return results
+
         for feature in feature_class.getFeatures():
-            if feature.geometry().isMultipart():
-                message = f'{feature_class.name()} feature with objectid {(feature["objectid"])} is not a single part'
+            geometry: QgsGeometry = feature.geometry()
+
+            is_multipart = False
+            number_of_parts = 1
+
+            if not QgsWkbTypes.isMultiType(geometry.wkbType()):
+                continue  
+
+            elif geometry.type() == QgsWkbTypes.PolygonGeometry:
+                parts = geometry.asMultiPolygon()
+                is_multipart = len(parts) > 1
+                number_of_parts = len(parts)
+
+            elif geometry.type() == QgsWkbTypes.LineGeometry:
+                parts = geometry.asMultiPolyline()
+                is_multipart = len(parts) > 1
+                number_of_parts = len(parts)
+
+            elif geometry.type() == QgsWkbTypes.PointGeometry:
+                parts = geometry.asMultiPoint()
+                is_multipart = len(parts) > 1
+                number_of_parts = len(parts)
+
+            if is_multipart:
+                message = f'{feature_class.name()} feature with objectid {(feature["objectid"])} is not a single part, has {number_of_parts} parts'
                 country = cls.get_attribute(feature, 'country')
                 result = cls.create_result(
                     run_id,
