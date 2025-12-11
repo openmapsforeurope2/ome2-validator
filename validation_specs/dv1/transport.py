@@ -603,6 +603,15 @@ T032c = road_service_area.AdjacentFacesMustDiffer(['country', 'label', 'type'])
 T032d = railway_station_area.AdjacentFacesMustDiffer(['country', 'label', 'station_code', 'railway_use', 'form_of_railway_station'])
 T032e = runway_area.AdjacentFacesMustDiffer(['country', 'surface_composition'])
 
+T033a = aerodrome_area.MustBeSinglePart()
+T033b = port_area.MustBeSinglePart()
+T033c = road_link.MustBeSinglePart()
+T033d = road.MustBeSinglePart()
+T033e = railway_line.MustBeSinglePart()
+T033f = runway_line.MustBeSinglePart()
+T033g = ferry_crossing.MustBeSinglePart()
+
+
 #endregion
 
 end_theme()
