@@ -597,7 +597,12 @@ T031h = railway_link.MustBeConsistentAcrossBorder(administrative_units.administr
 
 #endregion
 
+T032a = aerodrome_area.AdjacentFacesMustDiffer(['country', 'label', 'aerodrome_category', 'aerodrome_type', 'use_restriction', 'designator_iata', 'location_indicator_icao', 'un_locode'])
+T032b = port_area.AdjacentFacesMustDiffer(['country', 'label', 'un_locode', 'tent_network'])
+T032c = road_service_area.AdjacentFacesMustDiffer(['country', 'label', 'type'])
+T032d = railway_station_area.AdjacentFacesMustDiffer(['country', 'label', 'station_code', 'railway_use', 'form_of_railway_station'])
+T032e = runway_area.AdjacentFacesMustDiffer(['country', 'surface_composition'])
+
 #endregion
 
 end_theme()
-
