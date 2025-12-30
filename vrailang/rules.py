@@ -314,6 +314,15 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             (feature_class,),
             {}
         )
+    
+    @classmethod
+    def MustBeSinglePart(cls) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MustBeSinglePartValidator,
+            cls,
+            (),
+            {}
+        )
 
     @classmethod
     def MustBeInProximityOf(cls, feature_class: Type['feature'], distance: Union[int, float]) -> ValidationRule:
@@ -371,3 +380,4 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             (area_feature_class, corresponding_attributes),
             {}
         )
+    
