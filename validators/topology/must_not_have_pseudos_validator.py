@@ -8,7 +8,7 @@ class MustNotHavePseudosValidator(FeatureValidator):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer) -> list[ValidationResult]:
+    def validate(cls, run_id: int, validation_code: str, severity: str, feature_class: QgsVectorLayer,  type_attributes: list[str] = []) -> list[ValidationResult]:
         """Runs the class MustNotHavePseudosValidator.
 
         Topology validation for finding pseudo-nodes in lines.
@@ -31,10 +31,12 @@ class MustNotHavePseudosValidator(FeatureValidator):
             cls.logger.warning(log_message)
             return results
         
+        feature_cache = {}
         end_vertices_dict = {}
 
         # Loop over features
         for feature in feature_class.getFeatures():
+            feature_cache[feature.id()] = feature
             g1 = feature.geometry()
             # Check for valid geometry
             if QgisUtilities.is_empty_or_invalid_geometry(g1):
@@ -43,33 +45,47 @@ class MustNotHavePseudosValidator(FeatureValidator):
                 continue
 
             # Fill dict with polyline endpoints and corresponding feature id's
-            for polyline in QgisUtilities.geometry_to_polyline_list(g1):
+            if g1.isMultipart():
+                polylines = g1.asMultiPolyline()
+            else:
+                polylines = [g1.asPolyline()]
+
+            for polyline in polylines:
                 start_point = polyline[0]
                 end_point = polyline[-1]
-                for point in [start_point, end_point]:
-                    if point not in end_vertices_dict:
-                        end_vertices_dict[point] = [feature.id()]
-                    else:
-                        end_vertices_dict[point].append(feature.id())
+                end_vertices_dict.setdefault(start_point, []).append(feature.id())
+                end_vertices_dict.setdefault(end_point, []).append(feature.id())
 
         for point, feature_ids in end_vertices_dict.items():
             # Endpoints which occur twice must be pseudo-nodes
-            repetitions = len(feature_ids)
-            if repetitions == 2:
-                error_geom = QgisUtilities.pointxy_to_geometry(point)
-                feature = feature_class.getFeature(feature_ids[0])
-                error_feature = cls.create_error_feature(error_geom, feature.attribute('objectid'))
-                message = f'{feature_class.name()} contains a pseudo-node between objects with objectid\'s {feature_ids[0]} and {feature_ids[1]}.'
-                country = cls.get_attribute(feature, 'country')
-                result = cls.create_result(
-                    run_id,
-                    validation_code,
-                    severity,
-                    feature_class,
-                    error_feature,
-                    message,
-                    country
-                )
-                results.append(result)
+            if len(feature_ids) != 2:
+                continue
+
+            feature1 = feature_cache[feature_ids[0]]
+            feature2 = feature_cache[feature_ids[1]]
+
+            has_same_attributes = all(
+                feature1.attribute(attribute) == feature2.attribute(attribute)
+                for attribute in type_attributes
+            )
+
+            if not has_same_attributes:
+                continue
+
+            error_geom = QgisUtilities.pointxy_to_geometry(point)
+
+            error_feature = cls.create_error_feature(error_geom, feature1.attribute('objectid'))
+            message = f'{feature_class.name()} contains a pseudo-node between objects with objectid\'s {feature1.attribute('objectid')} and {feature2.attribute('objectid')}.'
+            country = cls.get_attribute(feature1, 'country')
+            result = cls.create_result(
+                run_id,
+                validation_code,
+                severity,
+                feature_class,
+                error_feature,
+                message,
+                country
+            )
+            results.append(result)
 
         return results
