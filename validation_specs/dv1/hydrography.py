@@ -549,6 +549,19 @@ H029c = dam_point.MustBeInProximityOf(watercourse_area_or_standing_water, distan
 
 #endregion
 
+H030a = dam_area.MustBeSinglePart()
+H030b = falls_area.MustBeSinglePart()
+H030c = lock_area.MustBeSinglePart()
+H030d = shore.MustBeSinglePart()
+H030e = standing_water.MustBeSinglePart()
+H030f = watercourse_area.MustBeSinglePart()
+H030g = dam_line.MustBeSinglePart()
+H030h = falls_line.MustBeSinglePart()
+H030i = lock_line.MustBeSinglePart()
+H030j = shoreline.MustBeSinglePart()
+H030k= watercourse.MustBeSinglePart()
+H030l = watercourse_link.MustBeSinglePart()
+
 
 
 #endregion
