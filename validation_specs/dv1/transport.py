@@ -611,6 +611,12 @@ T033e = railway_line.MustBeSinglePart()
 T033f = runway_line.MustBeSinglePart()
 T033g = ferry_crossing.MustBeSinglePart()
 
+T034a = road_link.MustNotHavePseudoNodes(attributes=['vertical_position', 'vertical_level', 'street_label'])
+T034b = road.MustNotHavePseudoNodes()
+T034c = railway_link.MustNotHavePseudoNodes(attributes=['vertical_position', 'vertical_level', 'number_of_tracks', 'electrified'])
+T034d = railway_line.MustNotHavePseudoNodes(attributes=['railway_line_label'])
+T034e = runway_line.MustNotHavePseudoNodes()
+T034f = ferry_crossing.MustNotHavePseudoNodes()
 
 #endregion
 

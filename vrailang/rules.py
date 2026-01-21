@@ -285,6 +285,17 @@ class MixinFeatureclassRules(FeatureclassProtocol):
             (),
             {}
         )
+    
+    @classmethod
+    def MustNotHavePseudoNodes(cls, attributes: list[str] = []) -> ValidationRule:
+        return _create_rule_and_register(
+            validators.MustNotHavePseudosValidator,
+            cls,
+            (),
+            {
+                'type_attributes': attributes
+            }
+        )
 
     @classmethod
     def MustNotOverlapWithFeaturesOfSameType(cls, attributes: list[str]) -> ValidationRule:
