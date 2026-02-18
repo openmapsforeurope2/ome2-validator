@@ -10,6 +10,7 @@ sys.path.append(SCRIPT_DIR)
 from utilities import LogUtilities, QgisUtilities
 from storage import StorageUtilities, ValidationLoggingRepository, ValidationTaskRepository, ValidationRunRepository, GeometryResultRepository, GenericResultRepository, ValidationCheckStatusRepository
 from models import ValidationTask, ValidationRun, ValidationParameters
+import pydapper
 from validators import *
 import logging
 
@@ -118,9 +119,19 @@ def main():
         logger.info(f"{'PG output DSN:':25} {params.output_db_params.create_pg_dsn()}")
         logger.info("")
 
+        try:
+            with pydapper.connect(params.input_db_params.create_pg_dsn()):
+                pass
+        except Exception as e:
+            logger.error('Connection error: %s', e)
+            sys.exit(-1)
+        finally:
+            pass
+        
+
         QgisUtilities.initialize_qgis()
         QgisUtilities.setup_postgis_connection(params.input_db_params.host, params.input_db_params.port, params.input_db_params.name, params.input_db_params.username, params.input_db_params.password)
-
+        
         DataSchemaValidator.set_dsn(params.input_db_params.create_pg_dsn())
         CrsValidator.set_dsn(params.input_db_params.create_pg_dsn())
         UniqueFieldValidator.set_dsn(params.input_db_params.create_pg_dsn())
