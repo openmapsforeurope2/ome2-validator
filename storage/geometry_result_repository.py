@@ -54,11 +54,11 @@ class GeometryResultRepository(ResultRepositoryProtocol[GeometryResult]):
         
         commands = pydapper.connect(cls.dsn)
         insert_query_base = "INSERT INTO geometry_result " + \
-                        "(run_id, validation_code, severity, feature_class, message, objectid, geometry, geometry_type) "
+                        "(run_id, validation_code, severity, feature_class, message, objectid, country, geometry, geometry_type) "
         insert_query = insert_query_base + \
-                        "VALUES (?run_id?, ?validation_code?, ?severity?, ?feature_class?, ?message?, ?objectid?, ST_Force2D(ST_SetSRID(?geometry?::geometry,?srid?)), ST_GeometryType(?geometry?))"
+                        "VALUES (?run_id?, ?validation_code?, ?severity?, ?feature_class?, ?message?, ?objectid?, ?country?, ST_Force2D(ST_SetSRID(?geometry?::geometry,?srid?)), ST_GeometryType(?geometry?))"
         insert_no_geom_query = insert_query_base + \
-                        "VALUES (?run_id?, ?validation_code?, ?severity?, ?feature_class?, ?message?, ?objectid?, NULL, NULL)"
+                        "VALUES (?run_id?, ?validation_code?, ?severity?, ?feature_class?, ?message?, ?objectid?, ?country?, NULL, NULL)"
         try:
             with commands:
                 for geometry_result in validation_results:
