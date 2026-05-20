@@ -158,12 +158,12 @@ def main() -> None:
 
         for table in dict_theme_to_tables[theme]:
             print(f'\n{Style.BRIGHT}{Fore.GREEN}{table}')
-            string_for_table = f"class {table}(feature): \n"
+            string_for_table = f"class {table}(feature):\n"
             class_from_file = extract_class(path=path_to_file_theme, classname=table)
 
             list_of_attributes = dict_theme_to_tables[theme][table]
             for attribute in list_of_attributes:
-                string_for_table += f"{TAB}{attribute} \n"
+                string_for_table += f"{TAB}{attribute}\n"
 
             with open(path_to_save_classes_theme, 'a', encoding='utf-8') as f:
                 f.write(string_for_table + '\n')
