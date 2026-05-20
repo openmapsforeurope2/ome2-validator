@@ -7,6 +7,8 @@ import os
 import colorama
 from colorama import Fore, Back, Style  # noqa: F401
 
+TAB = ' ' * 4
+
 theme_dict = {'tn': 'transport',
               'au': 'administrative_units',
               'hy': 'hydrography',
@@ -161,7 +163,7 @@ def main() -> None:
 
             list_of_attributes = dict_theme_to_tables[theme][table]
             for attribute in list_of_attributes:
-                string_for_table += f"\t{attribute} \n"
+                string_for_table += f"{TAB}{attribute} \n"
 
             with open(path_to_save_classes_theme, 'a', encoding='utf-8') as f:
                 f.write(string_for_table + '\n')
