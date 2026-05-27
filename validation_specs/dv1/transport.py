@@ -52,7 +52,6 @@ class road_node(feature):
     geom: PointZ[srid(3035)]
     local_name: varchar[length(255)]
     form_of_road_node: varchar[length(255)]
-    label: varchar[length(255)]
 
 class road_service_area(feature):
     objectid: uuid[primary_key, notnull]
