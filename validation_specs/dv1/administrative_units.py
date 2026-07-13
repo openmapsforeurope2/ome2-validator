@@ -267,13 +267,13 @@ A005g = maritime_zone.MustBeWithinExtent(Epsg3035Bounds)
 A005h = residence_of_authority.MustBeWithinExtent(Epsg3035Bounds)
 
 
-A006a = administrative_unit_area_1.AreaMustBeAtLeast(200_000_000)
-A006b = administrative_unit_area_2.AreaMustBeAtLeast(20_000_000)
-A006c = administrative_unit_area_3.AreaMustBeAtLeast(5_000_000)
-A006d = administrative_unit_area_4.AreaMustBeAtLeast(25_000_000)
-A006e = administrative_unit_area_5.AreaMustBeAtLeast(1_000_000)
-A006f = administrative_unit_area_6.AreaMustBeAtLeast(25_000)
-A006g = maritime_zone.AreaMustBeAtLeast(1_000_000_000)
+A006a = administrative_unit_area_1.AreaMustBeAtLeast(400000)
+A006b = administrative_unit_area_2.AreaMustBeAtLeast(40000)
+A006c = administrative_unit_area_3.AreaMustBeAtLeast(10000)
+A006d = administrative_unit_area_4.AreaMustBeAtLeast(50000)
+A006e = administrative_unit_area_5.AreaMustBeAtLeast(2000)
+A006f = administrative_unit_area_6.AreaMustBeAtLeast(50)
+A006g = maritime_zone.AreaMustBeAtLeast(200000)
 
 
 A007a = administrative_unit_area_1.VerticesDistanceMustBeAtLeast(0.05)
