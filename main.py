@@ -53,7 +53,7 @@ def get_parser() -> argparse.ArgumentParser:
 def main():
     parser = get_parser()
     args = parser.parse_args()
-    validation_params_json_filename = args.input
+    validation_params_json_filename: str = args.input
     
     env_vars_failed_to_expand: set[str] = set()
     params = ValidationParameters.from_json(validation_params_json_filename, env_vars_failed_to_expand)
