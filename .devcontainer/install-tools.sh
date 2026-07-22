@@ -3,6 +3,9 @@
 # Install dev dependencies:
 python3 -m pip install qgis-stubs
 
+# Install pyright for additional dev analysis
+python3 -m pip install pyright
+
 # Patch in additional type hints
 cat << EOF | sed -i '/class Commands(BaseCommands, ABC)/r /dev/stdin' /usr/local/lib/python3.12/dist-packages/pydapper/commands.py
     
