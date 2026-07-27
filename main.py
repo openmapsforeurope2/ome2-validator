@@ -160,6 +160,13 @@ def main():
 def arg_loader(arg: object, params: ValidationParameters) -> object:
     # We can't seem to do type checking during runtime on 'feature' or 'FeatureMetaclass' in rules.py due to circular dependencies.
     if vrailang.is_featureclass(arg):
+        if params.countries:
+            orig_arg = arg
+            arg = orig_arg.filtered(
+                f'"country" IN ({",".join(f"\'{c}\'" for c in params.countries)})', 
+                alias=orig_arg.ALIAS
+            )
+        
         layer_name = arg.TABLE_NAME
         if arg.ALIAS is not None:
             from_str = f' [from {arg.TABLE_NAME}]' if arg.TABLE_NAME.isidentifier() else ''
