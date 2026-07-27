@@ -164,21 +164,23 @@ class administrative_unit_area_6(feature):
     valid_from: timestamp
     valid_to: timestamp
 
-class administrative_hierarchy(feature):
-    objectid: uuid[primary_key, notnull]
-    country: varchar[length(8)]
-    begin_lifespan_version: timestamp
-    end_lifespan_version: timestamp
-    w_national_identifier: varchar[length(255)]
-    xy_source: varchar[length(255)]
-    z_source: varchar[length(255)]
-    w_scale: varchar[length(80)]
-    w_release: int4
-    national_level: varchar[length(255)]
-    national_level_name: jsonb
-    national_level_label: varchar[length(255)]
-    national_level_code: varchar[length(255)]
-    shn_digit: int4
+# Exclude for now: table without geometry
+# TODO: figure out how to handle tables like this
+# class administrative_hierarchy(feature):
+#     objectid: uuid[primary_key, notnull]
+#     country: varchar[length(8)]
+#     begin_lifespan_version: timestamp
+#     end_lifespan_version: timestamp
+#     w_national_identifier: varchar[length(255)]
+#     xy_source: varchar[length(255)]
+#     z_source: varchar[length(255)]
+#     w_scale: varchar[length(80)]
+#     w_release: int4
+#     national_level: varchar[length(255)]
+#     national_level_name: jsonb
+#     national_level_label: varchar[length(255)]
+#     national_level_code: varchar[length(255)]
+#     shn_digit: int4
 
 class maritime_zone(feature):
     objectid: uuid[primary_key, notnull]
