@@ -7,6 +7,7 @@ from qgis.core import QgsVectorLayer
 from typing import TYPE_CHECKING, Callable, ClassVar, Generic, Optional, Protocol, Self, Type, TypeVar
 
 if TYPE_CHECKING:
+    from models.validation_parameters import ValidationParameters
     from vrailang.dataconstraints import DataTypeAnnotation
     from vrailang.datatypes import DataType, GeometryType
     from vrailang.featureclasses import feature, FeatureclassAttribute
@@ -36,4 +37,7 @@ class FeatureclassProtocol(Protocol):
     FILTER_QUERY: ClassVar[str | None]
     
 
-ArgLoader = Callable[[type['feature']], QgsVectorLayer] | Callable[[object], object]
+ArgLoader = (
+    Callable[[type['feature'], 'ValidationParameters'], QgsVectorLayer] 
+    | Callable[[object, 'ValidationParameters'], object]
+)

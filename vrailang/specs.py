@@ -84,7 +84,7 @@ class ValidationSpecification:
                     self.logger.info(f"Skipping check {validation_rule.validation_code} since it is not enabled.")
                     continue
 
-                validation_rule.run(params.run_id, arg_loader)
+                validation_rule.run(params.run_id, params, arg_loader)
 
     def theme(self, name: str) -> 'ValidationTheme':
         if name not in self.themes:

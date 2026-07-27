@@ -157,7 +157,7 @@ def main():
         QgisUtilities.exit_qgis()
 
 
-def arg_loader(arg: object) -> object:
+def arg_loader(arg: object, params: ValidationParameters) -> object:
     # We can't seem to do type checking during runtime on 'feature' or 'FeatureMetaclass' in rules.py due to circular dependencies.
     if vrailang.is_featureclass(arg):
         layer_name = arg.TABLE_NAME
