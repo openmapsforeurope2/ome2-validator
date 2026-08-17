@@ -166,7 +166,13 @@ def arg_loader(arg: object, params: ValidationParameters) -> object:
                 f'"country" IN ({",".join(f"\'{c}\'" for c in params.countries)})', 
                 alias=orig_arg.ALIAS
             )
-        
+        if params.extent:
+            orig_arg = arg
+            arg = orig_arg.filtered(
+                f'ST_Intersects("geom", ST_GeomFromText(\'{params.extent}\', 3035))',
+                alias=orig_arg.ALIAS
+            )
+
         layer_name = arg.TABLE_NAME
         if arg.ALIAS is not None:
             from_str = f' [from {arg.TABLE_NAME}]' if arg.TABLE_NAME.isidentifier() else ''
