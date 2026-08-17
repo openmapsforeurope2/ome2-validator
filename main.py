@@ -53,7 +53,7 @@ def get_parser() -> argparse.ArgumentParser:
 def main():
     parser = get_parser()
     args = parser.parse_args()
-    validation_params_json_filename = args.input
+    validation_params_json_filename: str = args.input
     
     env_vars_failed_to_expand: set[str] = set()
     params = ValidationParameters.from_json(validation_params_json_filename, env_vars_failed_to_expand)
@@ -157,9 +157,16 @@ def main():
         QgisUtilities.exit_qgis()
 
 
-def arg_loader(arg: object) -> object:
+def arg_loader(arg: object, params: ValidationParameters) -> object:
     # We can't seem to do type checking during runtime on 'feature' or 'FeatureMetaclass' in rules.py due to circular dependencies.
     if vrailang.is_featureclass(arg):
+        if params.countries:
+            orig_arg = arg
+            arg = orig_arg.filtered(
+                f'"country" IN ({",".join(f"\'{c}\'" for c in params.countries)})', 
+                alias=orig_arg.ALIAS
+            )
+        
         layer_name = arg.TABLE_NAME
         if arg.ALIAS is not None:
             from_str = f' [from {arg.TABLE_NAME}]' if arg.TABLE_NAME.isidentifier() else ''

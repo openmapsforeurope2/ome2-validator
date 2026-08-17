@@ -17,6 +17,7 @@ from vrailang.dataconstraints import srid, length
 from models import BaseExtent, BaseValueDomain
 
 if TYPE_CHECKING:
+    from models.validation_parameters import ValidationParameters
     from vrailang.featureclasses import feature
     from vrailang.datatypes import DataType
     from vrailang.specs import ValidationTheme
@@ -56,13 +57,13 @@ class ValidationRule:
 
         return self
 
-    def run(self, run_id: int, arg_loader: ArgLoader):
+    def run(self, run_id: int, params: 'ValidationParameters', arg_loader: ArgLoader):
         # Convert vrailang.feature to QgsVectorLayer in featureclass, *args and **kwargs.
-        feature_layer = arg_loader(self.feature_class)
-        self.args = tuple([arg_loader(a) for a in list(self.args)])
+        feature_layer = arg_loader(self.feature_class, params)
+        self.args = tuple([arg_loader(a, params) for a in list(self.args)])
 
         for key in self.kwargs:
-            self.kwargs.update({key: arg_loader(self.kwargs[key])})
+            self.kwargs.update({key: arg_loader(self.kwargs[key], params)})
 
         self.validator.run(run_id, self.validation_code, self.severity, feature_layer, *self.args, **self.kwargs)
 
