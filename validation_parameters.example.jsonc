@@ -30,7 +30,7 @@
     "checks": [],
     // Specify which groups to check (currently unused):
     "groups": [],
-    // Specify which countries to check (currently unused):
+    // Specify which countries to check:
     "countries": [
         "NL"
     ],
