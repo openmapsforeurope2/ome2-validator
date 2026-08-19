@@ -24,7 +24,7 @@ class ValidationParameters:
         checks (list[str]): A selection of checks which we want to validate.
         groups list[str]: A selection of country-groups which we want to validate.
         countries (list[str]): A selection of countries which we want to validate.
-        extent Polygon: A polygon of the extent we want to validate
+        extent str: A polygon of the extent we want to validate
         min_required_only (bool): An option to run only th minimum required checks.
     """
     specification: str
@@ -37,7 +37,7 @@ class ValidationParameters:
     checks: list[str]
     groups: list[str]
     countries: list[str]
-    extent: Polygon
+    extent: str
     min_required_only: bool
 
     def __init__(self):
@@ -74,7 +74,7 @@ class ValidationParameters:
             checks=[],
             groups=[],
             countries=['NL'],
-            extent=Polygon(),
+            extent='',
             min_required_only=False
             ), indent=4
         )
