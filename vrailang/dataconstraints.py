@@ -3,6 +3,7 @@ The `vrailang.dataconstraints` module contains constraints
 that can be applied to datatypes of the `vrailang.datatypes` module.
 '''
 
+from abc import ABC
 from dataclasses import dataclass
 from typing import TypeGuard
 
@@ -20,17 +21,20 @@ class DataTypeAnnotation:
     pass
 
 @dataclass
-class precision(DataTypeAnnotation):
+class SingleArgumentConstraint(ABC, DataTypeAnnotation):
     value: int
 
-@dataclass
-class scale(DataTypeAnnotation):
-    value: int
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.value})'
 
+class precision(SingleArgumentConstraint):
+    pass
 
-@dataclass
-class length(DataTypeAnnotation):
-    value: int
+class scale(SingleArgumentConstraint):
+    pass
+
+class length(SingleArgumentConstraint):
+    pass
 
 @dataclass
 class boolean_flag(DataTypeAnnotation):
