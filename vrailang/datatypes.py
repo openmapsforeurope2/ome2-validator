@@ -56,7 +56,7 @@ class DataTypeProtocol(Protocol):
     size: int
     
     @classmethod
-    def as_string(cls) -> str: ...
+    def as_psql_string(cls) -> str: ...
 
 class DataType(MixinAttributeRules, DataTypeProtocol):
     """The base class for various datatypes."""
@@ -78,7 +78,7 @@ class DataType(MixinAttributeRules, DataTypeProtocol):
         return Annotated.__class_getitem__((cls,) + specifications) # type: ignore
     
     @classmethod
-    def as_string(cls):
+    def as_psql_string(cls):
         if issubclass(cls, GeometryType):
             return 'geometry'
         else:
