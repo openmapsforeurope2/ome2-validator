@@ -50,6 +50,9 @@ primary_key = boolean_flag('primary_key')
 class srid(DataTypeAnnotation):
     id: int
 
+    def __repr__(self):
+        return f'srid({self.id})'
+
 
 def is_dataconstraint(obj: object) -> TypeGuard[DataTypeAnnotation]:
     """Checks if a given object is an instance of DataTypeAnnotation.
