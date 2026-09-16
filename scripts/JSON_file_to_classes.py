@@ -6,6 +6,7 @@ import os
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any, Literal
 
 import colorama
 from colorama import Back, Fore, Style
@@ -126,12 +127,12 @@ def main() -> None:
         os.makedirs(path_to_save_classes)
 
     with open(path_to_schema, 'r') as file:
-        data = json.load(file)
+        data: dict[str, Any] = json.load(file)
 
-    srid = data['srid']
+    srid: str = data['srid']
     type_map = get_type_map(srid)
 
-    common_part = []
+    common_part: list[str] = []
 
     for x in data['common']:
         for attribute_name in data['common'][x]:
@@ -145,28 +146,33 @@ def main() -> None:
             
             common_part.append(f"{attribute_name}: {attribute_type}")
 
-    dict_theme_to_tables = {}
+    dict_theme_to_tables: dict[str, dict[str, list[str]]] = {}
 
-    for theme in data['themes']:
-        dict_table_to_class_attributes = {}
-        for y in data['themes'][theme]['tables']:
-            theme_part = []
-            for attribute_name in data['themes'][theme]['tables'][y]['fields']:
-                attribute_type_text = \
-                data['themes'][theme]['tables'][y]['fields'][attribute_name]['sql_type'].split('DEFAULT')[0].split(
+    themes: dict[str, Any] = data['themes']
+    for theme_name in themes:
+        dict_table_to_class_attributes: dict[str, list[str]] = {}
+
+        tables: dict[str, Any] = themes[theme_name]['tables']
+        for table_name in tables:  # noqa: PLC0206
+            table: dict[Literal['fields'], dict[str, Any]] = tables[table_name]
+            theme_part: list[str] = []
+
+            for attribute_name in table['fields']:
+                attribute_type_text: str = \
+                table['fields'][attribute_name]['sql_type'].split('DEFAULT')[0].split(
                     'without')[0].strip()
 
                 type_spec = type_map[attribute_type_text]
-                if data['themes'][theme]['tables'][y]['fields'][attribute_name].get('pkey') is True:
+                if table['fields'][attribute_name].get('pkey') is True:
                     type_spec = type_spec.with_prepended_constraints(dataconstraints.primary_key)
                 attribute_type = type_spec.render()
 
                 theme_part.append(f"{attribute_name}: {attribute_type}")
-            dict_table_to_class_attributes[y] = common_part + theme_part
+            dict_table_to_class_attributes[table_name] = common_part + theme_part
 
-        dict_theme_to_tables[theme] = dict_table_to_class_attributes
+        dict_theme_to_tables[theme_name] = dict_table_to_class_attributes
 
-    for theme in dict_theme_to_tables:
+    for theme in dict_theme_to_tables:  # noqa: PLC0206
         theme_name = theme_dict[theme]
         print(f"\n{Style.BRIGHT}{Back.GREEN}{Fore.CYAN}{theme_name}")
         path_to_file_theme = os.path.join(path_to_file, f"{theme_name}.py")
@@ -175,12 +181,12 @@ def main() -> None:
         with open(path_to_save_classes_theme, 'w', encoding='utf-8') as f:
             f.write("")
 
-        for table in dict_theme_to_tables[theme]:
-            print(f'\n{Style.BRIGHT}{Fore.GREEN}{table}')
-            string_for_table = f"class {table}(feature):\n"
-            class_from_file = extract_class(path=path_to_file_theme, classname=table)
+        for table_name in dict_theme_to_tables[theme]:
+            print(f'\n{Style.BRIGHT}{Fore.GREEN}{table_name}')
+            string_for_table = f"class {table_name}(feature):\n"
+            class_from_file = extract_class(path=path_to_file_theme, classname=table_name)
 
-            list_of_attributes = dict_theme_to_tables[theme][table]
+            list_of_attributes = dict_theme_to_tables[theme][table_name]
             for attribute in list_of_attributes:
                 string_for_table += f"{TAB}{attribute}\n"
 
@@ -189,7 +195,7 @@ def main() -> None:
 
             #compare
             if class_from_file == "":
-                print(f"{Fore.YELLOW}No existing class for {table}")
+                print(f"{Fore.YELLOW}No existing class for {table_name}")
                 continue
 
             string_for_table_as_lines = string_for_table.splitlines()
