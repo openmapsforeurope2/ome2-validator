@@ -3,3 +3,4 @@ varname==0.13.1
 typing_extensions==4.12.2
 colorama==0.4.6
 pyjson5==1.6.9
+shapely==2.1.2
