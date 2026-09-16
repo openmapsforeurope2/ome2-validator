@@ -16,7 +16,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))
 from vrailang import dataconstraints, datatypes
 from vrailang.dataconstraints import DataTypeAnnotation
-from vrailang.datatypes import DataType
+from vrailang.datatypes import DataType, GeometryType
 
 TAB = ' ' * 4
 
@@ -157,6 +157,7 @@ def main() -> None:
             table: dict[Literal['fields'], dict[str, Any]] = tables[table_name]
             theme_part: list[str] = []
 
+            has_geometry = False
             for attribute_name in table['fields']:
                 attribute_type_text: str = \
                 table['fields'][attribute_name]['sql_type'].split('DEFAULT')[0].split(
@@ -168,7 +169,14 @@ def main() -> None:
                 attribute_type = type_spec.render()
 
                 theme_part.append(f"{attribute_name}: {attribute_type}")
-            dict_table_to_class_attributes[table_name] = common_part + theme_part
+
+                if issubclass(type_spec.typ, GeometryType):
+                    has_geometry = True
+
+            if has_geometry:
+                dict_table_to_class_attributes[table_name] = common_part + theme_part
+            else:
+                print(f"\n{Style.BRIGHT}{Fore.YELLOW}*** Skipping {table_name} as it has no geometry columns...")
 
         dict_theme_to_tables[theme_name] = dict_table_to_class_attributes
 
