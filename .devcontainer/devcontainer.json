@@ -7,7 +7,7 @@
     "service": "validator",
     "workspaceFolder": "/workspace",
 
-    "overrideCommand": true, // Because the default command exits immediately
+    //"overrideCommand": true, // Because the default command exits immediately
 
     "postCreateCommand": "git update-index --skip-worktree .devcontainer/devcontainer.env && bash .devcontainer/install-tools.sh",
 
