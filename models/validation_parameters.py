@@ -144,12 +144,12 @@ class ValidationParameters:
                     db_prop.username = ValidationParameters._expand_env(db_params.get('username'), str, missing_vars)
                     db_prop.password = ValidationParameters._expand_env(db_params.get('password'), str, missing_vars)
 
-            params.themes = json_params["themes"]
-            params.checks = json_params["checks"]
-            params.groups = json_params["groups"]
-            params.countries = json_params["countries"]
-            params.extent = json_params["extent"]
-            params.min_required_only = json_params["min_required_only"]
+            params.themes = json_params.get("themes")
+            params.checks = json_params.get("checks")
+            params.groups = json_params.get("groups")
+            params.countries = json_params.get("countries")
+            params.extent = json_params.get("extent")
+            params.min_required_only = json_params.get("min_required_only")
             return params
         
     def are_complete(self) -> bool:
