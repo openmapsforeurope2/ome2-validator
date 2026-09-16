@@ -3,9 +3,19 @@ import argparse
 import ast
 import json
 import os
+import sys
+from dataclasses import dataclass, field
+from pathlib import Path
 
 import colorama
 from colorama import Back, Fore, Style
+
+# Add the project root to sys.path to allow imports from vrailang
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.append(str(PROJECT_ROOT))
+from vrailang import dataconstraints, datatypes
+from vrailang.dataconstraints import DataTypeAnnotation
+from vrailang.datatypes import DataType
 
 TAB = ' ' * 4
 
@@ -20,6 +30,52 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--specs', required=True, metavar='SPECS', dest='specs', help='Directory containing the validation specifications')
     parser.add_argument('--output', required=True, metavar='DIR', dest='output', help='Output directory for storing generated classes')
     return parser
+
+@dataclass(frozen=True)
+class TypeSpec:
+    typ: type[DataType]
+    annotations: tuple[DataTypeAnnotation, ...] = field(default=())
+
+    def __init__(
+        self,
+        typ: type[DataType],
+        *annotations: DataTypeAnnotation,
+    ):
+        object.__setattr__(self, "typ", typ)
+        object.__setattr__(self, "annotations", annotations)
+    
+    def with_prepended_constraints(self, *annotations) -> "TypeSpec":
+        return TypeSpec(self.typ, *(annotations + self.annotations))
+
+    def render(self) -> str:
+        parts = [
+            repr(a)
+            for a in self.annotations
+        ]
+
+        if parts:
+            return f"{self.typ.__name__}[{', '.join(parts)}]"
+        return self.typ.__name__
+
+def get_type_map(srid: str | int) -> dict[str, TypeSpec]:
+    srid = int(srid)
+    return {
+        'uuid': TypeSpec(datatypes.uuid, dataconstraints.notnull),
+        'timestamp': TypeSpec(datatypes.timestamp),
+        'character varying(8)': TypeSpec(datatypes.varchar, dataconstraints.length(8)),
+        'character varying(255)': TypeSpec(datatypes.varchar, dataconstraints.length(255)),
+        'character varying(80)': TypeSpec(datatypes.varchar, dataconstraints.length(80)),
+        'integer': TypeSpec(datatypes.int4),
+        'jsonb': TypeSpec(datatypes.jsonb),
+        'geometry(LineStringZ,${srid})': TypeSpec(datatypes.LineStringZ, dataconstraints.srid(srid)),
+        'geometry(LineString,${srid})': TypeSpec(datatypes.LineString, dataconstraints.srid(srid)),
+        'geometry(MultiLineStringZ,${srid})': TypeSpec(datatypes.MultiLineStringZ, dataconstraints.srid(srid)),
+        'geometry(MultiLineString,${srid})': TypeSpec(datatypes.MultiLineString, dataconstraints.srid(srid)),
+        'geometry(PointZ,${srid})': TypeSpec(datatypes.PointZ, dataconstraints.srid(srid)),
+        'geometry(Point,${srid})': TypeSpec(datatypes.Point, dataconstraints.srid(srid)),
+        'geometry(MultiPolygonZ,${srid})': TypeSpec(datatypes.MultiPolygonZ, dataconstraints.srid(srid)),
+        'geometry(MultiPolygon,${srid})': TypeSpec(datatypes.MultiPolygon, dataconstraints.srid(srid)),           
+    }
 
 def get_dict(srid: str):
     return {'uuid': 'uuid[notnull]',
