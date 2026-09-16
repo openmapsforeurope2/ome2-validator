@@ -5,7 +5,7 @@ import json
 import os
 
 import colorama
-from colorama import Fore, Back, Style  # noqa: F401
+from colorama import Back, Fore, Style
 
 TAB = ' ' * 4
 
