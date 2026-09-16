@@ -77,42 +77,6 @@ def get_type_map(srid: str | int) -> dict[str, TypeSpec]:
         'geometry(MultiPolygon,${srid})': TypeSpec(datatypes.MultiPolygon, dataconstraints.srid(srid)),           
     }
 
-def get_dict(srid: str):
-    return {'uuid': 'uuid[notnull]',
-            'timestamp': 'timestamp',
-            'character varying(8)': 'varchar[length(8)]',
-            'character varying(255)': 'varchar[length(255)]',
-            'character varying(80)': 'varchar[length(80)]',
-            'integer': 'int4',
-            'jsonb': 'jsonb',
-            'geometry(LineStringZ,${srid})': f'LineStringZ[srid({srid})]',
-            'geometry(LineString,${srid})': f'LineString[srid({srid})]',
-            'geometry(MultiLineStringZ,${srid})': f'MultiLineStringZ[srid({srid})]',
-            'geometry(MultiLineString,${srid})': f'MultiLineString[srid({srid})]',
-            'geometry(PointZ,${srid})': f'PointZ[srid({srid})]',
-            'geometry(Point,${srid})': f'Point[srid({srid})]',
-            'geometry(MultiPolygonZ,${srid})': f'MultiPolygonZ[srid({srid})]',
-            'geometry(MultiPolygon,${srid})': f'MultiPolygon[srid({srid})]',
-            }
-
-
-def get_dict_with_primary_key(srid):
-    return {'uuid': 'uuid[primary_key, notnull]',
-            'timestamp': 'timestamp[primary_key]',
-            'character varying(8)': 'varchar[length(8), primary_key]',
-            'character varying(255)': 'varchar[length(255), primary_key]',
-            'character varying(80)': 'varchar[length(80), primary_key]',
-            'integer': 'int4[primary_key]',
-            'jsonb': 'jsonb[primary_key]',
-            'geometry(LineStringZ,${srid})': f'LineStringZ[srid({srid}), primary_key]',
-            'geometry(LineString,${srid})': f'LineString[srid({srid}), primary_key]',
-            'geometry(MultiLineStringZ,${srid})': f'MultiLineStringZ[srid({srid}), primary_key]',
-            'geometry(MultiLineString,${srid})': f'MultiLineString[srid({srid}), primary_key]',
-            'geometry(PointZ,${srid})': f'PointZ[srid({srid}), primary_key]',
-            'geometry(Point,${srid})': f'Point[srid({srid}), primary_key]',
-            'geometry(MultiPolygonZ,${srid})': f'MultiPolygonZ[srid({srid}), primary_key]',
-            'geometry(MultiPolygon,${srid})': f'MultiPolygon[srid({srid}), primary_key]',
-            }
 
 
 def extract_class(path, classname):
@@ -165,8 +129,7 @@ def main() -> None:
         data = json.load(file)
 
     srid = data['srid']
-    dict_text_to_type = get_dict(srid=srid)
-    dict_text_to_type_with_primary_key = get_dict_with_primary_key(srid=srid)
+    type_map = get_type_map(srid)
 
     common_part = []
 
@@ -175,11 +138,11 @@ def main() -> None:
             attribute_type_text = data['common'][x][attribute_name]['sql_type'].split('DEFAULT')[0].split('without')[
                 0].strip()
 
+            type_spec = type_map[attribute_type_text]
             if data['common'][x][attribute_name].get('pkey') is True:
-                attribute_type = dict_text_to_type_with_primary_key[attribute_type_text]
-            else:
-                attribute_type = dict_text_to_type[attribute_type_text]
-
+                type_spec = type_spec.with_prepended_constraints(dataconstraints.primary_key)
+            attribute_type = type_spec.render()
+            
             common_part.append(f"{attribute_name}: {attribute_type}")
 
     dict_theme_to_tables = {}
@@ -193,10 +156,10 @@ def main() -> None:
                 data['themes'][theme]['tables'][y]['fields'][attribute_name]['sql_type'].split('DEFAULT')[0].split(
                     'without')[0].strip()
 
+                type_spec = type_map[attribute_type_text]
                 if data['themes'][theme]['tables'][y]['fields'][attribute_name].get('pkey') is True:
-                    attribute_type = dict_text_to_type_with_primary_key[attribute_type_text]
-                else:
-                    attribute_type = dict_text_to_type[attribute_type_text]
+                    type_spec = type_spec.with_prepended_constraints(dataconstraints.primary_key)
+                attribute_type = type_spec.render()
 
                 theme_part.append(f"{attribute_name}: {attribute_type}")
             dict_table_to_class_attributes[y] = common_part + theme_part
