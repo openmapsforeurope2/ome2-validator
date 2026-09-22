@@ -62,6 +62,8 @@ def main():
                          + f" Could not expand environment variables: {', '.join(sorted(env_vars_failed_to_expand))}")
     elif not params.are_complete():
         raise ValueError(f"Validation parameters are not complete. Check the parameters in {validation_params_json_filename}.")
+    elif not params.has_valid_extent():
+        raise ValueError(f"Validation parameters have an invalid extent. Check the parameters in {validation_params_json_filename}.")
 
     # Typed nulls for satisfying the typechecker
     GENERATE_ID: int = None  # type: ignore

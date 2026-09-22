@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-from collections import OrderedDict
-import os
 import json
+import os
+from collections import OrderedDict
 from json import JSONEncoder
 from typing import Any
+
 import pyjson5
+from shapely import wkt
+
 
 class ValidationParameters:
     """Class for parsing and serializing validation parameters from and to JSON.
@@ -171,6 +174,19 @@ class ValidationParameters:
             self.min_required_only is not None
             )
 
+    def has_valid_extent(self) -> bool:
+        """Checks if the extent is valid.
+
+        Returns:
+            bool: True if and only if the extent is valid.
+        """
+        try:
+            geometry = wkt.loads(self.extent)
+        except:  # noqa: E722
+            return False 
+        
+        return geometry.is_valid
+    
     def to_json(self) -> str:
         """Converts the object into a JSON string using an encoder.
 
