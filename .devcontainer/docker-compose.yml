@@ -7,6 +7,11 @@ services:
       context: ..
       dockerfile: Dockerfile
     
+    # Override entrypoint to keep the container running for development purposes
+    entrypoint:
+      - sleep 
+      - infinity
+
     volumes:
       - ..:/workspace
       #- ./resolv.google.conf:/etc/resolv.conf  # Uncomment to override host's DNS config

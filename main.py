@@ -17,8 +17,8 @@ import logging
 import validation_specs # noqa: F401  # This import is required for collecting the data specifications
 import vrailang
 
-
-
+# Set srid
+SRID = 3035
 
 def get_parser() -> argparse.ArgumentParser:
     class HelpAction(argparse.Action):
@@ -62,9 +62,8 @@ def main():
                          + f" Could not expand environment variables: {', '.join(sorted(env_vars_failed_to_expand))}")
     elif not params.are_complete():
         raise ValueError(f"Validation parameters are not complete. Check the parameters in {validation_params_json_filename}.")
-    
-    # Set srid
-    SRID = 3035
+    elif not params.has_valid_extent():
+        raise ValueError(f"Validation parameters have an invalid extent. Check the parameters in {validation_params_json_filename}.")
 
     # Typed nulls for satisfying the typechecker
     GENERATE_ID: int = None  # type: ignore
@@ -166,7 +165,13 @@ def arg_loader(arg: object, params: ValidationParameters) -> object:
                 f'"country" IN ({",".join(f"\'{c}\'" for c in params.countries)})', 
                 alias=orig_arg.ALIAS
             )
-        
+        if params.extent:
+            orig_arg = arg
+            arg = orig_arg.filtered(
+                f'ST_Intersects("geom", ST_GeomFromText(\'{params.extent}\', {SRID}))',
+                alias=orig_arg.ALIAS
+            )
+
         layer_name = arg.TABLE_NAME
         if arg.ALIAS is not None:
             from_str = f' [from {arg.TABLE_NAME}]' if arg.TABLE_NAME.isidentifier() else ''

@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-from collections import OrderedDict
-import os
 import json
+import os
+from collections import OrderedDict
 from json import JSONEncoder
 from typing import Any
+
 import pyjson5
+from shapely import wkt
+
 
 class ValidationParameters:
     """Class for parsing and serializing validation parameters from and to JSON.
@@ -24,6 +27,7 @@ class ValidationParameters:
         checks (list[str]): A selection of checks which we want to validate.
         groups list[str]: A selection of country-groups which we want to validate.
         countries (list[str]): A selection of countries which we want to validate.
+        extent str: A polygon of the extent we want to validate
         min_required_only (bool): An option to run only th minimum required checks.
     """
     specification: str
@@ -36,6 +40,7 @@ class ValidationParameters:
     checks: list[str]
     groups: list[str]
     countries: list[str]
+    extent: str
     min_required_only: bool
 
     def __init__(self):
@@ -72,6 +77,7 @@ class ValidationParameters:
             checks=[],
             groups=[],
             countries=['NL'],
+            extent='',
             min_required_only=False
             ), indent=4
         )
@@ -141,11 +147,12 @@ class ValidationParameters:
                     db_prop.username = ValidationParameters._expand_env(db_params.get('username'), str, missing_vars)
                     db_prop.password = ValidationParameters._expand_env(db_params.get('password'), str, missing_vars)
 
-            params.themes = json_params["themes"]
-            params.checks = json_params["checks"]
-            params.groups = json_params["groups"]
-            params.countries = json_params["countries"]
-            params.min_required_only = json_params["min_required_only"]
+            params.themes = json_params.get("themes")
+            params.checks = json_params.get("checks")
+            params.groups = json_params.get("groups")
+            params.countries = json_params.get("countries")
+            params.extent = json_params.get("extent")
+            params.min_required_only = json_params.get("min_required_only")
             return params
         
     def are_complete(self) -> bool:
@@ -163,9 +170,23 @@ class ValidationParameters:
             self.checks is not None and
             self.groups is not None and
             self.countries is not None and
+            self.extent is not None and
             self.min_required_only is not None
             )
 
+    def has_valid_extent(self) -> bool:
+        """Checks if the extent is valid.
+
+        Returns:
+            bool: True if and only if the extent is valid.
+        """
+        try:
+            geometry = wkt.loads(self.extent)
+        except:  # noqa: E722
+            return False 
+        
+        return geometry.is_valid
+    
     def to_json(self) -> str:
         """Converts the object into a JSON string using an encoder.
 
