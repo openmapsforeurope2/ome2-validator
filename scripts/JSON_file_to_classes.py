@@ -26,21 +26,29 @@ theme_dict = {'tn': 'transport',
               'ib': 'international_boundaries'}
 
 
+class ArgumentParserColoredMessages(argparse.ArgumentParser):
+    def error(self, message):
+        print(Style.BRIGHT + Fore.RED, end='')
+        print(f"{self.prog}: error: {message}")
+
+        print(Style.NORMAL + Fore.GREEN)
+        self.print_help()
+        print(Style.RESET_ALL)
+    
+        self.exit(2, "")
+    
+    def print_help(self, file=None):
+        print(Style.NORMAL + Fore.GREEN)
+        super().print_help(file=file)
+        print(Style.RESET_ALL)
+
 def handle_cmdline() -> tuple[str, str, str]:
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParserColoredMessages()
     parser.add_argument('--input', required=True, metavar='SCHEMA', dest='input', help='Path to the schema file')
     parser.add_argument('--specs', required=True, metavar='SPECS', dest='specs', help='Directory containing the validation specifications')
     parser.add_argument('--output', required=True, metavar='DIR', dest='output', help='Output directory for storing generated classes')
     
-    print(Style.BRIGHT + Fore.RED, end='')
-    try:
-        args = parser.parse_args()
-    except SystemExit:
-        print(Style.NORMAL + Fore.GREEN)
-        parser.print_help()
-        print(Style.RESET_ALL)
-        sys.exit()
-    
+    args = parser.parse_args()
     return args.specs, args.output, args.input
 
 @dataclass(frozen=True)
