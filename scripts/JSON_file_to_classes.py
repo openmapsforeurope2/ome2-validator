@@ -138,25 +138,9 @@ def main() -> None:
     type_map = get_type_map(schema['srid'])
 
     common_part = construct_common_part(schema, type_map)
+    tables_by_theme = construct_tables_per_theme(schema, type_map, common_part)
 
-    dict_theme_to_tables: dict[str, dict[str, list[str]]] = {}
-
-    themes: dict[str, Any] = schema['themes']
-    for theme_name in themes:
-        dict_table_to_class_attributes: dict[str, list[str]] = {}
-
-        tables: dict[str, Any] = themes[theme_name]['tables']
-        for table_name in tables:  # noqa: PLC0206
-            table_part, has_geometry = construct_table_part(tables[table_name], type_map)
-
-            if has_geometry:
-                dict_table_to_class_attributes[table_name] = common_part + table_part
-            else:
-                print(f"\n{Style.BRIGHT}{Fore.YELLOW}*** Skipping {table_name} as it has no geometry columns...")
-
-        dict_theme_to_tables[theme_name] = dict_table_to_class_attributes
-
-    for theme in dict_theme_to_tables:  # noqa: PLC0206
+    for theme in tables_by_theme:  # noqa: PLC0206
         theme_name = theme_dict[theme]
         print(f"\n{Style.BRIGHT}{Back.GREEN}{Fore.CYAN}{theme_name}")
         path_to_file_theme = os.path.join(specs_dir, f"{theme_name}.py")
@@ -165,12 +149,12 @@ def main() -> None:
         with open(path_to_save_classes_theme, 'w', encoding='utf-8') as f:
             f.write("")
 
-        for table_name in dict_theme_to_tables[theme]:
+        for table_name in tables_by_theme[theme]:
             print(f'\n{Style.BRIGHT}{Fore.GREEN}{table_name}')
             string_for_table = f"class {table_name}(feature):\n"
             class_from_file = extract_class(path=path_to_file_theme, classname=table_name)
 
-            list_of_attributes = dict_theme_to_tables[theme][table_name]
+            list_of_attributes = tables_by_theme[theme][table_name]
             for attribute in list_of_attributes:
                 string_for_table += f"{TAB}{attribute}\n"
 
@@ -234,6 +218,27 @@ def construct_common_part(schema: dict[str, Any], type_map: dict[str, TypeSpec])
             common_part.append(f"{attribute_name}: {attribute_type}")
     
     return common_part
+
+
+def construct_tables_per_theme(schema: dict[str, Any], type_map: dict[str, TypeSpec], common_part: list[str]) -> dict[str, dict[str, list[str]]]:
+    tables_by_theme: dict[str, dict[str, list[str]]] = {}
+
+    themes: dict[str, Any] = schema['themes']
+    for theme_name in themes:
+        dict_table_to_class_attributes: dict[str, list[str]] = {}
+
+        tables: dict[str, Any] = themes[theme_name]['tables']
+        for table_name in tables:  # noqa: PLC0206
+            table_part, has_geometry = construct_table_part(tables[table_name], type_map)
+
+            if has_geometry:
+                dict_table_to_class_attributes[table_name] = common_part + table_part
+            else:
+                print(f"\n{Style.BRIGHT}{Fore.YELLOW}*** Skipping {table_name} as it has no geometry columns...")
+
+        tables_by_theme[theme_name] = dict_table_to_class_attributes
+    return tables_by_theme
+
 
 
 def construct_table_part(table: dict[Literal['fields'], dict[str, Any]], type_map: dict[str, TypeSpec]) -> tuple[list[str], bool]:
