@@ -140,67 +140,8 @@ def main() -> None:
     common_part = construct_common_part(schema, type_map)
     tables_by_theme = construct_tables_per_theme(schema, type_map, common_part)
 
-    for theme in tables_by_theme:  # noqa: PLC0206
-        theme_name = theme_dict[theme]
-        print(f"\n{Style.BRIGHT}{Back.GREEN}{Fore.CYAN}{theme_name}")
-        path_to_file_theme = os.path.join(specs_dir, f"{theme_name}.py")
-        path_to_save_classes_theme = os.path.join(output_dir, f"{theme_name}.txt")
+    write_class_files(specs_dir, output_dir, tables_by_theme)
 
-        with open(path_to_save_classes_theme, 'w', encoding='utf-8') as f:
-            f.write("")
-
-        for table_name in tables_by_theme[theme]:
-            print(f'\n{Style.BRIGHT}{Fore.GREEN}{table_name}')
-            string_for_table = f"class {table_name}(feature):\n"
-            class_from_file = extract_class(path=path_to_file_theme, classname=table_name)
-
-            list_of_attributes = tables_by_theme[theme][table_name]
-            for attribute in list_of_attributes:
-                string_for_table += f"{TAB}{attribute}\n"
-
-            with open(path_to_save_classes_theme, 'a', encoding='utf-8') as f:
-                f.write(string_for_table + '\n')
-
-            #compare
-            if class_from_file == "":
-                print(f"{Fore.YELLOW}No existing class for {table_name}")
-                continue
-
-            string_for_table_as_lines = string_for_table.splitlines()
-            class_from_file_as_lines = class_from_file.splitlines()
-
-            print(f"#Features in json {len(string_for_table_as_lines) - 1}")
-            print(f"#Features in current class {len(class_from_file_as_lines) - 1}")
-
-            number_of_found_matches = 0
-            for line_current in class_from_file_as_lines[1:]:
-                line_current_split = line_current.strip().split(':')
-                found_match = False
-                for line_new in string_for_table_as_lines[1:]:
-                    line_new_split = line_new.strip().split(':')
-                    if line_current_split[0] == line_new_split[0]:
-                        found_match = True
-                        if line_current_split[1] == line_new_split[1]:
-                            number_of_found_matches += 1
-                        else:
-                            number_of_found_matches += 1
-                            print(f"{Style.BRIGHT}{Fore.RED}Different types for {line_current_split[0]}. Current type is {line_current_split[1].strip()} and new type: {line_new_split[1].strip()}.")
-                        continue
-                if not found_match:
-                    print(f"{Fore.RED}Feature {line_current.strip()} is not in json.")
-
-            if number_of_found_matches < len(string_for_table_as_lines) - 1:
-                for line_new in string_for_table_as_lines[1:]:
-                    line_new_split = line_new.strip().split(':')
-                    found_match = False
-                    for line_current in class_from_file_as_lines[1:]:
-                        line_current_split = line_current.strip().split(':')
-
-                        if line_current_split[0] == line_new_split[0]:
-                            found_match = True
-                            continue
-                    if not found_match:
-                        print(f"{Fore.RED}Feature {line_new.strip()} is not in current class.")
 
 
 def construct_common_part(schema: dict[str, Any], type_map: dict[str, TypeSpec]) -> list[str]:
@@ -262,6 +203,69 @@ def construct_table_part(table: dict[Literal['fields'], dict[str, Any]], type_ma
     
     return table_part,has_geometry
 
+
+def write_class_files(specs_dir: str, output_dir: str, tables_by_theme: dict[str, dict[str, list[str]]]):
+    for theme in tables_by_theme:  # noqa: PLC0206
+        theme_name = theme_dict[theme]
+        print(f"\n{Style.BRIGHT}{Back.GREEN}{Fore.CYAN}{theme_name}")
+        path_to_file_theme = os.path.join(specs_dir, f"{theme_name}.py")
+        path_to_save_classes_theme = os.path.join(output_dir, f"{theme_name}.txt")
+
+        with open(path_to_save_classes_theme, 'w', encoding='utf-8') as f:
+            f.write("")
+
+        for table_name in tables_by_theme[theme]:
+            print(f'\n{Style.BRIGHT}{Fore.GREEN}{table_name}')
+            string_for_table = f"class {table_name}(feature):\n"
+            class_from_file = extract_class(path=path_to_file_theme, classname=table_name)
+
+            list_of_attributes = tables_by_theme[theme][table_name]
+            for attribute in list_of_attributes:
+                string_for_table += f"{TAB}{attribute}\n"
+
+            with open(path_to_save_classes_theme, 'a', encoding='utf-8') as f:
+                f.write(string_for_table + '\n')
+
+            #compare
+            if class_from_file == "":
+                print(f"{Fore.YELLOW}No existing class for {table_name}")
+                continue
+
+            string_for_table_as_lines = string_for_table.splitlines()
+            class_from_file_as_lines = class_from_file.splitlines()
+
+            print(f"#Features in json {len(string_for_table_as_lines) - 1}")
+            print(f"#Features in current class {len(class_from_file_as_lines) - 1}")
+
+            number_of_found_matches = 0
+            for line_current in class_from_file_as_lines[1:]:
+                line_current_split = line_current.strip().split(':')
+                found_match = False
+                for line_new in string_for_table_as_lines[1:]:
+                    line_new_split = line_new.strip().split(':')
+                    if line_current_split[0] == line_new_split[0]:
+                        found_match = True
+                        if line_current_split[1] == line_new_split[1]:
+                            number_of_found_matches += 1
+                        else:
+                            number_of_found_matches += 1
+                            print(f"{Style.BRIGHT}{Fore.RED}Different types for {line_current_split[0]}. Current type is {line_current_split[1].strip()} and new type: {line_new_split[1].strip()}.")
+                        continue
+                if not found_match:
+                    print(f"{Fore.RED}Feature {line_current.strip()} is not in json.")
+
+            if number_of_found_matches < len(string_for_table_as_lines) - 1:
+                for line_new in string_for_table_as_lines[1:]:
+                    line_new_split = line_new.strip().split(':')
+                    found_match = False
+                    for line_current in class_from_file_as_lines[1:]:
+                        line_current_split = line_current.strip().split(':')
+
+                        if line_current_split[0] == line_new_split[0]:
+                            found_match = True
+                            continue
+                    if not found_match:
+                        print(f"{Fore.RED}Feature {line_new.strip()} is not in current class.")
 
 
 if __name__ == "__main__":
