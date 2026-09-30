@@ -135,22 +135,9 @@ def main() -> None:
     with open(path_to_schema, 'r') as file:
         schema: dict[str, Any] = json.load(file)
 
-    srid: str = schema['srid']
-    type_map = get_type_map(srid)
+    type_map = get_type_map(schema['srid'])
 
-    common_part: list[str] = []
-
-    for x in schema['common']:
-        for attribute_name in schema['common'][x]:
-            attribute_type_text = schema['common'][x][attribute_name]['sql_type'].split('DEFAULT')[0].split('without')[
-                0].strip()
-
-            type_spec = type_map[attribute_type_text]
-            if schema['common'][x][attribute_name].get('pkey') is True:
-                type_spec = type_spec.with_prepended_constraints(dataconstraints.primary_key)
-            attribute_type = type_spec.render()
-            
-            common_part.append(f"{attribute_name}: {attribute_type}")
+    common_part = construct_common_part(schema, type_map)
 
     dict_theme_to_tables: dict[str, dict[str, list[str]]] = {}
 
@@ -247,6 +234,23 @@ def main() -> None:
                             continue
                     if not found_match:
                         print(f"{Fore.RED}Feature {line_new.strip()} is not in current class.")
+
+
+def construct_common_part(schema: dict[str, Any], type_map: dict[str, TypeSpec]) -> list[str]:
+    common_part: list[str] = []
+    for x in schema['common']:
+        for attribute_name in schema['common'][x]:
+            attribute_type_text = schema['common'][x][attribute_name]['sql_type'].split('DEFAULT')[0].split('without')[
+                0].strip()
+
+            type_spec = type_map[attribute_type_text]
+            if schema['common'][x][attribute_name].get('pkey') is True:
+                type_spec = type_spec.with_prepended_constraints(dataconstraints.primary_key)
+            attribute_type = type_spec.render()
+            
+            common_part.append(f"{attribute_name}: {attribute_type}")
+    
+    return common_part
 
 
 if __name__ == "__main__":
