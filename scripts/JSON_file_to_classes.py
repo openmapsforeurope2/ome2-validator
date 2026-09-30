@@ -133,20 +133,20 @@ def main() -> None:
         os.makedirs(output_dir)
 
     with open(path_to_schema, 'r') as file:
-        data: dict[str, Any] = json.load(file)
+        schema: dict[str, Any] = json.load(file)
 
-    srid: str = data['srid']
+    srid: str = schema['srid']
     type_map = get_type_map(srid)
 
     common_part: list[str] = []
 
-    for x in data['common']:
-        for attribute_name in data['common'][x]:
-            attribute_type_text = data['common'][x][attribute_name]['sql_type'].split('DEFAULT')[0].split('without')[
+    for x in schema['common']:
+        for attribute_name in schema['common'][x]:
+            attribute_type_text = schema['common'][x][attribute_name]['sql_type'].split('DEFAULT')[0].split('without')[
                 0].strip()
 
             type_spec = type_map[attribute_type_text]
-            if data['common'][x][attribute_name].get('pkey') is True:
+            if schema['common'][x][attribute_name].get('pkey') is True:
                 type_spec = type_spec.with_prepended_constraints(dataconstraints.primary_key)
             attribute_type = type_spec.render()
             
@@ -154,7 +154,7 @@ def main() -> None:
 
     dict_theme_to_tables: dict[str, dict[str, list[str]]] = {}
 
-    themes: dict[str, Any] = data['themes']
+    themes: dict[str, Any] = schema['themes']
     for theme_name in themes:
         dict_table_to_class_attributes: dict[str, list[str]] = {}
 
