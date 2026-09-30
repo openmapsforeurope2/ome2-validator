@@ -126,11 +126,11 @@ def extract_class(path, classname):
 
 
 def main() -> None:
-    path_to_file, path_to_save_classes, path_to_schema = handle_cmdline()
+    specs_dir, output_dir, path_to_schema = handle_cmdline()
     colorama.init(autoreset=True)
 
-    if not os.path.exists(path_to_save_classes):
-        os.makedirs(path_to_save_classes)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     with open(path_to_schema, 'r') as file:
         data: dict[str, Any] = json.load(file)
@@ -189,8 +189,8 @@ def main() -> None:
     for theme in dict_theme_to_tables:  # noqa: PLC0206
         theme_name = theme_dict[theme]
         print(f"\n{Style.BRIGHT}{Back.GREEN}{Fore.CYAN}{theme_name}")
-        path_to_file_theme = os.path.join(path_to_file, f"{theme_name}.py")
-        path_to_save_classes_theme = os.path.join(path_to_save_classes, f"{theme_name}.txt")
+        path_to_file_theme = os.path.join(specs_dir, f"{theme_name}.py")
+        path_to_save_classes_theme = os.path.join(output_dir, f"{theme_name}.txt")
 
         with open(path_to_save_classes_theme, 'w', encoding='utf-8') as f:
             f.write("")
