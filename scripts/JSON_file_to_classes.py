@@ -147,27 +147,10 @@ def main() -> None:
 
         tables: dict[str, Any] = themes[theme_name]['tables']
         for table_name in tables:  # noqa: PLC0206
-            table: dict[Literal['fields'], dict[str, Any]] = tables[table_name]
-            theme_part: list[str] = []
-
-            has_geometry = False
-            for attribute_name in table['fields']:
-                attribute_type_text: str = \
-                table['fields'][attribute_name]['sql_type'].split('DEFAULT')[0].split(
-                    'without')[0].strip()
-
-                type_spec = type_map[attribute_type_text]
-                if table['fields'][attribute_name].get('pkey') is True:
-                    type_spec = type_spec.with_prepended_constraints(dataconstraints.primary_key)
-                attribute_type = type_spec.render()
-
-                theme_part.append(f"{attribute_name}: {attribute_type}")
-
-                if issubclass(type_spec.typ, GeometryType):
-                    has_geometry = True
+            table_part, has_geometry = construct_table_part(tables[table_name], type_map)
 
             if has_geometry:
-                dict_table_to_class_attributes[table_name] = common_part + theme_part
+                dict_table_to_class_attributes[table_name] = common_part + table_part
             else:
                 print(f"\n{Style.BRIGHT}{Fore.YELLOW}*** Skipping {table_name} as it has no geometry columns...")
 
@@ -251,6 +234,29 @@ def construct_common_part(schema: dict[str, Any], type_map: dict[str, TypeSpec])
             common_part.append(f"{attribute_name}: {attribute_type}")
     
     return common_part
+
+
+def construct_table_part(table: dict[Literal['fields'], dict[str, Any]], type_map: dict[str, TypeSpec]) -> tuple[list[str], bool]:
+    table_part: list[str] = []
+
+    has_geometry = False
+    for attribute_name in table['fields']:
+        attribute_type_text: str = \
+                table['fields'][attribute_name]['sql_type'].split('DEFAULT')[0].split(
+                    'without')[0].strip()
+
+        type_spec = type_map[attribute_type_text]
+        if table['fields'][attribute_name].get('pkey') is True:
+            type_spec = type_spec.with_prepended_constraints(dataconstraints.primary_key)
+        attribute_type = type_spec.render()
+
+        table_part.append(f"{attribute_name}: {attribute_type}")
+
+        if issubclass(type_spec.typ, GeometryType):
+            has_geometry = True
+    
+    return table_part,has_geometry
+
 
 
 if __name__ == "__main__":
