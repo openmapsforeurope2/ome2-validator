@@ -25,12 +25,23 @@ theme_dict = {'tn': 'transport',
               'hy': 'hydrography',
               'ib': 'international_boundaries'}
 
-def get_parser() -> argparse.ArgumentParser:
+
+def handle_cmdline() -> tuple[str, str, str]:
     parser = argparse.ArgumentParser()
     parser.add_argument('--input', required=True, metavar='SCHEMA', dest='input', help='Path to the schema file')
     parser.add_argument('--specs', required=True, metavar='SPECS', dest='specs', help='Directory containing the validation specifications')
     parser.add_argument('--output', required=True, metavar='DIR', dest='output', help='Output directory for storing generated classes')
-    return parser
+    
+    print(Style.BRIGHT + Fore.RED, end='')
+    try:
+        args = parser.parse_args()
+    except SystemExit:
+        print(Style.NORMAL + Fore.GREEN)
+        parser.print_help()
+        print(Style.RESET_ALL)
+        sys.exit()
+    
+    return args.specs, args.output, args.input
 
 @dataclass(frozen=True)
 class TypeSpec:
@@ -107,21 +118,8 @@ def extract_class(path, classname):
 
 
 def main() -> None:
-    parser = get_parser()
-    print(Style.BRIGHT + Fore.RED, end='')
-    try:
-        args = parser.parse_args()
-    except SystemExit:
-        print(Style.NORMAL + Fore.GREEN)
-        parser.print_help()
-        print(Style.RESET_ALL)
-        return
-    
+    path_to_file, path_to_save_classes, path_to_schema = handle_cmdline()
     colorama.init(autoreset=True)
-
-    path_to_file = args.specs
-    path_to_save_classes = args.output
-    path_to_schema = args.input
 
     if not os.path.exists(path_to_save_classes):
         os.makedirs(path_to_save_classes)
