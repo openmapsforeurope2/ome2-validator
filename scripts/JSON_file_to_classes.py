@@ -3,9 +3,20 @@ import argparse
 import ast
 import json
 import os
+import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Literal
 
 import colorama
-from colorama import Fore, Back, Style  # noqa: F401
+from colorama import Back, Fore, Style
+
+# Add the project root to sys.path to allow imports from vrailang
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.append(str(PROJECT_ROOT))
+from vrailang import dataconstraints, datatypes
+from vrailang.dataconstraints import DataTypeAnnotation
+from vrailang.datatypes import DataType, GeometryType
 
 TAB = ' ' * 4
 
@@ -14,49 +25,78 @@ theme_dict = {'tn': 'transport',
               'hy': 'hydrography',
               'ib': 'international_boundaries'}
 
-def get_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser()
+
+class ArgumentParserColoredMessages(argparse.ArgumentParser):
+    def error(self, message):
+        print(Style.BRIGHT + Fore.RED, end='')
+        print(f"{self.prog}: error: {message}")
+
+        print(Style.NORMAL + Fore.GREEN)
+        self.print_help()
+        print(Style.RESET_ALL)
+    
+        self.exit(2, "")
+    
+    def print_help(self, file=None):
+        print(Style.NORMAL + Fore.GREEN)
+        super().print_help(file=file)
+        print(Style.RESET_ALL)
+
+def handle_cmdline() -> tuple[str, str, str]:
+    parser = ArgumentParserColoredMessages()
     parser.add_argument('--input', required=True, metavar='SCHEMA', dest='input', help='Path to the schema file')
     parser.add_argument('--specs', required=True, metavar='SPECS', dest='specs', help='Directory containing the validation specifications')
     parser.add_argument('--output', required=True, metavar='DIR', dest='output', help='Output directory for storing generated classes')
-    return parser
+    
+    args = parser.parse_args()
+    return args.specs, args.output, args.input
 
-def get_dict(srid: str):
-    return {'uuid': 'uuid[notnull]',
-            'timestamp': 'timestamp',
-            'character varying(8)': 'varchar[length(8)]',
-            'character varying(255)': 'varchar[length(255)]',
-            'character varying(80)': 'varchar[length(80)]',
-            'integer': 'int4',
-            'jsonb': 'jsonb',
-            'geometry(LineStringZ,${srid})': f'LineStringZ[srid({srid})]',
-            'geometry(LineString,${srid})': f'LineString[srid({srid})]',
-            'geometry(MultiLineStringZ,${srid})': f'MultiLineStringZ[srid({srid})]',
-            'geometry(MultiLineString,${srid})': f'MultiLineString[srid({srid})]',
-            'geometry(PointZ,${srid})': f'PointZ[srid({srid})]',
-            'geometry(Point,${srid})': f'Point[srid({srid})]',
-            'geometry(MultiPolygonZ,${srid})': f'MultiPolygonZ[srid({srid})]',
-            'geometry(MultiPolygon,${srid})': f'MultiPolygon[srid({srid})]',
-            }
+@dataclass(frozen=True)
+class TypeSpec:
+    typ: type[DataType]
+    annotations: tuple[DataTypeAnnotation, ...] = field(default=())
 
+    def __init__(
+        self,
+        typ: type[DataType],
+        *annotations: DataTypeAnnotation,
+    ):
+        object.__setattr__(self, "typ", typ)
+        object.__setattr__(self, "annotations", annotations)
+    
+    def with_prepended_constraints(self, *annotations) -> "TypeSpec":
+        return TypeSpec(self.typ, *(annotations + self.annotations))
 
-def get_dict_with_primary_key(srid):
-    return {'uuid': 'uuid[primary_key, notnull]',
-            'timestamp': 'timestamp[primary_key]',
-            'character varying(8)': 'varchar[length(8), primary_key]',
-            'character varying(255)': 'varchar[length(255), primary_key]',
-            'character varying(80)': 'varchar[length(80), primary_key]',
-            'integer': 'int4[primary_key]',
-            'jsonb': 'jsonb[primary_key]',
-            'geometry(LineStringZ,${srid})': f'LineStringZ[srid({srid}), primary_key]',
-            'geometry(LineString,${srid})': f'LineString[srid({srid}), primary_key]',
-            'geometry(MultiLineStringZ,${srid})': f'MultiLineStringZ[srid({srid}), primary_key]',
-            'geometry(MultiLineString,${srid})': f'MultiLineString[srid({srid}), primary_key]',
-            'geometry(PointZ,${srid})': f'PointZ[srid({srid}), primary_key]',
-            'geometry(Point,${srid})': f'Point[srid({srid}), primary_key]',
-            'geometry(MultiPolygonZ,${srid})': f'MultiPolygonZ[srid({srid}), primary_key]',
-            'geometry(MultiPolygon,${srid})': f'MultiPolygon[srid({srid}), primary_key]',
-            }
+    def render(self) -> str:
+        parts = [
+            repr(a)
+            for a in self.annotations
+        ]
+
+        if parts:
+            return f"{self.typ.__name__}[{', '.join(parts)}]"
+        return self.typ.__name__
+
+def get_type_map(srid: str | int) -> dict[str, TypeSpec]:
+    srid = int(srid)
+    return {
+        'uuid': TypeSpec(datatypes.uuid, dataconstraints.notnull),
+        'timestamp': TypeSpec(datatypes.timestamp),
+        'character varying(8)': TypeSpec(datatypes.varchar, dataconstraints.length(8)),
+        'character varying(255)': TypeSpec(datatypes.varchar, dataconstraints.length(255)),
+        'character varying(80)': TypeSpec(datatypes.varchar, dataconstraints.length(80)),
+        'integer': TypeSpec(datatypes.int4),
+        'jsonb': TypeSpec(datatypes.jsonb),
+        'geometry(LineStringZ,${srid})': TypeSpec(datatypes.LineStringZ, dataconstraints.srid(srid)),
+        'geometry(LineString,${srid})': TypeSpec(datatypes.LineString, dataconstraints.srid(srid)),
+        'geometry(MultiLineStringZ,${srid})': TypeSpec(datatypes.MultiLineStringZ, dataconstraints.srid(srid)),
+        'geometry(MultiLineString,${srid})': TypeSpec(datatypes.MultiLineString, dataconstraints.srid(srid)),
+        'geometry(PointZ,${srid})': TypeSpec(datatypes.PointZ, dataconstraints.srid(srid)),
+        'geometry(Point,${srid})': TypeSpec(datatypes.Point, dataconstraints.srid(srid)),
+        'geometry(MultiPolygonZ,${srid})': TypeSpec(datatypes.MultiPolygonZ, dataconstraints.srid(srid)),
+        'geometry(MultiPolygon,${srid})': TypeSpec(datatypes.MultiPolygon, dataconstraints.srid(srid)),           
+    }
+
 
 
 def extract_class(path, classname):
@@ -86,82 +126,100 @@ def extract_class(path, classname):
 
 
 def main() -> None:
-    parser = get_parser()
-    print(Style.BRIGHT + Fore.RED, end='')
-    try:
-        args = parser.parse_args()
-    except SystemExit:
-        print(Style.NORMAL + Fore.GREEN)
-        parser.print_help()
-        print(Style.RESET_ALL)
-        return
-    
+    specs_dir, output_dir, path_to_schema = handle_cmdline()
     colorama.init(autoreset=True)
 
-    path_to_file = args.specs
-    path_to_save_classes = args.output
-    path_to_schema = args.input
-
-    if not os.path.exists(path_to_save_classes):
-        os.makedirs(path_to_save_classes)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     with open(path_to_schema, 'r') as file:
-        data = json.load(file)
+        schema: dict[str, Any] = json.load(file)
 
-    srid = data['srid']
-    dict_text_to_type = get_dict(srid=srid)
-    dict_text_to_type_with_primary_key = get_dict_with_primary_key(srid=srid)
+    type_map = get_type_map(schema['srid'])
 
-    common_part = []
+    common_part = construct_common_part(schema, type_map)
+    tables_by_theme = construct_tables_per_theme(schema, type_map, common_part)
 
-    for x in data['common']:
-        for attribute_name in data['common'][x]:
-            attribute_type_text = data['common'][x][attribute_name]['sql_type'].split('DEFAULT')[0].split('without')[
+    write_class_files(specs_dir, output_dir, tables_by_theme)
+
+
+
+def construct_common_part(schema: dict[str, Any], type_map: dict[str, TypeSpec]) -> list[str]:
+    common_part: list[str] = []
+    for x in schema['common']:
+        for attribute_name in schema['common'][x]:
+            attribute_type_text = schema['common'][x][attribute_name]['sql_type'].split('DEFAULT')[0].split('without')[
                 0].strip()
 
-            if data['common'][x][attribute_name].get('pkey') is True:
-                attribute_type = dict_text_to_type_with_primary_key[attribute_type_text]
-            else:
-                attribute_type = dict_text_to_type[attribute_type_text]
-
+            type_spec = type_map[attribute_type_text]
+            if schema['common'][x][attribute_name].get('pkey') is True:
+                type_spec = type_spec.with_prepended_constraints(dataconstraints.primary_key)
+            attribute_type = type_spec.render()
+            
             common_part.append(f"{attribute_name}: {attribute_type}")
+    
+    return common_part
 
-    dict_theme_to_tables = {}
 
-    for theme in data['themes']:
-        dict_table_to_class_attributes = {}
-        for y in data['themes'][theme]['tables']:
-            theme_part = []
-            for attribute_name in data['themes'][theme]['tables'][y]['fields']:
-                attribute_type_text = \
-                data['themes'][theme]['tables'][y]['fields'][attribute_name]['sql_type'].split('DEFAULT')[0].split(
+def construct_tables_per_theme(schema: dict[str, Any], type_map: dict[str, TypeSpec], common_part: list[str]) -> dict[str, dict[str, list[str]]]:
+    tables_by_theme: dict[str, dict[str, list[str]]] = {}
+
+    themes: dict[str, Any] = schema['themes']
+    for theme_name in themes:
+        dict_table_to_class_attributes: dict[str, list[str]] = {}
+
+        tables: dict[str, Any] = themes[theme_name]['tables']
+        for table_name in tables:  # noqa: PLC0206
+            table_part, has_geometry = construct_table_part(tables[table_name], type_map)
+
+            if has_geometry:
+                dict_table_to_class_attributes[table_name] = common_part + table_part
+            else:
+                print(f"\n{Style.BRIGHT}{Fore.YELLOW}*** Skipping {table_name} as it has no geometry columns...")
+
+        tables_by_theme[theme_name] = dict_table_to_class_attributes
+    return tables_by_theme
+
+
+
+def construct_table_part(table: dict[Literal['fields'], dict[str, Any]], type_map: dict[str, TypeSpec]) -> tuple[list[str], bool]:
+    table_part: list[str] = []
+
+    has_geometry = False
+    for attribute_name in table['fields']:
+        attribute_type_text: str = \
+                table['fields'][attribute_name]['sql_type'].split('DEFAULT')[0].split(
                     'without')[0].strip()
 
-                if data['themes'][theme]['tables'][y]['fields'][attribute_name].get('pkey') is True:
-                    attribute_type = dict_text_to_type_with_primary_key[attribute_type_text]
-                else:
-                    attribute_type = dict_text_to_type[attribute_type_text]
+        type_spec = type_map[attribute_type_text]
+        if table['fields'][attribute_name].get('pkey') is True:
+            type_spec = type_spec.with_prepended_constraints(dataconstraints.primary_key)
+        attribute_type = type_spec.render()
 
-                theme_part.append(f"{attribute_name}: {attribute_type}")
-            dict_table_to_class_attributes[y] = common_part + theme_part
+        table_part.append(f"{attribute_name}: {attribute_type}")
 
-        dict_theme_to_tables[theme] = dict_table_to_class_attributes
+        if issubclass(type_spec.typ, GeometryType):
+            has_geometry = True
+    
+    return table_part,has_geometry
 
-    for theme in dict_theme_to_tables:
+
+def write_class_files(specs_dir: str, output_dir: str, tables_by_theme: dict[str, dict[str, list[str]]]):
+    for theme in tables_by_theme:  # noqa: PLC0206
         theme_name = theme_dict[theme]
         print(f"\n{Style.BRIGHT}{Back.GREEN}{Fore.CYAN}{theme_name}")
-        path_to_file_theme = os.path.join(path_to_file, f"{theme_name}.py")
-        path_to_save_classes_theme = os.path.join(path_to_save_classes, f"{theme_name}.txt")
+        path_to_file_theme = os.path.join(specs_dir, f"{theme_name}.py")
+        path_to_save_classes_theme = os.path.join(output_dir, f"{theme_name}.txt")
 
         with open(path_to_save_classes_theme, 'w', encoding='utf-8') as f:
             f.write("")
 
-        for table in dict_theme_to_tables[theme]:
-            print(f'\n{Style.BRIGHT}{Fore.GREEN}{table}')
-            string_for_table = f"class {table}(feature):\n"
-            class_from_file = extract_class(path=path_to_file_theme, classname=table)
+        for table_name in tables_by_theme[theme]:
+            print(f'\n{Style.BRIGHT}{Fore.GREEN}{table_name}')
+            string_for_table = f"class {table_name}(feature):\n"
+            class_from_file = extract_class(path=path_to_file_theme, classname=table_name)
 
-            list_of_attributes = dict_theme_to_tables[theme][table]
+            list_of_attributes = tables_by_theme[theme][table_name]
             for attribute in list_of_attributes:
                 string_for_table += f"{TAB}{attribute}\n"
 
@@ -170,7 +228,7 @@ def main() -> None:
 
             #compare
             if class_from_file == "":
-                print(f"{Fore.YELLOW}No existing class for {table}")
+                print(f"{Fore.YELLOW}No existing class for {table_name}")
                 continue
 
             string_for_table_as_lines = string_for_table.splitlines()

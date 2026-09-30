@@ -191,7 +191,7 @@ class MixinFeatureclassRules(FeatureclassProtocol):
         for key, value in cls.ATTRIBUTES.items():
             length_constraint = value.get_constraint(length)
             length_constraint_value = length_constraint.value if length_constraint else None
-            attr_dict[key] = (value.datatype.as_string(), length_constraint_value)
+            attr_dict[key] = (value.datatype.as_psql_string(), length_constraint_value)
 
         return _create_rule_and_register(
             validators.DataSchemaValidator,
