@@ -23,6 +23,48 @@ running the command should show the tool's help message:
 docker run --rm -it eurogeographics/ome2-validator
 ```
 
+## Published Docker images
+
+The [Publish Docker image workflow](.github/workflows/publish-image.yml) builds the
+existing Dockerfile and pushes the image to GitHub Container Registry (GHCR):
+
+- A push to `main` publishes `ghcr.io/openmapsforeurope2/ome2-validator:latest`.
+- A pushed Git tag starting with `v` publishes the same image name with that exact tag, for example
+  `ghcr.io/openmapsforeurope2/ome2-validator:v26.11.16.0`.
+  Tag pushes do not update `latest`.
+
+The image name is derived from the GitHub repository, so it follows the repository's
+owner and name if the project is moved or forked.
+
+Release tags follow `vYY.MM.DD.N`, where `N` is a zero-based release counter for
+that date (for example, `v26.11.16.0`, then `v26.11.16.1`).
+This is calendar versioning, not Semantic Versioning. Do not reuse release tags.
+The workflow runs for pushed tags starting with `v`; it does not enforce the full date-and-counter format.
+Git tags must also be valid Docker image tags; the documented convention is valid.
+
+For example, to publish a release from the current commit:
+
+```sh
+git tag v26.11.16.0
+git push origin v26.11.16.0
+```
+
+Here, `origin` is the remote for the GitHub repository; use your GitHub remote's
+name if it differs.
+
+The workflow uses the built-in `GITHUB_TOKEN` with `contents: read` and
+`packages: write` permissions; no additional registry secret is required.
+Organization policies must allow Actions to publish packages.
+After the first successful publish, check the package's visibility in GitHub:
+new packages are private by default. Make it public if anonymous pulls are needed;
+otherwise, authenticate to GHCR before pulling.
+
+To pull and run a published release:
+
+```sh
+docker run --rm ghcr.io/openmapsforeurope2/ome2-validator:v26.11.16.0
+```
+
 ## Running the validator
 
 Once the Docker image has been built, the validator tool can be run with a command like the one below:
